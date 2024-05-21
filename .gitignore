@@ -1,1 +1,22 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Libraries
+*.so
+*.dylib
+*.dll
+
+# Executables
+*.out
+zappy
+
+# Others
+.vscode
+.cache
 .idea/*
+.git/*
+.doxygen/*
+*.ppm
