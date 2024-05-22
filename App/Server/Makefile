@@ -6,11 +6,11 @@
 ##
 
 
-SRC = 			App/src/main.c          \
+SRC = 			src/main.c          \
 
 OBJ = 			$(SRC:.c=.o)
 
-INCLUDE =       -I./App/include
+INCLUDE =       -I./include
 
 CFLAGS = 		-W -Wall -Wextra -Werror $(INCLUDE) -std=c11 -D_GNU_SOURCE
 

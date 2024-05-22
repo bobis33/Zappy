@@ -7,11 +7,11 @@ set(CMAKE_SHARED_LIBRARY_SUFFIX ".so")
 set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/plugins/)
 
 set(SRC_DIR
-        ${CMAKE_SOURCE_DIR}/App/src/
+        ${CMAKE_SOURCE_DIR}/src/
 )
 
 SET(INCLUDE_DIR
-        ${CMAKE_SOURCE_DIR}/App/include/
+        ${CMAKE_SOURCE_DIR}/include/
         ${CMAKE_SOURCE_DIR}/lib/include/
 )
 

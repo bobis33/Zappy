@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** Zappy | GUI
 ** File description:
-** constants
+** Constant.hpp
 */
 
 /*
