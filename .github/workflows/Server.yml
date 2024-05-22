@@ -1,0 +1,31 @@
+name: ZAPPY SERVER
+run-name: ${{github.actor}} ZAPPY SERVER
+on:
+  push:
+    branches:
+      - "**"
+
+env:
+  EXECUTABLE: "zappy_server"
+  WORKDIR: "App/Server"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+        image: epitechcontent/epitest-docker:latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Check compilation
+        run: |
+          cd $WORKDIR
+          make re
+
+      - name: Check binary
+        run: |
+          cd $WORKDIR
+          if [[ ! -x "./${EXECUTABLE}" ]]; then
+          echo "Error: Binary ${EXECUTABLE} not found."
+          exit 1
+          fi
