@@ -7,6 +7,7 @@
 
 
 SRC = 			src/main.c          \
+                src/bind.c          \
 
 OBJ = 			$(SRC:.c=.o)
 
