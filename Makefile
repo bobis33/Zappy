@@ -5,28 +5,33 @@
 ## Makefile
 ##
 
-AI = App/AI
+AI 			= App/AI
 
-GUI = App/GUI
+GUI 		= App/GUI
 
-Server = App/Server
+Server 		= App/Server
 
-all: server gui
+all:        ai gui server
 
-server:
-	@make -C $(Server)
+ai:
+			@make -C $(AI)
 
 gui:
-	cd App/GUI && ./build.sh build
+			cd $(GUI) && ./build.sh build
+
+server:
+			@make -C $(Server)
 
 clean:
-	cd App/GUI && ./build.sh clean
-	@make clean -C $(Server)
+			@make clean -C $(AI)
+			cd $(GUI) && ./build.sh clean
+			@make clean -C $(Server)
 
 fclean:
-	cd App/GUI && ./build.sh clean
-	@make fclean -C $(Server)
+			@make fclean -C $(AI)
+			cd $(GUI) && ./build.sh clean
+			@make fclean -C $(Server)
 
-re: fclean all
+re: 		fclean all
 
-.PHONY: all clean fclean re
+.PHONY: 	all ai gui server clean fclean re
