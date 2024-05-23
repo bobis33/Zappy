@@ -8,6 +8,7 @@
 #pragma once
 
 #include "GUI/Abstraction/IRenderer.hpp"
+#include "GUI/Constant.hpp"
 
 namespace gui {
 
@@ -17,17 +18,17 @@ namespace gui {
 
             void setName(const std::string& name) override { m_name = name; };
             void setResolution(const std::pair<unsigned int, unsigned int>& resolution) override { m_resolution = resolution; };
-            void setFramerate(const unsigned int framerate) override { m_framerate = framerate; };
+            void setFPS(const unsigned int FPS) override { m_FPS = FPS; };
 
             [[nodiscard]] const std::string& getName() const override { return m_name; };
             [[nodiscard]] const std::pair<unsigned int, unsigned int>& getResolution() const override { return m_resolution; };
-            [[nodiscard]] const unsigned int& getFramerate() const override { return m_framerate; };
+            [[nodiscard]] const unsigned int& getFPS() const override { return m_FPS; };
 
         private:
 
-            std::string m_name{"Default name"};
-            std::pair<unsigned int, unsigned int> m_resolution{1920, 1080};
-            unsigned int m_framerate{90};
+            std::string m_name{DEFAULT_NAME.data()};
+            std::pair<unsigned int, unsigned int> m_resolution{DEFAULT_RESOLUTION};
+            unsigned int m_FPS{DEFAULT_FPS};
 
     }; // class ARenderer
 

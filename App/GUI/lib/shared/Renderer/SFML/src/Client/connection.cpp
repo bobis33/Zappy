@@ -10,7 +10,13 @@
 #include "GUI/SFMLClient.hpp"
 #include "GUI/RunTimeException.hpp"
 
+void gui::SFMLClient::disconnect()
+{
+    m_socket.disconnect();
+}
+
 void gui::SFMLClient::connect(const uint16_t port, const std::string &machineName)
 {
-    m_socket.connect(machineName, port) != sf::Socket::Done ? throw RunTimeException("Connection failed") : void();
+    if (m_socket.connect(machineName, port) != sf::Socket::Done)
+        throw RunTimeException("Connection failed");
 }

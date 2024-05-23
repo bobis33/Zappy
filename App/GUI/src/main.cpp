@@ -23,14 +23,17 @@ int main(const int argc, char* const argv[])
         }
         Gui(Parser::ParseArgs(argc, argv)).Run();
         PluginLoader::getInstance().closePlugins();
+    } catch (const PluginLoader::PluginLoaderException &e) {
+        std::cerr << "PluginLoaderException: " << e.what() << '\n';
+        return EPITECH_EXIT_ERROR;
     } catch (const Parser::ParserException &e) {
-        std::cerr << e.what() << '\n';
+        std::cerr << "ParserException: " << e.what() << '\n';
         return EPITECH_EXIT_ERROR;
     } catch (const RunTimeException &e) {
-        std::cerr << e.what() << '\n';
+        std::cerr << "RunTimeException: " << e.what() << '\n';
         return EPITECH_EXIT_ERROR;
     } catch (const std::exception &e) {
-        std::cerr << e.what() << '\n';
+        std::cerr << "StandardException: " << e.what() << '\n';
         return EPITECH_EXIT_ERROR;
     } catch (...) {
         std::cerr << "Unknown error\n";

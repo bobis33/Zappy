@@ -19,9 +19,11 @@ namespace gui {
             virtual ~IClient() = default;
 
             virtual void connect(uint16_t port, const std::string& machineName) = 0;
+            virtual void disconnect() = 0;
             virtual bool sendCommand(const std::string& cmd) = 0;
             virtual bool getResponse(const std::string& cmd) = 0;
             virtual std::string getResponse() = 0;
+            virtual bool isConnected() = 0;
 
     }; // class IClient
 
