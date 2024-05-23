@@ -10,7 +10,8 @@ add_library(${PROJECT_NAME} SHARED ${SOURCE})
 target_sources(${PROJECT_NAME} PRIVATE
         ${SRC_DIR}/entryPoint.cpp
         ${SRC_DIR}/SFML.cpp
-        ${SRC_DIR}/client.cpp
+        ${SRC_DIR}/Client/client.cpp
+        ${SRC_DIR}/Client/commands.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR} include)

@@ -22,20 +22,17 @@ if (USE_CLANG_TIDY)
     include(${CMAKE_MODULE_PATH}/ClangTidy.cmake)
 endif()
 
-# Plugins
-# add_subdirectory(App/Plugin)
-
-# Static library
+# Libraries
 add_subdirectory(lib)
 
 # Main executable
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 target_sources(${PROJECT_NAME} PRIVATE
+        ${SRC_DIR}/gui.cpp
         ${SRC_DIR}/main.cpp
         ${SRC_DIR}/parser.cpp
         ${SRC_DIR}/pluginLoader.cpp
-        ${SRC_DIR}/gui.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR})

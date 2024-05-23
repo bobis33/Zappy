@@ -11,6 +11,7 @@
 #include "GUI/Gui.hpp"
 #include "GUI/Parser.hpp"
 #include "GUI/PluginLoader.hpp"
+#include "GUI/RunTimeException.hpp"
 
 using namespace gui;
 
@@ -22,6 +23,12 @@ int main(const int argc, char* const argv[])
         }
         Gui(Parser::ParseArgs(argc, argv)).Run();
         PluginLoader::getInstance().closePlugins();
+    } catch (const Parser::ParserException &e) {
+        std::cerr << e.what() << '\n';
+        return EPITECH_EXIT_ERROR;
+    } catch (const RunTimeException &e) {
+        std::cerr << e.what() << '\n';
+        return EPITECH_EXIT_ERROR;
     } catch (const std::exception &e) {
         std::cerr << e.what() << '\n';
         return EPITECH_EXIT_ERROR;

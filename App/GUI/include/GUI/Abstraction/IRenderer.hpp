@@ -10,6 +10,7 @@
 #include <cstdint>
 
 #include "GUI/Abstraction/IPlugin.hpp"
+#include "GUI/Abstraction/IClient.hpp"
 
 namespace gui {
 
@@ -24,9 +25,10 @@ namespace gui {
             [[nodiscard]] virtual const std::string& getName() const = 0;
             [[nodiscard]] virtual const std::pair<unsigned int, unsigned int>& getResolution() const = 0;
             [[nodiscard]] virtual const unsigned int& getFramerate() const = 0;
+            [[nodiscard]] virtual IClient& getClient() = 0;
 
             virtual void render() = 0;
-            virtual void connect(uint16_t port, const std::string& machineName) = 0;
+            virtual void handleEvents() = 0;
 
     }; // class IRenderer
 
