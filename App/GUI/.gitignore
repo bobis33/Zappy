@@ -1,4 +1,5 @@
 .doxygen/*
+.idea/*
 
 # CMake
 CMakeCache.txt

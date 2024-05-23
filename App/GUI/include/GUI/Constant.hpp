@@ -19,4 +19,3 @@ namespace gui {
     static constexpr int EPITECH_EXIT_ERROR = 84;
 
 }; // namespace gui
-

@@ -5,8 +5,9 @@ if (DOXYGEN_FOUND)
     set(DOXYGEN_QUIET YES)
     set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/.doxygen)
     doxygen_add_docs(doc
-            lib/include
-            App/include
+            lib/shared/Renderer/SFML/include
+            lib/static/myLib/include
+            include
             ALL
     )
     add_custom_command(TARGET doc
@@ -15,8 +16,8 @@ if (DOXYGEN_FOUND)
             COMMAND ${CMAKE_MAKE_PROGRAM} > /dev/null
             && ${CMAKE_COMMAND} -E copy
             ${DOXYGEN_OUTPUT_DIRECTORY}/latex/refman.pdf
-            ${CMAKE_SOURCE_DIR}/doc/Zappy_GUI.pdf
-            BYPRODUCTS ${CMAKE_SOURCE_DIR}/doc/Zappy_GUI.pdf
+            ${CMAKE_SOURCE_DIR}/Zappy_GUI.pdf
+            BYPRODUCTS ${CMAKE_SOURCE_DIR}/Zappy_GUI.pdf
             VERBATIM
     )
 else ()

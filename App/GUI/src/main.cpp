@@ -2,14 +2,32 @@
 ** EPITECH PROJECT, 2024
 ** Zappy | GUI
 ** File description:
-** main
+** main.cpp
 */
 
+#include <iostream>
+
 #include "GUI/Constant.hpp"
+#include "GUI/Gui.hpp"
+#include "GUI/Parser.hpp"
+#include "GUI/PluginLoader.hpp"
 
 using namespace gui;
 
-int main(int ac, char* av[])
+int main(const int argc, char* const argv[])
 {
+    try {
+        if (argc != 2 && argc != 5) {
+            throw Parser::ParserException("Invalid number of arguments");
+        }
+        Gui(Parser::ParseArgs(argc, argv)).Run();
+        PluginLoader::getInstance().closePlugins();
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << '\n';
+        return EPITECH_EXIT_ERROR;
+    } catch (...) {
+        std::cerr << "Unknown error\n";
+        return EPITECH_EXIT_ERROR;
+    }
     return EPITECH_EXIT_SUCCESS;
 }

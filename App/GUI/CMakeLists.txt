@@ -33,6 +33,9 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 
 target_sources(${PROJECT_NAME} PRIVATE
         ${SRC_DIR}/main.cpp
+        ${SRC_DIR}/parser.cpp
+        ${SRC_DIR}/pluginLoader.cpp
+        ${SRC_DIR}/gui.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR})
