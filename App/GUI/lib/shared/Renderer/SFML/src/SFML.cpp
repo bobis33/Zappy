@@ -9,17 +9,41 @@
 
 #include "GUI/SFML.hpp"
 
-bool gui::SFML::checkConnection(sf::Clock clock, bool &connexionReceived)
+static constexpr const int BIT_PER_PIXEL = 64;
+
+static gui::KeyBoard::Key KEY_CODE_ARRAY[sf::Keyboard::KeyCount];
+
+gui::KeyBoard::Key gui::SFML::getKeyboardEvent(const sf::Event &event)
+{
+    return event.key.code >= sf::Keyboard::KeyCount ? gui::KeyBoard::Key::NONE : KEY_CODE_ARRAY[event.key.code];
+}
+
+void gui::SFML::init(const std::pair<unsigned int, unsigned int> resolution, const std::string &name)
+{
+    std::fill_n(KEY_CODE_ARRAY, sf::Keyboard::KeyCount, KeyBoard::Key::NONE);
+    KEY_CODE_ARRAY[sf::Keyboard::Escape] = KeyBoard::Key::KEY_ESCAPE;
+    KEY_CODE_ARRAY[sf::Keyboard::Enter] = KeyBoard::Key::KEY_ENTER;
+    KEY_CODE_ARRAY[sf::Keyboard::Left] = KeyBoard::Key::KEY_LEFT;
+    KEY_CODE_ARRAY[sf::Keyboard::Right] = KeyBoard::Key::KEY_RIGHT;
+    KEY_CODE_ARRAY[sf::Keyboard::Up] = KeyBoard::Key::KEY_UP;
+    KEY_CODE_ARRAY[sf::Keyboard::Down] = KeyBoard::Key::KEY_DOWN;
+    KEY_CODE_ARRAY[sf::Keyboard::Space] = KeyBoard::Key::KEY_SPACE;
+
+    m_window.create(sf::VideoMode(resolution.first, resolution.second, BIT_PER_PIXEL), name, sf::Style::Resize | sf::Style::Close);
+    m_timeoutClock.restart();
+}
+
+bool gui::SFML::checkConnection(sf::Clock clock)
 {
     if (!getClient().isConnected()) {
-        if (clock.getElapsedTime().asSeconds() > 30) {
+        if (clock.getElapsedTime().asSeconds() > TIMEOUT) {
             return false;
         }
     } else {
-        if (connexionReceived) {
+        if (m_connectionReceived) {
             clock.restart();
         }
-        connexionReceived = true;
+        m_connectionReceived = true;
     }
 
     return true;
@@ -27,38 +51,8 @@ bool gui::SFML::checkConnection(sf::Clock clock, bool &connexionReceived)
 
 void gui::SFML::render()
 {
-    sf::Clock clock;
-    bool connexionReceived = false;
-    m_window.create(sf::VideoMode(getResolution().first, getResolution().second), getName());
-    m_window.setFramerateLimit(getFPS());
-
-    while (m_window.isOpen() && m_isConnected) {
-
-        if (!checkConnection(clock, connexionReceived)) {
-            m_isConnected = false;
-            break;
-        }
-        handleEvents();
-        m_window.clear(sf::Color::Black);
-        m_window.display();
+    if (!checkConnection(m_timeoutClock)) {
+        m_isConnected = false;
     }
+    m_window.display();
 }
-
-void gui::SFML::handleEvents()
-{
-    sf::Event event{};
-
-    while (m_window.pollEvent(event)) {
-
-        switch(event.type) {
-            case sf::Event::Closed:
-                m_window.close();
-                getClient().disconnect();
-                break;
-
-            default:
-                break;
-        }
-    }
-}
-

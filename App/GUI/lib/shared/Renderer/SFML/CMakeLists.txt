@@ -10,6 +10,7 @@ add_library(${PROJECT_NAME} SHARED ${SOURCE})
 target_sources(${PROJECT_NAME} PRIVATE
         ${SRC_DIR}/entryPoint.cpp
         ${SRC_DIR}/SFML.cpp
+        ${SRC_DIR}/event.cpp
         ${SRC_DIR}/Client/connection.cpp
         ${SRC_DIR}/Client/command.cpp
 )
