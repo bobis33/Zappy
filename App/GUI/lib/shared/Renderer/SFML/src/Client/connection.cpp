@@ -9,14 +9,15 @@
 
 #include "GUI/SFMLClient.hpp"
 #include "GUI/RunTimeException.hpp"
+#include "GUI/Constant.hpp"
 
-void gui::SFMLClient::disconnect()
+bool gui::SFMLClient::connect(const uint16_t port, const std::string &machineName)
 {
-    m_socket.disconnect();
-}
+    sf::Clock clk{};
 
-void gui::SFMLClient::connect(const uint16_t port, const std::string &machineName)
-{
-    if (m_socket.connect(machineName, port) != sf::Socket::Done)
-        throw RunTimeException("Connection failed");
+    while(clk.getElapsedTime().asSeconds() < TIMEOUT) {
+        if (m_socket.connect(machineName, port) == sf::Socket::Done)
+            return true;
+    }
+    return false;
 }

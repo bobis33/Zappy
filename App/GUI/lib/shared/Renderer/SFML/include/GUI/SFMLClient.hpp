@@ -19,8 +19,8 @@ namespace gui {
 
             ~SFMLClient() override = default;
 
-            void connect(uint16_t port, const std::string &machineName) override;
-            void disconnect() override;
+            bool connect(uint16_t port, const std::string &machineName) override;
+            void disconnect() override { m_socket.disconnect(); };
 
             bool sendCommand(const std::string &cmd) override;
             bool getResponse(const std::string &cmd) override;
