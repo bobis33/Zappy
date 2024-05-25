@@ -22,7 +22,8 @@ gui::Gui::Gui(const gui::Arguments &args)
     m_renderer->setResolution(DEFAULT_RESOLUTION);
     m_renderer->setName(DEFAULT_NAME.data());
     m_renderer->setFPS(DEFAULT_FPS);
-    m_renderer->getClient().connect(args.m_port, args.m_machineName);
+    if (!m_renderer->getClient().connect(args.m_port, args.m_machineName))
+        throw RunTimeException("Failed to connect to server");
 
     if (!m_renderer->getClient().sendCommand("GRAPHIC\n") || !m_renderer->getClient().getResponse("WELCOME\n"))
         throw RunTimeException("Failed to connect to server (GRAPHIC or WELCOME cmd)");
