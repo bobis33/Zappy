@@ -42,7 +42,7 @@ uint16_t gui::Parser::ParsePort(const char* port)
     return static_cast<uint16_t>(portInt);
 }
 
-gui::Arguments gui::Parser::ParseArgs(const int argc, char* const argv[])
+gui::Argument gui::Parser::ParseArgs(const int argc, char* const argv[])
 {
     uint16_t port = 0;
     std::string machineName;

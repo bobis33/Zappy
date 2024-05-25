@@ -7,14 +7,9 @@
 
 #pragma once
 
+#include "GUI/Argument.hpp"
+
 namespace gui {
-
-    struct Arguments {
-        const uint16_t m_port;
-        const std::string m_machineName;
-
-        Arguments(uint16_t port, std::string  machineName) : m_port{port}, m_machineName{std::move(machineName)} {};
-    };
 
     class Parser {
 
@@ -23,7 +18,7 @@ namespace gui {
             Parser() = default;
             ~Parser() = default;
 
-            static Arguments ParseArgs(int argc, char* const argv[]);
+            static Argument ParseArgs(int argc, char* const argv[]);
 
             static uint16_t ParsePort(const char* port);
             static std::string ParseMachineName(const char* machineName);

@@ -5,7 +5,6 @@
 ** gui.cpp
 */
 
-#include <iostream>
 #include <functional>
 
 #include "GUI/Constant.hpp"
@@ -32,16 +31,15 @@ void gui::Gui::Run()
     }
 }
 
-gui::Gui::Gui(const gui::Arguments &args)
+gui::Gui::Gui(const gui::Argument &args)
 {
     m_renderer = PluginLoader::getInstance().getPlugin<IRenderer>(PLUGIN_RENDERER_SFML.data());
-    m_renderer->init(DEFAULT_RESOLUTION, DEFAULT_NAME.data());
+    m_renderer->init(DEFAULT_NAME.data(), DEFAULT_RESOLUTION, DEFAULT_BITS_PER_PIXEL);
     m_renderer->setFPS(DEFAULT_FPS);
-    if (!m_renderer->getClient().connect(args.m_port, args.m_machineName) ||
+    if (!m_renderer->getClient().connect(args.port, args.hostName) ||
         !m_renderer->getClient().sendCommand("GRAPHIC\n") ||
         !m_renderer->getClient().getResponse("WELCOME\n"))
         throw RunTimeException("Failed to connect to server");
 
-    const std::string &response = m_renderer->getClient().getResponse();
-    std::cout << response << std::endl; // to remove
+    m_data = m_renderer->getClient().getResponse();
 }

@@ -5,11 +5,7 @@
 ** client.cpp
 */
 
-#include <cstdint>
-
 #include "GUI/SFMLClient.hpp"
-#include "GUI/RunTimeException.hpp"
-#include "GUI/Constant.hpp"
 
 bool gui::SFMLClient::connect(const uint16_t port, const std::string &machineName)
 {
@@ -20,4 +16,11 @@ bool gui::SFMLClient::connect(const uint16_t port, const std::string &machineNam
             return true;
     }
     return false;
+}
+
+bool gui::SFMLClient::isConnected()
+{
+    sf::Packet packet;
+    packet << "";
+    return m_socket.send(packet) == sf::Socket::Done;
 }

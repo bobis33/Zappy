@@ -10,6 +10,7 @@
 #include <SFML/Network.hpp>
 
 #include "GUI/Abstraction/IClient.hpp"
+#include "GUI/Constant.hpp"
 
 namespace gui {
 
@@ -26,11 +27,11 @@ namespace gui {
             bool getResponse(const std::string &cmd) override;
             std::string getResponse() override;
 
-            [[nodiscard]] bool isConnected() override { return m_socket.getRemoteAddress() != sf::IpAddress::None; };
+            [[nodiscard]] bool isConnected() override;
 
         private:
+
             sf::TcpSocket m_socket{};
-            sf::Packet m_packet{};
 
     }; // class Client
 

@@ -9,8 +9,8 @@
 
 #include <memory>
 
-#include "GUI/Parser.hpp"
 #include "GUI/Abstraction/IRenderer.hpp"
+#include "GUI/Argument.hpp"
 
 namespace gui {
 
@@ -19,7 +19,7 @@ namespace gui {
 
         public:
 
-            explicit Gui(const Arguments& args);
+            explicit Gui(const Argument &args);
             ~Gui() = default;
 
             void Run();
@@ -29,6 +29,7 @@ namespace gui {
         private:
 
             std::unique_ptr<IRenderer> m_renderer;
+            std::string m_data;
 
     }; // class Gui
 

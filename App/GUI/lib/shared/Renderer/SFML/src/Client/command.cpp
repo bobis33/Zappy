@@ -6,7 +6,6 @@
 */
 
 #include "GUI/SFMLClient.hpp"
-#include "GUI/Constant.hpp"
 
 std::string gui::SFMLClient::getResponse()
 {

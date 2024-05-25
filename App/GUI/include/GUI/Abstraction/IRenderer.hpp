@@ -22,9 +22,9 @@ namespace gui {
             virtual void setFPS(unsigned int FPS) = 0;
 
             [[nodiscard]] virtual IClient& getClient() = 0;
-            [[nodiscard]] virtual bool isRunning() const = 0;
+            [[nodiscard]] virtual bool isRunning() = 0;
 
-            virtual void init(std::pair<unsigned int, unsigned int> resolution, const std::string &name) = 0;
+            virtual void init(const std::string &name, std::pair<const unsigned int,const unsigned int> resolution, unsigned int bitsPerPixel) = 0;
             virtual void render() = 0;
             virtual KeyBoard::Key getEvents() = 0;
             virtual void close() = 0;

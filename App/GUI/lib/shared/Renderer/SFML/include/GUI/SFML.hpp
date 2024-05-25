@@ -12,7 +12,6 @@
 #include "GUI/Abstraction/IRenderer.hpp"
 #include "GUI/SFMLClient.hpp"
 #include "GUI/KeyBoard.hpp"
-#include "GUI/Constant.hpp"
 
 namespace gui {
 
@@ -28,9 +27,9 @@ class SFML : public IRenderer {
             [[nodiscard]] std::string getPluginName() const override { return PLUGIN_RENDERER_SFML.data(); };
             [[nodiscard]] IClient& getClient() override { return m_client; };
             [[nodiscard]] KeyBoard::Key getEvents() override;
-            [[nodiscard]] bool isRunning() const override { return m_window.isOpen() && m_isConnected; };
+            [[nodiscard]] bool isRunning() override { return m_window.isOpen() && checkConnection(m_timeoutClock); };
 
-            void init(std::pair<unsigned int, unsigned int> resolution, const std::string &name) override;
+            void init(const std::string &name, std::pair<const unsigned int,const unsigned int> resolution, unsigned int bitsPerPixel) override;
             void close() override { m_window.close(); getClient().disconnect(); };
             void render() override;
 
@@ -41,9 +40,7 @@ class SFML : public IRenderer {
 
             sf::RenderWindow m_window;
             SFMLClient m_client;
-            bool m_isConnected{true};
             sf::Clock m_timeoutClock;
-            bool m_connectionReceived{false};
 
     }; // class SFML
 

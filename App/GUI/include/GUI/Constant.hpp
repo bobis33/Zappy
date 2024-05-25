@@ -13,6 +13,8 @@
 
 #pragma once
 
+#include <string_view>
+
 namespace gui {
 
     static constexpr const int EPITECH_EXIT_SUCCESS = 0;
@@ -22,9 +24,10 @@ namespace gui {
     static constexpr const int TIMEOUT = 20;
 
     static constexpr const unsigned int DEFAULT_FPS = 80;
-    static constexpr const std::pair<unsigned int, unsigned int> DEFAULT_RESOLUTION = {1920, 1080};
-    static constexpr const std::string_view DEFAULT_NAME = "Zappy";
+    static constexpr const unsigned int DEFAULT_BITS_PER_PIXEL = 64;
+    static constexpr const std::pair<const unsigned int, const unsigned int> DEFAULT_RESOLUTION {1920, 1080};
+    static constexpr const std::string_view DEFAULT_NAME = "ZAPPY";
 
     static constexpr const std::string_view PLUGIN_RENDERER_SFML = "SFML";
 
-}; // namespace gui
+} // namespace gui

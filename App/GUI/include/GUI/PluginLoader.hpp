@@ -5,8 +5,6 @@
 ** PluginLoader.hpp
 */
 
-
-#include <dlfcn.h>
 #include <unordered_map>
 #include <vector>
 
