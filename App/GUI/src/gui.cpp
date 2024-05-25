@@ -58,7 +58,7 @@ gui::Gui::Gui(const gui::Argument &args)
         throw RunTimeException("Failed to connect to server");
 
     m_data = getData(m_renderer->getClient().getResponse());
-    for (const auto &line : m_data) {
+    for (const std::string &line : m_data) {
         command = line.substr(0, 3);
         if (ProtocolMap.find(command) != ProtocolMap.end()) {
             std::cout << "Command: " << command << std::endl;

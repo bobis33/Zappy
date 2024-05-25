@@ -19,7 +19,7 @@ std::string gui::Protocol::getCommand(gui::ProtocolKey key)
 gui::ProtocolKey gui::Protocol::getKey(const std::string &command)
 {
     if (ProtocolMap.find(command) != ProtocolMap.end()) {
-        return Map.at(command);
+        return ProtocolMap.at(command);
     }
 
     return ProtocolKey::UNKNOWN;
