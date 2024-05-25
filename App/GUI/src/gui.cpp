@@ -6,11 +6,14 @@
 */
 
 #include <functional>
+#include <sstream>
+#include <iostream>
 
 #include "GUI/Constant.hpp"
 #include "GUI/Gui.hpp"
 #include "GUI/PluginLoader.hpp"
 #include "GUI/RunTimeException.hpp"
+#include "GUI/Protocol.hpp"
 
 static const std::function<void(gui::Gui &)> EVENT_ARRAY[gui::KeyBoard::Key::COUNT]
 {
@@ -31,8 +34,21 @@ void gui::Gui::Run()
     }
 }
 
+std::vector<std::string> gui::Gui::getData(const std::string &data)
+{
+    std::vector<std::string> tmp;
+    std::string tmpData;
+    std::stringstream ss(data);
+
+    while (std::getline(ss, tmpData, '\n')) {
+        tmp.push_back(tmpData);
+    }
+    return tmp;
+}
+
 gui::Gui::Gui(const gui::Argument &args)
 {
+    std::string command;
     m_renderer = PluginLoader::getInstance().getPlugin<IRenderer>(PLUGIN_RENDERER_SFML.data());
     m_renderer->init(DEFAULT_NAME.data(), DEFAULT_RESOLUTION, DEFAULT_BITS_PER_PIXEL);
     m_renderer->setFPS(DEFAULT_FPS);
@@ -41,5 +57,11 @@ gui::Gui::Gui(const gui::Argument &args)
         !m_renderer->getClient().getResponse("WELCOME\n"))
         throw RunTimeException("Failed to connect to server");
 
-    m_data = m_renderer->getClient().getResponse();
+    m_data = getData(m_renderer->getClient().getResponse());
+    for (const auto &line : m_data) {
+        command = line.substr(0, 3);
+        if (ProtocolMap.find(command) != ProtocolMap.end()) {
+            std::cout << "Command: " << command << std::endl;
+        }
+    }
 }
