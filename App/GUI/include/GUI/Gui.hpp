@@ -24,6 +24,8 @@ namespace gui {
 
             void Run();
 
+            std::unique_ptr<IRenderer>& getRenderer() { return m_renderer; };
+
         private:
 
             std::unique_ptr<IRenderer> m_renderer;

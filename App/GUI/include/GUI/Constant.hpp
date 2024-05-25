@@ -21,7 +21,7 @@ namespace gui {
     static constexpr const int MAX_OCTETS_READ = 4096;
     static constexpr const int TIMEOUT = 20;
 
-    static constexpr const unsigned int DEFAULT_FPS = 60;
+    static constexpr const unsigned int DEFAULT_FPS = 80;
     static constexpr const std::pair<unsigned int, unsigned int> DEFAULT_RESOLUTION = {1920, 1080};
     static constexpr const std::string_view DEFAULT_NAME = "Zappy";
 
