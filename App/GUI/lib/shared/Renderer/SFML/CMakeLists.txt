@@ -11,6 +11,7 @@ target_sources(${PROJECT_NAME} PRIVATE
         ${SRC_DIR}/entryPoint.cpp
         ${SRC_DIR}/SFML.cpp
         ${SRC_DIR}/event.cpp
+        ${SRC_DIR}/Inventory/resource.cpp
         ${SRC_DIR}/Client/connection.cpp
         ${SRC_DIR}/Client/command.cpp
 )
