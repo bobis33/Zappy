@@ -8,6 +8,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <array>
 
 #include "GUI/Abstraction/IRenderer.hpp"
 #include "GUI/SFMLClient.hpp"
@@ -41,6 +42,8 @@ class SFML : public IRenderer {
             sf::RenderWindow m_window;
             SFMLClient m_client;
             sf::Clock m_timeoutClock;
+
+            static std::array<gui::KeyBoard::Key, sf::Keyboard::KeyCount> KEY_CODE_ARRAY;
 
     }; // class SFML
 

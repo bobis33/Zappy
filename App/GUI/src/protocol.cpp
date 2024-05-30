@@ -9,9 +9,10 @@
 
 std::string gui::Protocol::getCommand(gui::ProtocolKey key)
 {
-    for (const auto &it : ProtocolMap) {
-        if (it.second == key)
-            return it.first;
+    for (const auto &iterator : ProtocolMap) {
+        if (iterator.second == key) {
+            return iterator.first;
+        }
     }
     return "";
 }

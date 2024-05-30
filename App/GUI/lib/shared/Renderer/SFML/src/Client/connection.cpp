@@ -12,8 +12,9 @@ bool gui::SFMLClient::connect(const uint16_t port, const std::string &machineNam
     sf::Clock clk{};
 
     while(clk.getElapsedTime().asSeconds() < TIMEOUT) {
-        if (m_socket.connect(machineName, port) == sf::Socket::Done)
+        if (m_socket.connect(machineName, port) == sf::Socket::Done) {
             return true;
+        }
     }
     return false;
 }

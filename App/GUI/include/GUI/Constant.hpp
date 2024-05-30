@@ -25,6 +25,8 @@ namespace gui {
     static constexpr const int MAX_OCTETS_READ = 4096;
     static constexpr const int TIMEOUT = 20;
 
+    static constexpr const int MAX_PORT = 65535;
+
     static constexpr const unsigned int DEFAULT_FPS = 80;
     static constexpr const unsigned int DEFAULT_BITS_PER_PIXEL = 64;
     static constexpr const std::pair<const unsigned int, const unsigned int> DEFAULT_RESOLUTION {1920, 1080};

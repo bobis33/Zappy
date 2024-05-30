@@ -9,7 +9,7 @@
 
 #include <vector>
 
-#include "GUI/Mob/Inventory/Resource.hpp"
+#include "GUI/Inventory/Resource.hpp"
 
 namespace gui {
 

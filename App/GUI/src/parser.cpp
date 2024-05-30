@@ -23,38 +23,38 @@ std::string gui::Parser::ParseMachineName(const char* machineName)
     const std::regex ip_regex(R"(^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$)");
 
     if (machineNameStr == "localhost") {
-        return {"127.0.0.1"};
-    }else if (machineNameStr.empty() || std::regex_match(machineNameStr, ip_regex)) {
+        return "127.0.0.1";
+    } if (machineNameStr.empty() || std::regex_match(machineNameStr, ip_regex)) {
         return machineNameStr;
-    } else {
-        throw ParserException("Invalid IP address format");
     }
+
+    throw ParserException("Invalid IP address format");
 }
 
 uint16_t gui::Parser::ParsePort(const char* port)
 {
     int portInt = std::stoi(port);
 
-    if (portInt < 0 || portInt > 65535) {
+    if (portInt < 0 || portInt > MAX_PORT) {
         throw ParserException("Invalid port");
     }
 
-    return static_cast<uint16_t>(portInt);
+    return static_cast<unsigned short int>(portInt);
 }
 
 gui::Argument gui::Parser::ParseArgs(const int argc, char* const argv[])
 {
     uint16_t port = 0;
+    int optionChar = 0;
     std::string machineName;
-    int c;
 
     if (argc == 2 && std::string(argv[1]) == "-help") {
         std::cout << HELP_MSG;
         exit(EPITECH_EXIT_SUCCESS);
     }
 
-    while((c = getopt(argc, argv, "p:h:")) != -1) {
-        switch (c) {
+    while((optionChar = getopt(argc, argv, "p:h:")) != -1) {
+        switch (optionChar) {
             case 'p':
                 port = ParsePort(optarg);
                 break;

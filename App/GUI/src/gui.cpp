@@ -15,7 +15,7 @@
 #include "GUI/RunTimeException.hpp"
 #include "GUI/Protocol.hpp"
 
-static const std::function<void(gui::Gui &)> EVENT_ARRAY[gui::KeyBoard::Key::COUNT]
+static const std::array<std::function<void(gui::Gui &gui)>, gui::KeyBoard::Key::COUNT> EVENT_ARRAY
 {
     [](gui::Gui &gui) -> void { gui.getRenderer()->close(); },
     nullptr,
@@ -23,12 +23,12 @@ static const std::function<void(gui::Gui &)> EVENT_ARRAY[gui::KeyBoard::Key::COU
 
 void gui::Gui::Run()
 {
-    KeyBoard::Key event;
+    unsigned long event = 0;
 
     while (m_renderer->isRunning()) {
-        event = m_renderer->getEvents();
-        if (event < KeyBoard::Key::COUNT && EVENT_ARRAY[event] != nullptr) {
-            EVENT_ARRAY[event](*this);
+        event = static_cast<unsigned long>(m_renderer->getEvents());
+        if (event < KeyBoard::Key::COUNT && EVENT_ARRAY.at(event) != nullptr) {
+            EVENT_ARRAY.at(event)(*this);
         }
         m_renderer->render();
     }
@@ -54,14 +54,15 @@ gui::Gui::Gui(const gui::Argument &args)
     m_renderer->setFPS(DEFAULT_FPS);
     if (!m_renderer->getClient().connect(args.port, args.hostName) ||
         !m_renderer->getClient().sendCommand("GRAPHIC\n") ||
-        !m_renderer->getClient().getResponse("WELCOME\n"))
+        !m_renderer->getClient().getResponse("WELCOME\n")) {
         throw RunTimeException("Failed to connect to server");
+    }
 
     m_data = getData(m_renderer->getClient().getResponse());
     for (const std::string &line : m_data) {
         command = line.substr(0, 3);
         if (ProtocolMap.find(command) != ProtocolMap.end()) {
-            std::cout << "Command: " << command << std::endl;
+            std::cout << "Command: " << command << '\n';
         }
     }
 }

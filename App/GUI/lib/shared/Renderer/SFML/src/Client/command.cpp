@@ -5,17 +5,19 @@
 ** command.cpp
 */
 
+#include <array>
+
 #include "GUI/SFMLClient.hpp"
 
 std::string gui::SFMLClient::getResponse()
 {
-    char data[MAX_OCTETS_READ] = {0};
-    std::size_t size;
+    std::array<char, MAX_OCTETS_READ> data{};
     sf::Clock clk{};
+    std::size_t size = 0;
 
     while (clk.getElapsedTime().asSeconds() < TIMEOUT) {
         if (m_socket.receive(&data, MAX_OCTETS_READ, size) == sf::Socket::Done) {
-            return data;
+            return data.data();
         }
     }
 
@@ -24,12 +26,12 @@ std::string gui::SFMLClient::getResponse()
 
 bool gui::SFMLClient::getResponse(const std::string& cmd)
 {
-    char data[MAX_OCTETS_READ] = {0};
-    std::size_t received;
+    std::array<char, MAX_OCTETS_READ> data{};
     sf::Clock clk{};
+    std::size_t received = 0;
 
     while (clk.getElapsedTime().asSeconds() < TIMEOUT) {
-        if (m_socket.receive(&data, MAX_OCTETS_READ, received) == sf::Socket::Done && data == cmd) {
+        if (m_socket.receive(&data, MAX_OCTETS_READ, received) == sf::Socket::Done && std::string(data.data(), received) == cmd){
             return true;
         }
     }
@@ -39,10 +41,10 @@ bool gui::SFMLClient::getResponse(const std::string& cmd)
 
 bool gui::SFMLClient::sendCommand(const std::string& cmd)
 {
-    const std::size_t to_send = cmd.size();
+    sf::Clock clk{};
     std::size_t total_sent = 0;
     std::size_t sent = 0;
-    sf::Clock clk{};
+    const std::size_t to_send = cmd.size();
 
     while (total_sent < to_send || clk.getElapsedTime().asSeconds() < TIMEOUT) {
         sent = 0;

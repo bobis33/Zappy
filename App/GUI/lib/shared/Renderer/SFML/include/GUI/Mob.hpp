@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "GUI/Inventory.hpp"
+#include "GUI/Inventory/Inventory.hpp"
 #include "GUI/Position.hpp"
 
 namespace gui {

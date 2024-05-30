@@ -50,7 +50,7 @@ namespace gui {
 
             void loadPlugins();
 
-            std::unordered_map<std::string, PluginCreator> m_plugins{};
+            std::unordered_map<std::string, PluginCreator> m_plugins{0};
             std::vector<void*> m_handles{nullptr};
 
     }; // class PluginLoader

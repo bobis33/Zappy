@@ -7,8 +7,6 @@
 
 #pragma once
 
-#include <cstdint>
-
 #include "GUI/Abstraction/IPlugin.hpp"
 #include "GUI/Abstraction/IClient.hpp"
 #include "GUI/KeyBoard.hpp"

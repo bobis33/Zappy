@@ -13,8 +13,9 @@
 void gui::PluginLoader::closePlugins()
 {
     for (void* handle : m_handles) {
-        if (handle != nullptr)
+        if (handle != nullptr) {
             dlclose(handle);
+        }
     }
 }
 

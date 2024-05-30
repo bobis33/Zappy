@@ -26,14 +26,11 @@ namespace gui {
                 NONE
             };
 
-            Resource(const Type type, const unsigned int quantity);
+            Resource(Type type, unsigned int quantity);
 
             bool operator==(const Resource &resource) const
             {
-                if (type == resource.type)
-                    return true;
-
-                return false;
+                return type == resource.type;
             }
 
             Type type;

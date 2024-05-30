@@ -19,6 +19,11 @@ namespace gui {
 
         public:
 
+            enum class RendererMode {
+                GAME,
+                SETTINGS
+            };
+
             explicit Gui(const Argument &args);
             ~Gui() = default;
 
@@ -32,6 +37,7 @@ namespace gui {
 
             std::unique_ptr<IRenderer> m_renderer;
             std::vector<std::string> m_data;
+            RendererMode m_mode{RendererMode::GAME};
 
     }; // class Gui
 
