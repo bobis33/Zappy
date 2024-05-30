@@ -11,5 +11,5 @@
 
 bool print_msg(const int fd, const char *msg)
 {
-    return write(fd, msg, strlen(msg)) == 0;
+    return write(fd, msg, strlen(msg)) != -1;
 }

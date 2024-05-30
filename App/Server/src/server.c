@@ -5,10 +5,10 @@
 ** server
 */
 
-#pragma once
-
 #include <stdbool.h>
 
 #include "Server/arguments.h"
 
-bool run_server(arguments_t *args);
+bool run_server(arguments_t *args) {
+    return true;
+}

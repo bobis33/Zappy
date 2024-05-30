@@ -13,6 +13,12 @@ function clean() {
     else
         echo ".doxygen directory does not exist."
     fi
+    if [ -d "cmake-build-debug" ]; then
+        rm -rf cmake-build-debug/*
+        echo "cmake-build-debug directory has been removed."
+    else
+        echo "doc directory does not exist."
+    fi
     if [ -f "zappy_server" ]; then
         rm zappy_server
         echo "zappy_server binary has been removed."

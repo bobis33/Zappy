@@ -10,25 +10,41 @@
 #include <stdio.h>
 
 #include "Server/constant.h"
-#include "Server/server.h"
+#include "Server/arguments.h"
 #include "Server/parser.h"
+#include "Server/server.h"
+
+static void debug_print(arguments_t *args)
+{
+    printf("\n===============DEBUG SERVER===============\n");
+    printf("port: %d\n", args->port);
+    printf("width: %d\n", args->width);
+    printf("height: %d\n", args->height);
+    printf("clients_nb: %d\n", args->clients_nb);
+    printf("freq: %d\n", args->freq);
+    for (int i = 0; i < args->nb_teams; i++) {
+        printf("team_names: %s\n", args->team_names[i]);
+    }
+    printf("==========================================\n\n");
+}
+
+static void free_server(arguments_t *args)
+{
+    free((void *)args->team_names);
+    free(args);
+}
 
 int main(const int argc, char *const argv[])
 {
-    server_t *server = NULL;
+    arguments_t *args = NULL;
 
-    if (!parse_args(&server, argc, argv)) {
+    if (!parse_args(&args, argc, argv)) {
         return EPITECH_EXIT_ERROR;
     }
-    printf("port: %d\n", server->port);
-    printf("width: %d\n", server->width);
-    printf("height: %d\n", server->height);
-    printf("clients_nb: %d\n", server->clients_nb);
-    printf("freq: %d\n", server->freq);
-    for (int i = 0; i < server->nb_teams; i++) {
-        printf("team_names: %s\n", server->team_names[i]);
+    debug_print(args);
+    if (!run_server(args)) {
+        return EPITECH_EXIT_ERROR;
     }
-    free((void *)server->team_names);
-    free(server);
+    free_server(args);
     return EPITECH_EXIT_SUCCESS;
 }

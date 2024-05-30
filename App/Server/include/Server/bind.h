@@ -9,14 +9,14 @@
 
 #include <stdbool.h>
 
-#include "Server/server.h"
+#include "Server/arguments.h"
 
-bool bind_port(server_t *server, char *arg);
-bool bind_width(server_t *server, char *arg);
-bool bind_height(server_t *server, char *arg);
-bool bind_team(server_t *server, char *arg);
-bool bind_clients_nb(server_t *server, char *arg);
-bool bind_freq(server_t *server, char *arg);
+bool bind_port(arguments_t *args, char *arg);
+bool bind_width(arguments_t *args, char *arg);
+bool bind_height(arguments_t *args, char *arg);
+bool bind_team(arguments_t *args, char *arg);
+bool bind_clients_nb(arguments_t *args, char *arg);
+bool bind_freq(arguments_t *args, char *arg);
 
 const flag_binding_t FLAG_BINDING[] = {
     {.flag = 'p', .binding = &bind_port},

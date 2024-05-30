@@ -28,6 +28,7 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 target_sources(${PROJECT_NAME} PRIVATE
         ${SRC_DIR}/main.c
         ${SRC_DIR}/parser.c
+        ${SRC_DIR}/server.c
         ${SRC_DIR}/bind/bind.c
         ${SRC_DIR}/bind/bind_team.c
         ${SRC_DIR}/tools.c

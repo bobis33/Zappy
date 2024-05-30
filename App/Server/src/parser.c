@@ -5,62 +5,69 @@
 ** parser
 */
 
-#include <stdbool.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
-#include <stdio.h>
 
-#include "Server/server.h"
+#include "Server/arguments.h"
 #include "Server/tools.h"
 #include "Server/bind.h"
 #include "Server/constant.h"
 
-static server_t *init_struct(void)
+static arguments_t *init_struct(void)
 {
-    server_t *server = malloc(sizeof(server_t));
+    arguments_t *args = malloc(sizeof(arguments_t));
 
-    server->port = 0;
-    server->width = 0;
-    server->height = 0;
-    server->nb_teams = 0;
-    server->clients_nb = 0;
-    server->freq = DEFAULT_FREQ;
-    server->team_names = malloc(sizeof(char *) * MAX_TEAMS);
-    if (!server->team_names) {
-        free(server);
+    args->port = 0;
+    args->width = 0;
+    args->height = 0;
+    args->nb_teams = 0;
+    args->clients_nb = 0;
+    args->freq = DEFAULT_FREQ;
+    args->team_names = malloc(sizeof(char *) * MAX_TEAMS);
+    if (!args->team_names) {
+        free(args);
         return NULL;
     }
-    return server;
+    return args;
 }
 
-static bool parse_flag_help(const int argc, char *argv)
+static bool check_filled_struct(arguments_t *args)
 {
-    if (argc == 2 && strcmp(argv, "-help") == 0) {
+    if (args->port == 0 || args->width == 0 ||
+        args->height == 0 || args->nb_teams == 0 ||
+        args->clients_nb == 0 || args->team_names[0] == NULL) {
+        return false;
+    }
+    return true;
+}
+
+static bool parse_flag_help(const char *argv)
+{
+    if (strcmp(argv, "-help") == 0) {
         if (!print_msg(1, "USAGE: ./zappy_server -p port -x width -y height "
             "-n name1 name2 ... -c clientsNb -f freq\n"
-            "\tport\tis the port number\n"
-            "\twidth\tis the width of the world\n"
-            "\theight\tis the height of the world\n"
-            "\tnameX\tis the name of the team X\n"
-            "\tclientsNb\tis the number of authorized clients per team\n"
-            "\tfreq\tis the reciprocal of time unit "
+            "\tport\t   is the port number\n"
+            "\twidth\t   is the width of the world\n"
+            "\theight\t   is the height of the world\n"
+            "\tnameX\t   is the name of the team X\n"
+            "\tclientsNb  is the number of authorized clients per team\n"
+            "\tfreq\t   is the reciprocal of time unit "
             "for execution of actions\n")) {
             return false;
         }
         exit(0);
-        return true;
     }
     return true;
 }
 
 static void parse_flags(char *const argv[],
-    server_t **server,
-    const int option_char)
+                        arguments_t **args,
+                        const int option_char)
 {
     for (unsigned int i = 0; FLAG_BINDING[i].flag; i++) {
         if (FLAG_BINDING[i].flag == option_char && 'n' != option_char) {
-            FLAG_BINDING[i].binding(*server, optarg);
+            FLAG_BINDING[i].binding(*args, optarg);
         }
     }
     if ('n' != option_char) {
@@ -71,26 +78,27 @@ static void parse_flags(char *const argv[],
         if (strstr(argv[optind], "-") != NULL) {
             break;
         }
-        bind_team(*server, argv[optind]);
+        bind_team(*args, argv[optind]);
     }
 }
 
-bool parse_args(server_t **server, const int argc, char *const argv[])
+bool parse_args(arguments_t **args, const int argc, char *const argv[])
 {
     int option_char = 0;
 
-    if (!parse_flag_help(argc, argv[1]))
-        return false;
-    *server = init_struct();
-    if (!server) {
+    if (argc == 2 && !parse_flag_help(argv[1])) {
         return false;
     }
+    *args = init_struct();
     while (true) {
         option_char = getopt(argc, argv, "p:x:y:n:c:f:");
-        if (option_char == -1) {
+        if (option_char == -1 || option_char == '?') {
             break;
         }
-        parse_flags(argv, server, option_char);
+        parse_flags(argv, args, option_char);
+    }
+    if (!check_filled_struct(*args)) {
+        return false;
     }
     return true;
 }

@@ -9,6 +9,6 @@
 
 #include <stdbool.h>
 
-#include "Server/server.h"
+#include "Server/arguments.h"
 
-bool parse_args(server_t **server, const int ac, char *const av[]);
+bool parse_args(arguments_t **args, const int ac, char *const av[]);
