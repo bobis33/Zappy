@@ -20,17 +20,17 @@ gui:
 			cd $(GUI) && ./build.sh build
 
 server:
-			@make -C $(Server)
+			cd $(Server) && ./build.sh build
 
 clean:
 			@make clean -C $(AI)
 			cd $(GUI) && ./build.sh clean
-			@make clean -C $(Server)
+			cd $(Server) && ./build.sh clean
 
 fclean:
 			@make fclean -C $(AI)
 			cd $(GUI) && ./build.sh clean
-			@make fclean -C $(Server)
+			cd $(Server) && ./build.sh clean
 
 re: 		fclean all
 
