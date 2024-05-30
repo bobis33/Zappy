@@ -1,3 +1,19 @@
+.idea/*
+.doxygen/*
+coding-style-reports.log
+
+# Lib
 *.a
 *.o
+
+# CMake
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Makefile
+cmake_install.cmake
+cmake-build-debug/*
+build/*
+
+# Binary
 zappy_server

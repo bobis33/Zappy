@@ -6,44 +6,45 @@
 */
 
 #include <string.h>
-#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
 
-#include "Server/Constant.h"
-#include "Server/Server.h"
-#include "Server/Bind.h"
+#include "Server/constant.h"
+#include "Server/arguments.h"
+#include "Server/parser.h"
+#include "Server/server.h"
 
-static const flag_binding_t FLAG_BINDING[] = {
-    {.flag = 'p', .binding = &bind_port},
-    {.flag = 'x', .binding = &bind_width},
-    {.flag = 'y', .binding = &bind_height},
-    {.flag = 'n', .binding = &bind_team_names},
-    {.flag = 'c', .binding = &bind_clients_nb},
-    {.flag = 'f', .binding = &bind_freq},
-    {0}
-};
-
-static void print_help()
+static void debug_print(arguments_t *args)
 {
-    write(1, "USAGE: ./zappy_server -p port -x width -y height "
-             "-n name1 name2 ... -c clientsNb -f freq\n"
-             "\tport\tis the port number\n"
-             "\twidth\tis the width of the world\n"
-             "\theight\tis the height of the world\n"
-             "\tnameX\tis the name of the team X\n"
-             "\tclientsNb\tis the number of authorized clients per team\n"
-             "\tfreq\tis the reciprocal of time unit for execution of actions\n",
-             333);
+    printf("\n===============DEBUG SERVER===============\n");
+    printf("port: %d\n", args->port);
+    printf("width: %d\n", args->width);
+    printf("height: %d\n", args->height);
+    printf("clients_nb: %d\n", args->clients_nb);
+    printf("freq: %d\n", args->freq);
+    for (int i = 0; i < args->nb_teams; i++) {
+        printf("team_names: %s\n", args->team_names[i]);
+    }
+    printf("==========================================\n\n");
 }
 
-int main(int argc, char* const argv[])
+static void free_server(arguments_t *args)
 {
-    (void) FLAG_BINDING;
-    if (argc == 2 && strcmp(argv[1], "-help") == 0) {
-        print_help();
-        return EPITECH_EXIT_SUCCESS;
-    } if (argc < 13) {
+    free((void *)args->team_names);
+    free(args);
+}
+
+int main(const int argc, char *const argv[])
+{
+    arguments_t *args = NULL;
+
+    if (!parse_args(&args, argc, argv)) {
         return EPITECH_EXIT_ERROR;
     }
-
+    debug_print(args);
+    if (!run_server(args)) {
+        return EPITECH_EXIT_ERROR;
+    }
+    free_server(args);
     return EPITECH_EXIT_SUCCESS;
 }
