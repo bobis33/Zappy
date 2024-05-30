@@ -5,7 +5,7 @@
 ** resource
 */
 
-#include "GUI/Mob/Inventory/Resource.hpp"
+#include "GUI/Inventory/Resource.hpp"
 
 gui::Resource::Resource(const Type ctype, const unsigned int cquantity) : type(ctype), quantity(cquantity)
 {
