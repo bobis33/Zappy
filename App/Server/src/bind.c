@@ -6,41 +6,59 @@
 */
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "Server/Bind.h"
 
-int bind_port(int *port, char *arg)
+int bind_port(server_t *server, char *arg)
 {
-    *port = atoi(arg);
-    return 0;
+    server->port = atoi(arg);
+    return EXIT_SUCCESS;
 }
 
-int bind_width(int *width, char *arg)
+int bind_width(server_t *server, char *arg)
 {
-    *width = atoi(arg);
-    return 0;
+    server->width = atoi(arg);
+    return EXIT_SUCCESS;
 }
 
-int bind_height(int *height, char *arg)
+int bind_height(server_t *server, char *arg)
 {
-    *height = atoi(arg);
-    return 0;
+    server->height = atoi(arg);
+    return EXIT_SUCCESS;
 }
 
-int bind_team_names(int *team_names, char *arg)
+int bind_team_names(server_t *server, char *arg)
 {
-    *team_names = atoi(arg);
-    return 0;
+    if (arg == NULL)
+        return 1;
+
+    char *new_team_name = strdup(arg);
+    if (!new_team_name)
+        return 1;
+
+    server->team_names_len++;
+
+    server->team_names = realloc(server->team_names, sizeof(char *) * server->team_names_len);
+    if (!server->team_names) {
+        free(new_team_name);
+        return 1;
+    }
+
+    server->team_names[server->team_names_len - 1] = new_team_name;
+
+    return EXIT_SUCCESS;
 }
 
-int bind_clients_nb(int *clients_nb, char *arg)
+
+int bind_clients_nb(server_t *server, char *arg)
 {
-    *clients_nb = atoi(arg);
-    return 0;
+    server->clients_nb = atoi(arg);
+    return EXIT_SUCCESS;
 }
 
-int bind_freq(int *freq, char *arg)
+int bind_freq(server_t *server, char *arg)
 {
-    *freq = atoi(arg);
+    server->freq = atoi(arg);
     return 0;
 }

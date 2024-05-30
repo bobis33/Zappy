@@ -7,9 +7,11 @@
 
 #pragma once
 
-int bind_port(int *port, char *arg);
-int bind_width(int *width, char *arg);
-int bind_height(int *height, char *arg);
-int bind_team_names(int *team_names, char *arg);
-int bind_clients_nb(int *clients_nb, char *arg);
-int bind_freq(int *freq, char *arg);
+#include "Server/Server.h"
+
+int bind_port(server_t *server, char *arg);
+int bind_width(server_t *server, char *arg);
+int bind_height(server_t *server, char *arg);
+int bind_team_names(server_t *server, char *arg);
+int bind_clients_nb(server_t *server, char *arg);
+int bind_freq(server_t *server, char *arg);

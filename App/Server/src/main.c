@@ -7,6 +7,8 @@
 
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #include "Server/Constant.h"
 #include "Server/Server.h"
@@ -38,11 +40,49 @@ static void print_help()
 int main(int argc, char* const argv[])
 {
     (void) FLAG_BINDING;
-    if (argc == 2 && strcmp(argv[1], "-help") == 0) {
+    int c = 0;
+
+    server_t *server = malloc(sizeof(server_t));
+
+    if (argc == 2 && strcmp(argv[1], "-help") == 0)
+    {
         print_help();
         return EPITECH_EXIT_SUCCESS;
-    } if (argc < 13) {
-        return EPITECH_EXIT_ERROR;
+    }
+
+    while ((c = getopt(argc, argv, "p:x:y:n:c:f:")) != -1)
+    {
+        if ('n' == c)
+        {
+            optind--;
+            for ( ; *argv[optind] != 0 && *argv[optind] != '-'; optind++)
+            {
+                if (strstr(argv[optind], "-") != NULL)
+                {
+                    break;
+                }
+                bind_team_names(server, argv[optind]);
+            }
+        }
+        for (unsigned int i = 0; FLAG_BINDING[i].flag; i++)
+        {
+            if (FLAG_BINDING[i].flag == c)
+            {
+                if ('n' == c)
+                    break;
+                FLAG_BINDING[i].binding(server, optarg);
+            }
+        }
+    }
+
+    printf("port: %d\n", server->port);
+    printf("width: %d\n", server->width);
+    printf("height: %d\n", server->height);
+    printf("clients_nb: %d\n", server->clients_nb);
+    printf("freq: %d\n", server->freq);
+    for(int i = 0; i < server->team_names_len; i++)
+    {
+        printf("team_names: %s\n", server->team_names[i]);
     }
 
     return EPITECH_EXIT_SUCCESS;
