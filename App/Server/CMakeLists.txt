@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.27)
 
 project(zappy_server
-        DESCRIPTION "EPITECH | B-YEP-400 | Zappy | sERVER"
+        DESCRIPTION "EPITECH | B-YEP-400 | Zappy | Server"
         LANGUAGES C
         VERSION 0.1.0
 )
@@ -27,7 +27,9 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 
 target_sources(${PROJECT_NAME} PRIVATE
         ${SRC_DIR}/main.c
-        ${SRC_DIR}/bind.c
+        ${SRC_DIR}/parser.c
+        ${SRC_DIR}/bind/bind.c
+        ${SRC_DIR}/bind/bind_team.c
         ${SRC_DIR}/tools.c
 )
 

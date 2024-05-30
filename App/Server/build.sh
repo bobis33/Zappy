@@ -14,7 +14,7 @@ function clean() {
         echo ".doxygen directory does not exist."
     fi
     if [ -f "zappy_server" ]; then
-        rm zappy_GUI
+        rm zappy_server
         echo "zappy_server binary has been removed."
     else
         echo "zappy_server binary does not exist."

@@ -2,22 +2,24 @@
 ** EPITECH PROJECT, 2024
 ** B-YEP-400-BDX-4-1-zappy-jules.sourbets
 ** File description:
-** Server
+** server.h
 */
 
 #pragma once
+
+#include <stdbool.h>
 
 typedef struct server_s {
     int port;
     int width;
     int height;
-    char **team_names;
-    int team_names_len;
+    int nb_teams;
     int clients_nb;
-    int freq;
+    int freq; // DEFAULT 100
+    char **team_names;
 } server_t;
 
 typedef struct flag_binding_s {
     int flag;
-    int (*binding)(server_t *server, char *arg);
+    bool (*binding)(server_t *server, char *arg);
 } flag_binding_t;
