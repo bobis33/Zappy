@@ -42,4 +42,3 @@ target_link_libraries(${PROJECT_NAME} PRIVATE my_lib)
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 target_compile_options(${PROJECT_NAME} PRIVATE ${WARNING_FLAGS})
-set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
