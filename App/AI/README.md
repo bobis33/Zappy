@@ -1,5 +1,9 @@
 # AI
 
+
+[![ZAPPY AI](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/AI.yml/badge.svg)](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/AI.yml)
+
+
 ## Protocol
 
 Each player responds to the following actions and only to these ones, with the following syntax :

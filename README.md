@@ -2,6 +2,10 @@
 
 ![Epitech](doc/png/Epitech_banner.png)
 
+[![ZAPPY AI](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/AI.yml/badge.svg)](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/AI.yml)
+[![ZAPPY GUI](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/GUI.yml/badge.svg)](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/GUI.yml)
+[![ZAPPY SERVER](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/Server.yml/badge.svg)](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/Server.yml)
+
 
 ## Description
 
@@ -27,11 +31,11 @@ $> make
 [...]
 ```
 
-[AI Documentation](App/AI/AI.md)
+[AI Documentation](App/AI/README.md)
 
-[GUI Documentation](App/GUI/GUI.md)
+[GUI Documentation](App/GUI/README.md)
 
-[Server Documentation](App/Server/Server.md)
+[Server Documentation](App/Server/README.md)
 
 ## Commit Norms
 

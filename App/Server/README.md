@@ -1,5 +1,9 @@
 # Server
 
+
+[![ZAPPY SERVER](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/Server.yml/badge.svg)](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/Server.yml)
+
+
 ## Description
 
 A server, created in C, that generates the inhabitants’ world.

@@ -1,6 +1,9 @@
 # GUI
 
 
+[![ZAPPY GUI](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/GUI.yml/badge.svg)](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/GUI.yml)
+
+
 ## Protocol
 
 
