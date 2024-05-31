@@ -1,11 +1,47 @@
 # GUI
 
+[![CI GUI](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/GUI.yml/badge.svg)](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/GUI.yml)
 
-[![ZAPPY GUI](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/GUI.yml/badge.svg)](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/GUI.yml)
+
+## Usage
+
+### Build
+
+```bash
+$> cd App/GUI
+$> ./build.sh build
+[...]
+```
+> if it doesn't work, try the following command:
+```bash
+$> ./build.sh clean && ./build.sh build
+[...]
+```
+
+### Run
+
+```bash
+$> ./zappy_gui -p [port] -h [host]
+[...]
+```
+> ```port``` is the port number to connect to the server.
+> 
+> ```host``` is the host name or IP address of the server.
+
+
+## Informations
+
+The GUI client’s connection to the server happens as follows:
+
+    1. the client opens a socket on the server’s port,
+
+    2. the server and the client communicate the following way:
+        Server --> WELCOME\n
+               <-- GRAPHIC\n
+               --> game informations (see the above array)
 
 
 ## Protocol
-
 
 | SYMBOL |               MEANING               |
 |:------:|:-----------------------------------:|
@@ -28,7 +64,6 @@
 |   M    |               message               |
 |   i    |          resource  number           |
 
-<br>
 
 |                   SERVER                   |  CLIENT   |                    DETAILS                    |                    TO A GUI client                     |                        TO ALL GUI client                        |
 |:------------------------------------------:|:---------:|:---------------------------------------------:|:------------------------------------------------------:|:---------------------------------------------------------------:|
@@ -58,15 +93,3 @@
 |                   suc\n                    |           |                unknown command                |                                                        |                    empty or unknown command                     |
 |                   sbp\n                    |           |               command parameter               |                                                        |              invalide command (wrong parameter.s)               |
 |                  eht e\n                   |           |                 egg is mature                 |               new GUI client connection                |    server create an egg or egg create by an AI become mature    |
-
-<br>
-
-The GUI client’s connection to the server happens as follows:
-
-    1. the client opens a socket on the server’s port,
-
-    2. the server and the client communicate the following way:
-        Server --> WELCOME\n
-               <-- GRAPHIC\n
-               --> game informations (see the above array)
-

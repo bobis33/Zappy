@@ -2,9 +2,9 @@
 
 ![Epitech](doc/png/Epitech_banner.png)
 
-[![ZAPPY AI](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/AI.yml/badge.svg)](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/AI.yml)
-[![ZAPPY GUI](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/GUI.yml/badge.svg)](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/GUI.yml)
-[![ZAPPY SERVER](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/Server.yml/badge.svg)](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/Server.yml)
+[![CI AI](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/AI.yml/badge.svg)](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/AI.yml)
+[![CI GUI](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/GUI.yml/badge.svg)](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/GUI.yml)
+[![CI SERVER](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/Server.yml/badge.svg)](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/Server.yml)
 
 
 ## Description
@@ -30,11 +30,18 @@ The winning team is the first one where at least 6 players who reach the maximum
 $> make
 [...]
 ```
+> if it doesn't work, try the following command:
+```bash
+$> make re
+[...]
+```
 
-[AI Documentation](App/AI/README.md)
+### Run
 
-[GUI Documentation](App/GUI/README.md)
+>To see the usage of each program, go to the corresponding documentation:
 
+[AI Documentation](App/AI/README.md) - 
+[GUI Documentation](App/GUI/README.md) -
 [Server Documentation](App/Server/README.md)
 
 ## Commit Norms

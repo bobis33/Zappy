@@ -1,7 +1,6 @@
 # Server
 
-
-[![ZAPPY SERVER](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/Server.yml/badge.svg)](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/Server.yml)
+[![CI SERVER](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/Server.yml/badge.svg)](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/Server.yml)
 
 
 ## Description
@@ -12,26 +11,40 @@ The server is executed in the form of one, single process and one, single thread
 It must use select to handle socket multiplexing; the select must unlock only if something happen on a
 socket or if an event is ready to be executed.
 
+
+## Usage
+
+### Build
+
 ```bash
-USAGE: ./zappy_server -p port -x width -y height -n name1 name2 ... -c clientsNb -f freq --auto-start on|off --display-eggs true|false [-v | --verbose]
+$> cd App/Server
+$> ./build.sh build
+[...]
+```
+> if it doesn't work, try the following command:
+```bash
+$> ./build.sh clean && ./build.sh build
+[...]
+```
+
+### Run
+
+```bash 
+$> ./zappy_server -p port -x width -y height -n name1 name2 ... -c clientsNb -f freq
 	port		is the port number
 	width		is the width of the world
 	height		is the height of the world
 	nameX		is the name of the team X
 	clientsNb	is the number of authorized clients per team
 	freq		is the reciprocal of time unit for execution of actions
-	auto-start	does the greeting is send automaticly #(see bonus part)
-	display-eggs	eggs are visible and destructible
 ```
-
-> The team name GRAPHIC is reserved for the GUI to authenticate itself as such to the server.
 
 
 ## Informations
 
+> The team name GRAPHIC is reserved for the GUI to authenticate itself as such to the server.
 
 ### Incantations
-
 
 This ritual, which augments physical and mental capacities, must be done according to a particular rite: they
 must gather the following on the same unit of terrain:
@@ -40,7 +53,8 @@ must gather the following on the same unit of terrain:
 - At least a certain number of players with the same level
 
 The elevation begins as soon as a player initiates the incantation.
-The player who starts an incantation will receive ko if all the requirements are not satisfied and the incantation will be canceled, the player will receive the ko instantly after the initial server check (not at the end of the incantation duration).
+The player who starts an incantation will receive ko if all the requirements are not satisfied and the incantation will be canceled,
+the player will receive the ko instantly after the initial server check (not at the end of the incantation duration).
 
 which means that it will make the next action received by the server.
 
