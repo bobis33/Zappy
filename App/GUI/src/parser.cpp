@@ -18,7 +18,7 @@ static constexpr const std::string_view HELP_MSG = "USAGE\n"
                                                    "DESCRIPTION\n"
                                                    "    Zappy GUI\n";
 
-std::string gui::Parser::ParseMachineName(const char* machineName)
+std::string gui::Parser::parseMachineName(const char* machineName)
 {
     std::string machineNameStr(machineName);
     const std::regex ip_regex(R"(^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$)");
@@ -32,7 +32,7 @@ std::string gui::Parser::ParseMachineName(const char* machineName)
     throw ParserException("Invalid IP address format");
 }
 
-uint16_t gui::Parser::ParsePort(const char* port)
+uint16_t gui::Parser::parsePort(const char* port)
 {
     int portInt = std::stoi(port);
 
@@ -43,7 +43,7 @@ uint16_t gui::Parser::ParsePort(const char* port)
     return static_cast<unsigned short int>(portInt);
 }
 
-gui::Argument gui::Parser::ParseArgs(const int argc, char* const argv[])
+gui::Argument gui::Parser::parseArgs(const int argc, char* const argv[])
 {
     uint16_t port = 0;
     int optionChar = 0;
@@ -57,10 +57,10 @@ gui::Argument gui::Parser::ParseArgs(const int argc, char* const argv[])
     while((optionChar = getopt(argc, argv, "p:h:")) != -1) {
         switch (optionChar) {
             case 'p':
-                port = ParsePort(optarg);
+                port = parsePort(optarg);
                 break;
             case 'h':
-                machineName = ParseMachineName(optarg);
+                machineName = parseMachineName(optarg);
                 break;
             default:
                 throw ParserException("Invalid argument");
@@ -70,7 +70,7 @@ gui::Argument gui::Parser::ParseArgs(const int argc, char* const argv[])
     return {port, machineName};
 }
 
-void gui::Parser::processData(std::vector<std::string> data, Gui &gui)
+void gui::Parser::processData(const std::vector<std::string>& data, Gui &gui)
 {
     std::string command;
     std::string tmpData;
@@ -115,15 +115,15 @@ gui::Inventory gui::Parser::parseTileContent(const std::string &tileContent)
         throw gui::RunTimeException("Invalid tile content format.");
     }
 
-    std::cout << "Tile at (" << values[0] << ", " << values[1] << ") contains:" << '\n';
+    std::cout << "Tile at (" << values.at(0) << ", " << values.at(1) << ") contains:" << '\n';
 
     return {
-        {Resource::Type::FOOD, values[2]},
-        {Resource::Type::LINEMATE, values[3]},
-        {Resource::Type::DERAUMERE, values[4]},
-        {Resource::Type::SIBUR, values[5]},
-        {Resource::Type::MENDIANE, values[6]},
-        {Resource::Type::PHIRAS, values[7]},
-        {Resource::Type::THYSTAME, values[8]}
+        {Resource::Type::FOOD, values.at(2)},
+        {Resource::Type::LINEMATE, values.at(3)},
+        {Resource::Type::DERAUMERE, values.at(4)},
+        {Resource::Type::SIBUR, values.at(5)},
+        {Resource::Type::MENDIANE, values.at(6)},
+        {Resource::Type::PHIRAS, values.at(7)},
+        {Resource::Type::THYSTAME, values.at(8)}
     };
 }

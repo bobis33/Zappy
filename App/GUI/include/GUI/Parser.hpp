@@ -20,12 +20,12 @@ namespace gui {
             Parser() = default;
             ~Parser() = default;
 
-            static Argument ParseArgs(int argc, char* const argv[]);
+            static Argument parseArgs(int argc, char* const argv[]);
 
-            static uint16_t ParsePort(const char* port);
-            static std::string ParseMachineName(const char* machineName);
+            static uint16_t parsePort(const char* port);
+            static std::string parseMachineName(const char* machineName);
 
-            static void processData(std::vector<std::string> data, Gui &gui);
+            static void processData(const std::vector<std::string>& data, Gui &gui);
             static Inventory parseTileContent(const std::string &tileContent);
 
             class ParserException : public std::exception

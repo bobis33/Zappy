@@ -21,7 +21,7 @@ int main(const int argc, char* const argv[])
         if (argc != 2 && argc != 5) {
             throw Parser::ParserException("Invalid number of arguments");
         }
-        Gui(Parser::ParseArgs(argc, argv)).Run();
+        Gui(Parser::parseArgs(argc, argv)).Run();
         PluginLoader::getInstance().closePlugins();
     } catch (const PluginLoader::PluginLoaderException &e) {
         std::cerr << "PluginLoaderException: " << e.what() << '\n';
