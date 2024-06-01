@@ -8,6 +8,8 @@
 #pragma once
 
 #include "GUI/Argument.hpp"
+#include "GUI/Gui.hpp"
+#include "GUI/Inventory/Inventory.hpp"
 
 namespace gui {
 
@@ -22,6 +24,9 @@ namespace gui {
 
             static uint16_t ParsePort(const char* port);
             static std::string ParseMachineName(const char* machineName);
+
+            static void processData(std::vector<std::string> data, Gui &gui);
+            static Inventory parseTileContent(std::string tileContent);
 
             class ParserException : public std::exception
             {

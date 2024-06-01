@@ -13,6 +13,7 @@
 namespace gui {
 
     enum class ProtocolKey {
+        COUNT,
         MAP_SIZE,
         TILE_CONTENT,
         MAP_CONTENT,

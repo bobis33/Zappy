@@ -34,7 +34,7 @@ target_sources(${PROJECT_NAME} PRIVATE
         ${SRC_DIR}/parser.cpp
         ${SRC_DIR}/pluginLoader.cpp
         ${SRC_DIR}/protocol.cpp
-        ${SRC_DIR}/Inventory/resource.cpp
+        ${SRC_DIR}/resource.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR})

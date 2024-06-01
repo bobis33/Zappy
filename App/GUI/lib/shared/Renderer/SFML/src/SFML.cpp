@@ -7,6 +7,8 @@
 
 #include "GUI/SFML.hpp"
 
+std::array<gui::KeyBoard::Key, sf::Keyboard::KeyCount> gui::SFML::KEY_CODE_ARRAY;
+
 gui::KeyBoard::Key gui::SFML::getKeyboardEvent(const sf::Event &event)
 {
     return event.key.code >= sf::Keyboard::KeyCount ? gui::KeyBoard::Key::NONE : KEY_CODE_ARRAY.at(static_cast<unsigned long>(event.key.code));
