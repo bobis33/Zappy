@@ -31,5 +31,6 @@ namespace gui {
     static constexpr const unsigned int DEFAULT_BITS_PER_PIXEL = 64;
     static constexpr const std::pair<const unsigned int, const unsigned int> DEFAULT_RESOLUTION {1920, 1080};
     static constexpr const std::string_view DEFAULT_NAME = "ZAPPY";
+    static constexpr const int MAX_MAP_SIZE = 30;
 
 } // namespace gui

@@ -8,6 +8,7 @@
 #include <getopt.h>
 #include <regex>
 #include <iostream>
+#include <sstream>
 
 #include "GUI/Parser.hpp"
 #include "GUI/Constant.hpp"
@@ -82,13 +83,20 @@ void gui::Parser::processData(const std::vector<std::string>& data, Gui &gui)
             {
             case ProtocolKey::MAP_SIZE:
                 tmpData = line.substr(4, line.size());
+                    for (const auto &chr : tmpData) {
+                        if (chr == ' ') {
+                            gui.setMapSize({std::stoi(tmpData.substr(0, tmpData.find(' '))),
+                                            std::stoi(tmpData.substr(tmpData.find(' ') + 1, tmpData.size()))});
+                            break;
+                        }
+                    }
                 break;
             case ProtocolKey::TIME_UNIT_REQUEST:
                 tmpData = line.substr(4, line.size());
                 break;
             case ProtocolKey::TILE_CONTENT:
                 tmpData = line.substr(4, line.size());
-                parseTileContent(tmpData);
+                gui.getMap().addTile(parseTileContent(tmpData));
                 break;
             case ProtocolKey::MAP_CONTENT:
                 tmpData = line.substr(4, line.size());
@@ -106,24 +114,24 @@ void gui::Parser::processData(const std::vector<std::string>& data, Gui &gui)
     }
 }
 
-gui::Inventory gui::Parser::parseTileContent(const std::string &tileContent)
+gui::Tile gui::Parser::parseTileContent(const std::string &tileContent)
 {
     std::istringstream iss(tileContent);
     std::vector<unsigned int> values((std::istream_iterator<int>(iss)), std::istream_iterator<int>());
-
-    if (values.size() != 9) {
-        throw gui::RunTimeException("Invalid tile content format.");
-    }
-
-    std::cout << "Tile at (" << values.at(0) << ", " << values.at(1) << ") contains:" << '\n';
-
+    // std::cout << "Tile at (" << values.at(0) << ", " << values.at(1) << ") contains:" << '\n';
     return {
-        {Resource::Type::FOOD, values.at(2)},
-        {Resource::Type::LINEMATE, values.at(3)},
-        {Resource::Type::DERAUMERE, values.at(4)},
-        {Resource::Type::SIBUR, values.at(5)},
-        {Resource::Type::MENDIANE, values.at(6)},
-        {Resource::Type::PHIRAS, values.at(7)},
-        {Resource::Type::THYSTAME, values.at(8)}
+        {
+            {Resource::Type::FOOD, values.at(2)},
+            {Resource::Type::LINEMATE, values.at(3)},
+            {Resource::Type::DERAUMERE, values.at(4)},
+            {Resource::Type::SIBUR, values.at(5)},
+            {Resource::Type::MENDIANE, values.at(6)},
+            {Resource::Type::PHIRAS, values.at(7)},
+            {Resource::Type::THYSTAME, values.at(8)}
+        },
+        {
+            values.at(0),
+            values.at(1)
+        }
     };
 }

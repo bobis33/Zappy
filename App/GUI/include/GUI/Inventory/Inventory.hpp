@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <utility>
 #include <vector>
 
 #include "GUI/Inventory/Resource.hpp"
@@ -19,7 +20,7 @@ namespace gui {
 
             Inventory(Resource food, Resource linemate, Resource deraumere, Resource sibur, Resource mendiane, Resource phiras, Resource thystame) :
                 resources({food, linemate, deraumere, sibur, mendiane, phiras, thystame}) {};
-            Inventory(std::vector<Resource> cresources): resources(cresources) {};
+            explicit Inventory(std::vector<Resource> cresources): resources(std::move(cresources)) {};
 
             std::vector<Resource> resources;
 

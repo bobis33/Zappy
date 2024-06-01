@@ -9,14 +9,14 @@
 
 #include <utility>
 
-namespace {
+namespace gui {
 
     class Position {
 
         public:
 
-            Position(unsigned int x, unsigned int y) : x(x), y(y) {};
-            ~Position();
+            Position(unsigned int cx, unsigned int cy) : x(cx), y(cy) {};
+            ~Position() = default;
 
             unsigned int x;
             unsigned int y;

@@ -9,7 +9,7 @@
 
 #include "GUI/Argument.hpp"
 #include "GUI/Gui.hpp"
-#include "GUI/Inventory/Inventory.hpp"
+#include "GUI/Map/Tile.hpp"
 
 namespace gui {
 
@@ -26,7 +26,7 @@ namespace gui {
             static std::string parseMachineName(const char* machineName);
 
             static void processData(const std::vector<std::string>& data, Gui &gui);
-            static Inventory parseTileContent(const std::string &tileContent);
+            static Tile parseTileContent(const std::string &tileContent);
 
             class ParserException : public std::exception
             {
