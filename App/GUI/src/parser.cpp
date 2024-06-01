@@ -8,8 +8,6 @@
 #include <getopt.h>
 #include <regex>
 #include <iostream>
-#include <sstream>
-#include <iterator>
 
 #include "GUI/Parser.hpp"
 #include "GUI/Constant.hpp"
@@ -90,6 +88,7 @@ void gui::Parser::processData(std::vector<std::string> data, Gui &gui)
                 break;
             case ProtocolKey::TILE_CONTENT:
                 tmpData = line.substr(4, line.size());
+                parseTileContent(tmpData);
                 break;
             case ProtocolKey::MAP_CONTENT:
                 tmpData = line.substr(4, line.size());
@@ -107,27 +106,24 @@ void gui::Parser::processData(std::vector<std::string> data, Gui &gui)
     }
 }
 
-gui::Inventory gui::Parser::parseTileContent(std::string tileContent)
+gui::Inventory gui::Parser::parseTileContent(const std::string &tileContent)
 {
     std::istringstream iss(tileContent);
-    std::vector<int> values((std::istream_iterator<int>(iss)), std::istream_iterator<int>());
+    std::vector<unsigned int> values((std::istream_iterator<int>(iss)), std::istream_iterator<int>());
 
     if (values.size() != 9) {
         throw gui::RunTimeException("Invalid tile content format.");
     }
 
-    int x = values[0];
-    int y = values[1];
+    std::cout << "Tile at (" << values[0] << ", " << values[1] << ") contains:" << '\n';
 
-    std::cout << "Tile at (" << x << ", " << y << ") contains:" << std::endl;
-
-    Resource food(gui::Resource::Type::FOOD, static_cast<unsigned int>(values[2]));
-    Resource linemate(gui::Resource::Type::LINEMATE, static_cast<unsigned int>(values[3]));
-    Resource deraumere(gui::Resource::Type::DERAUMERE, static_cast<unsigned int>(values[4]));
-    Resource sibur(gui::Resource::Type::SIBUR, static_cast<unsigned int>(values[5]));
-    Resource mendiane(gui::Resource::Type::MENDIANE, static_cast<unsigned int>(values[6]));
-    Resource phiras(gui::Resource::Type::PHIRAS, static_cast<unsigned int>(values[7]));
-    Resource thystame(gui::Resource::Type::THYSTAME, static_cast<unsigned int>(values[8]));
-
-    return gui::Inventory(food, linemate, deraumere, sibur, mendiane, phiras, thystame);
+    return {
+        {Resource::Type::FOOD, values[2]},
+        {Resource::Type::LINEMATE, values[3]},
+        {Resource::Type::DERAUMERE, values[4]},
+        {Resource::Type::SIBUR, values[5]},
+        {Resource::Type::MENDIANE, values[6]},
+        {Resource::Type::PHIRAS, values[7]},
+        {Resource::Type::THYSTAME, values[8]}
+    };
 }

@@ -26,7 +26,7 @@ namespace gui {
             static std::string ParseMachineName(const char* machineName);
 
             static void processData(std::vector<std::string> data, Gui &gui);
-            static Inventory parseTileContent(std::string tileContent);
+            static Inventory parseTileContent(const std::string &tileContent);
 
             class ParserException : public std::exception
             {

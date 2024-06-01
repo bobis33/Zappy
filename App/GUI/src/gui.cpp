@@ -7,13 +7,11 @@
 
 #include <functional>
 #include <sstream>
-#include <iostream>
 
 #include "GUI/Constant.hpp"
 #include "GUI/Gui.hpp"
 #include "GUI/PluginLoader.hpp"
 #include "GUI/RunTimeException.hpp"
-#include "GUI/Protocol.hpp"
 #include "GUI/Parser.hpp"
 
 static const std::array<std::function<void(gui::Gui &gui)>, gui::KeyBoard::Key::COUNT> EVENT_ARRAY
@@ -49,7 +47,6 @@ std::vector<std::string> gui::Gui::getData(const std::string &data)
 
 gui::Gui::Gui(const gui::Argument &args)
 {
-    std::string command;
     m_renderer = PluginLoader::getInstance().getPlugin<IRenderer>(PLUGIN_RENDERER_SFML.data());
     m_renderer->init(DEFAULT_NAME.data(), DEFAULT_RESOLUTION, DEFAULT_BITS_PER_PIXEL);
     m_renderer->setFPS(DEFAULT_FPS);
@@ -60,12 +57,4 @@ gui::Gui::Gui(const gui::Argument &args)
     }
 
     Parser::processData(getData(m_renderer->getClient().getResponse()), *this);
-    // creer methode pour interpreter les commandes -> m_data
-    // for (const std::string &line : m_data) {
-    //     command = line.substr(0, 3);
-    //     std::cout << line << std::endl;
-    //     if (ProtocolMap.find(command) != ProtocolMap.end()) {
-    //         // std::cout << "Command: " << command << std::endl;
-    //     }
-    // }
 }
