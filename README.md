@@ -2,9 +2,9 @@
 
 ![Epitech](doc/png/Epitech_banner.png)
 
-[![CI AI](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/AI.yml/badge.svg)](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/AI.yml)
-[![CI GUI](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/GUI.yml/badge.svg)](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/GUI.yml)
-[![CI SERVER](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/Server.yml/badge.svg)](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/Server.yml)
+[![CI AI][ci-ai-badge]][ci-ai]
+[![CI GUI][ci-gui-badge]][ci-gui]
+[![CI SERVER][ci-server-badge]][ci-server]
 
 
 ## Description
@@ -57,3 +57,10 @@ $> make re
 | style       | Change that does not affect functionality or semantics (indentation, formatting, adding space, renaming a variable, etc.) |
 | docs        | Writing or updating documentation                                                                                         |
 | test        | Addition or modification of tests                                                                                         |
+
+[ci-ai]: https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/AI.yml
+[ci-ai-badge]: https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/AI.yml/badge.svg
+[ci-gui]: https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/GUI.yml
+[ci-gui-badge]: https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/GUI.yml/badge.svg
+[ci-server]: https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/Server.yml
+[ci-server-badge]: https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/Server.yml/badge.svg

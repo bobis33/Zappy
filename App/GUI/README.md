@@ -1,6 +1,6 @@
 # GUI
 
-[![CI GUI](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/GUI.yml/badge.svg)](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/GUI.yml)
+[![CI GUI][ci-gui-badge]][ci-gui]
 
 
 ## Usage
@@ -93,3 +93,6 @@ The GUI client’s connection to the server happens as follows:
 |                   suc\n                    |           |                unknown command                |                                                        |                    empty or unknown command                     |
 |                   sbp\n                    |           |               command parameter               |                                                        |              invalide command (wrong parameter.s)               |
 |                  eht e\n                   |           |                 egg is mature                 |               new GUI client connection                |    server create an egg or egg create by an AI become mature    |
+
+[ci-gui]: https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/GUI.yml
+[ci-gui-badge]: https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/GUI.yml/badge.svg

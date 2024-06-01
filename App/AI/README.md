@@ -1,6 +1,6 @@
 # AI
 
-[![CI AI](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/AI.yml/badge.svg)](https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/AI.yml)
+[![CI AI][ci-ai-badge]][ci-ai]
 
 
 ## Informations
@@ -59,3 +59,6 @@ Each player responds to the following actions and only to these, with the follow
 |      start incantation       |  __Incantation__   |   300/f    |     Elevation underway     |
 
 > In case of a bad/unknown command, the server must answer “ko”.
+
+[ci-ai]: https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/AI.yml
+[ci-ai-badge]: https://github.com/EpitechPromo2027/B-YEP-400-BDX-4-1-zappy-jules.sourbets/actions/workflows/AI.yml/badge.svg
