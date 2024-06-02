@@ -8,12 +8,9 @@
 #pragma once
 
 #include <unordered_map>
-#include <string>
 #include <functional>
 
-#include "GUI/Gui.hpp"
 #include "GUI/Parser.hpp"
-
 
 namespace gui {
 

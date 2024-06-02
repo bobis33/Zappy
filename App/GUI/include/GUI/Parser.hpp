@@ -7,9 +7,7 @@
 
 #pragma once
 
-#include "GUI/Argument.hpp"
 #include "GUI/Gui.hpp"
-#include "GUI/Map/Tile.hpp"
 
 namespace gui {
 

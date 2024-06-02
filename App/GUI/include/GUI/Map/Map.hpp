@@ -29,7 +29,6 @@ namespace gui {
 
             [[nodiscard]] std::vector<std::vector<Tile>>& getTiles() { return m_tiles; };
 
-
         private:
 
             unsigned int m_width;

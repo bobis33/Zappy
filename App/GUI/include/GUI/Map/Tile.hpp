@@ -7,8 +7,6 @@
 
 #pragma once
 
-#include <utility>
-
 #include "GUI/Inventory/Inventory.hpp"
 #include "GUI/Position.hpp"
 

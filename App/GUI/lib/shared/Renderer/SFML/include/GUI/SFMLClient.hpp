@@ -31,7 +31,7 @@ namespace gui {
 
         private:
 
-            sf::TcpSocket m_socket{};
+            sf::TcpSocket m_socket;
 
     }; // class Client
 
