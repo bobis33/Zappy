@@ -31,7 +31,8 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 target_sources(${PROJECT_NAME} PRIVATE
         ${SRC_DIR}/gui.cpp
         ${SRC_DIR}/main.cpp
-        ${SRC_DIR}/parser.cpp
+        ${SRC_DIR}/Parser/parseArgs.cpp
+        ${SRC_DIR}/Parser/parseServerResponse.cpp
         ${SRC_DIR}/pluginLoader.cpp
         ${SRC_DIR}/protocol.cpp
         ${SRC_DIR}/resource.cpp

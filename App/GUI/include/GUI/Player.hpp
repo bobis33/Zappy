@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** zappy_gui
 ** File description:
-** Mob
+** Player.hpp
 */
 
 #pragma once
@@ -12,7 +12,7 @@
 
 namespace gui {
 
-    class Mob {
+    class Player {
 
         public:
 
@@ -28,7 +28,7 @@ namespace gui {
             Position& getPosition() { return m_position; };
             unsigned int getLevel() const { return m_level; };
 
-            void setAction(const Action &action) { m_action = action; };
+            void setAction(const Action action) { m_action = action; };
 
             void levelUp() { m_level++; };
 
@@ -39,6 +39,6 @@ namespace gui {
             Position m_position;
             unsigned int m_level{1};
 
-    }; // class Mob
+    }; // class Player
 
 } // namespace gui
