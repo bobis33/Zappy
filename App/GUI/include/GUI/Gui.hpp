@@ -33,9 +33,9 @@ namespace gui {
             void Run();
 
             static std::vector<std::string> getData(const std::string &data);
-            std::pair<int, int> getMapSize() { return m_mapSize; };
-            void setMapSize(const std::pair<int, int> &mapSize) { m_mapSize = mapSize; };
-            Map &getMap() { return m_map; };
+            void setMap(const Map &map) { m_map = map; };
+            Map& getMap() { return m_map; };
+            void initMap(const std::pair<unsigned, unsigned> &size);
 
         private:
 
@@ -43,7 +43,7 @@ namespace gui {
             std::vector<std::string> m_data;
             RendererMode m_mode{RendererMode::GAME};
             std::pair<int, int> m_mapSize{0, 0};
-            Map m_map;
+            Map m_map{30, 30, {}};
 
     }; // class Gui
 

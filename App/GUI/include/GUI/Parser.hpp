@@ -17,9 +17,6 @@ namespace gui {
 
         public:
 
-            Parser() = default;
-            ~Parser() = default;
-
             static Argument parseArgs(int argc, char* const argv[]);
 
             static uint16_t parsePort(const char* port);

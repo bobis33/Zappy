@@ -7,6 +7,7 @@
 
 #include <functional>
 #include <sstream>
+#include <iostream>
 
 #include "GUI/Constant.hpp"
 #include "GUI/Gui.hpp"
@@ -20,6 +21,20 @@ static const std::array<std::function<void(gui::Gui &gui)>, gui::KeyBoard::Key::
     nullptr,
 };
 
+gui::Gui::Gui(const gui::Argument &args)
+{
+    m_renderer = PluginLoader::getInstance().getPlugin<IRenderer>(PLUGIN_RENDERER_SFML.data());
+    m_renderer->init(DEFAULT_NAME.data(), DEFAULT_RESOLUTION, DEFAULT_BITS_PER_PIXEL);
+    m_renderer->setFPS(DEFAULT_FPS);
+    if (!m_renderer->getClient().connect(args.port, args.hostName) ||
+        !m_renderer->getClient().sendCommand("GRAPHIC\n") ||
+        !m_renderer->getClient().getResponse("WELCOME\n")) {
+        throw RunTimeException("Failed to connect to server");
+    }
+
+    Parser::processData(getData(m_renderer->getClient().getResponse()), *this);
+}
+
 void gui::Gui::Run()
 {
     unsigned long event = 0;
@@ -30,6 +45,15 @@ void gui::Gui::Run()
             EVENT_ARRAY.at(event)(*this);
         }
         m_renderer->render();
+    }
+    // DEBUG TILE      - To remove
+    for (auto &row : m_map.getTiles()) {
+        for (auto &tile : row) {
+            std::cout << "Tile: " << tile.getPosition().x << " " << tile.getPosition().y << '\n';
+            for (auto &resource : tile.getInventory().resources) {
+                std::cout << "Resource: " << resource.quantity << " " << resource.density << '\n';
+            }
+        }
     }
 }
 
@@ -45,16 +69,12 @@ std::vector<std::string> gui::Gui::getData(const std::string &data)
     return tmp;
 }
 
-gui::Gui::Gui(const gui::Argument &args)
+void gui::Gui::initMap(const std::pair<unsigned int, unsigned int> &size)
 {
-    m_renderer = PluginLoader::getInstance().getPlugin<IRenderer>(PLUGIN_RENDERER_SFML.data());
-    m_renderer->init(DEFAULT_NAME.data(), DEFAULT_RESOLUTION, DEFAULT_BITS_PER_PIXEL);
-    m_renderer->setFPS(DEFAULT_FPS);
-    if (!m_renderer->getClient().connect(args.port, args.hostName) ||
-        !m_renderer->getClient().sendCommand("GRAPHIC\n") ||
-        !m_renderer->getClient().getResponse("WELCOME\n")) {
-        throw RunTimeException("Failed to connect to server");
+    m_map.getTiles().resize(size.second);
+    for (auto &row : m_map.getTiles()) {
+        row.resize(size.first);
     }
-
-    Parser::processData(getData(m_renderer->getClient().getResponse()), *this);
+    m_map.setWidth(size.first);
+    m_map.setHeight(size.second);
 }

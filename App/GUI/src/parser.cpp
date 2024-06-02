@@ -8,7 +8,7 @@
 #include <getopt.h>
 #include <regex>
 #include <iostream>
-#include <sstream>
+#include <iterator>
 
 #include "GUI/Parser.hpp"
 #include "GUI/Constant.hpp"
@@ -73,40 +73,94 @@ gui::Argument gui::Parser::parseArgs(const int argc, char* const argv[])
 
 void gui::Parser::processData(const std::vector<std::string>& data, Gui &gui)
 {
-    std::string command;
     std::string tmpData;
     for (const std::string &line : data) {
-        command = line.substr(0, 3);
-        const auto command_val = ProtocolMap.find(command);
+        const auto command_val = ProtocolMap.find(line.substr(0, 3));
         if (command_val != ProtocolMap.end()) {
+            tmpData = line.substr(4, line.size());
             switch (command_val->second)
             {
             case ProtocolKey::MAP_SIZE:
-                tmpData = line.substr(4, line.size());
-                    for (const auto &chr : tmpData) {
-                        if (chr == ' ') {
-                            gui.setMapSize({std::stoi(tmpData.substr(0, tmpData.find(' '))),
-                                            std::stoi(tmpData.substr(tmpData.find(' ') + 1, tmpData.size()))});
-                            break;
-                        }
-                    }
+                gui.initMap({std::stoi(tmpData.substr(0, tmpData.find(' '))),
+                             std::stoi(tmpData.substr(tmpData.find(' ') + 1, tmpData.size()))});
                 break;
-            case ProtocolKey::TIME_UNIT_REQUEST:
-                tmpData = line.substr(4, line.size());
-                break;
+
             case ProtocolKey::TILE_CONTENT:
-                tmpData = line.substr(4, line.size());
                 gui.getMap().addTile(parseTileContent(tmpData));
                 break;
+
             case ProtocolKey::MAP_CONTENT:
-                tmpData = line.substr(4, line.size());
                 break;
+
             case ProtocolKey::TEAMS_NAME:
-                tmpData = line.substr(4, line.size());
                 break;
+
+            case ProtocolKey::PLAYER_CONNECTION:
+                break;
+
+            case ProtocolKey::PLAYER_POSITION:
+                break;
+
+            case ProtocolKey::PLAYER_LEVEL:
+                break;
+
+            case ProtocolKey::PLAYER_INVENTORY:
+                break;
+
+            case ProtocolKey::EXPULSION:
+                break;
+
+            case ProtocolKey::BROADCAST:
+                break;
+
+            case ProtocolKey::INCANTATION_START:
+                break;
+
+            case ProtocolKey::INCANTATION_END:
+                break;
+
+            case ProtocolKey::FORK:
+                break;
+
+            case ProtocolKey::RESOURCES_DROP:
+                break;
+
+            case ProtocolKey::RESOURCES_COLLECT:
+                break;
+
+            case ProtocolKey::PLAYER_DEATH:
+                break;
+
             case ProtocolKey::EGG_LAID:
-                tmpData = line.substr(4, line.size());
                 break;
+
+            case ProtocolKey::PLAYER_EGG_CONNECTION:
+                break;
+
+            case ProtocolKey::EGG_DEATH:
+                break;
+
+            case ProtocolKey::TIME_UNIT_REQUEST:
+                break;
+
+            case ProtocolKey::TIME_UNIT_MODIFICATION:
+                break;
+
+            case ProtocolKey::END_GAME:
+                break;
+
+            case ProtocolKey::MESSAGE:
+                break;
+
+            case ProtocolKey::UNKNOWN:
+                break;
+
+            case ProtocolKey::UNKNOWN_PARAMETER:
+                break;
+
+            case ProtocolKey::EGG_MATURE:
+                break;
+
             default:
                 break;
             }
@@ -118,7 +172,6 @@ gui::Tile gui::Parser::parseTileContent(const std::string &tileContent)
 {
     std::istringstream iss(tileContent);
     std::vector<unsigned int> values((std::istream_iterator<int>(iss)), std::istream_iterator<int>());
-    // std::cout << "Tile at (" << values.at(0) << ", " << values.at(1) << ") contains:" << '\n';
     return {
         {
             {Resource::Type::FOOD, values.at(2)},
