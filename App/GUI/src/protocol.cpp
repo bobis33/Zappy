@@ -7,7 +7,6 @@
 
 #include "GUI/Protocol.hpp"
 
-
 const std::unordered_map<std::string, std::function<void(gui::Gui&, const std::string&)>> gui::Protocol::ProtocolMap = {
         {"msz", [](Gui& gui, const std::string& cmd) {
             gui.initMap({

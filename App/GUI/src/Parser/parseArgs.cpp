@@ -12,11 +12,6 @@
 #include "GUI/Parser.hpp"
 #include "GUI/Constant.hpp"
 
-static constexpr const std::string_view HELP_MSG = "USAGE\n"
-                                                   "    ./zappy_gui -p port -h machine\n"
-                                                   "DESCRIPTION\n"
-                                                   "    Zappy GUI\n";
-
 std::string gui::Parser::parseMachineName(const char* machineName)
 {
     std::string machineNameStr(machineName);
@@ -42,18 +37,12 @@ uint16_t gui::Parser::parsePort(const char* port)
     return static_cast<uint16_t>(portInt);
 }
 
-gui::Argument gui::Parser::parseArgs(const int argc, char* const argv[])
+gui::Argument gui::Parser::getOptions(const int argc, char* const argv[], const std::string &optString)
 {
     uint16_t port = 0;
-    int optionChar = 0;
     std::string machineName;
-
-    if (argc == 2 && std::string(argv[1]) == "-help") {
-        std::cout << HELP_MSG;
-        exit(EPITECH_EXIT_SUCCESS);
-    }
-
-    while((optionChar = getopt(argc, argv, "p:h:")) != -1) {
+    int optionChar = 0;
+    while((optionChar = getopt(argc, argv, optString.c_str())) != -1) {
         switch (optionChar) {
             case 'p':
                 port = parsePort(optarg);

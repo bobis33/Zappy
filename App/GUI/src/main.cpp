@@ -15,13 +15,22 @@
 
 using namespace gui;
 
+static constexpr const std::string_view HELP_MSG = "USAGE\n"
+                                                   "    ./zappy_gui -p port -h machine\n"
+                                                   "DESCRIPTION\n"
+                                                   "    Zappy GUI\n";
+
 int main(const int argc, char* const argv[])
 {
+    if (argc == 2 && std::string(argv[1]) == "-help") {
+        std::cout << HELP_MSG;
+        return EPITECH_EXIT_SUCCESS;
+    }
     try {
-        if (argc != 2 && argc != 5) {
+        if (argc != 5) {
             throw Parser::ParserException("Invalid number of arguments");
         }
-        Gui(Parser::parseArgs(argc, argv)).Run();
+        Gui(Parser::getOptions(argc, argv, "p:h:")).Run();
         PluginLoader::getInstance().closePlugins();
     } catch (const PluginLoader::PluginLoaderException &e) {
         std::cerr << "PluginLoaderException: " << e.what() << '\n';

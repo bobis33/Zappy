@@ -15,7 +15,7 @@ namespace gui {
 
         public:
 
-            static Argument parseArgs(int argc, char* const argv[]);
+            static Argument getOptions(int argc, char* const argv[], const std::string &optString);
 
             static uint16_t parsePort(const char* port);
             static std::string parseMachineName(const char* machineName);

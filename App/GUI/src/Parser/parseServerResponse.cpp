@@ -10,7 +10,6 @@
 
 #include "GUI/Protocol.hpp"
 
-
 void gui::Parser::processData(const std::vector<std::string>& data, Gui &gui)
 {
     for (const std::string &line : data) {
