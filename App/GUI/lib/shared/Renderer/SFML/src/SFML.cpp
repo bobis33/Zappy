@@ -6,6 +6,7 @@
 */
 
 #include "GUI/SFML.hpp"
+#include <iostream>
 
 std::array<gui::KeyBoard::Key, sf::Keyboard::KeyCount> gui::SFML::KEY_CODE_ARRAY;
 
@@ -27,6 +28,24 @@ void gui::SFML::init(const std::string &name, std::pair<const unsigned int,const
 
     m_window.create(sf::VideoMode(resolution.first, resolution.second, bitsPerPixel), name, sf::Style::Resize | sf::Style::Close);
     m_timeoutClock.restart();
+
+    if (!t_tile.loadFromFile("assets/textures/forest_.png")) {
+        throw std::runtime_error("Failed to load texture");
+    }
+
+    sf::IntRect textureRect(100, 85, 40, 40);
+    s_tile.setTexture(t_tile);
+    s_tile.setTextureRect(textureRect);
+
+    if (!t_background.loadFromFile("assets/textures/background.jpg")) {
+        throw std::runtime_error("Failed to load background texture");
+    }
+
+    s_background.setTexture(t_background);
+    s_background.setScale(
+        static_cast<float>(resolution.first) / t_background.getSize().x,
+        static_cast<float>(resolution.second) / t_background.getSize().y
+    );
 }
 
 bool gui::SFML::checkConnection(sf::Clock clock)
@@ -43,8 +62,29 @@ bool gui::SFML::checkConnection(sf::Clock clock)
     return true;
 }
 
-void gui::SFML::render()
+void gui::SFML::render(Map &tiles)
 {
-    m_window.display();
     m_window.clear({0, 0, 0, 0});
+    m_window.draw(s_background);
+    sf::Vector2u windowSize = m_window.getSize();
+
+    float maxTileWidth = (windowSize.x - (tiles.getWidth())) / tiles.getWidth();
+    float maxTileHeight = (windowSize.y - (tiles.getHeight())) / tiles.getHeight();
+
+    float scaleX = maxTileWidth / s_tile.getTextureRect().width + 0.02;
+    float scaleY = maxTileHeight / s_tile.getTextureRect().height + 0.02;
+
+    float scale = std::min(scaleX, scaleY);
+    s_tile.setScale(scale, scale);
+
+    for (unsigned int y = 0; y < tiles.getHeight(); y++) {
+        for (unsigned int x = 0; x < tiles.getWidth(); x++) {
+            s_tile.setPosition(
+                x * (s_tile.getGlobalBounds().width),
+                y * (s_tile.getGlobalBounds().height)
+            );
+            m_window.draw(s_tile);
+        }
+    }
+    m_window.display();
 }

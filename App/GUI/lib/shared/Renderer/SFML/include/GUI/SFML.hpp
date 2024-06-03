@@ -13,6 +13,7 @@
 #include "GUI/Abstraction/IRenderer.hpp"
 #include "GUI/SFMLClient.hpp"
 #include "GUI/KeyBoard.hpp"
+#include "GUI/Map/Map.hpp"
 
 namespace gui {
 
@@ -32,7 +33,7 @@ class SFML : public IRenderer {
 
             void init(const std::string &name, std::pair<const unsigned int,const unsigned int> resolution, unsigned int bitsPerPixel) override;
             void close() override { m_window.close(); getClient().disconnect(); };
-            void render() override;
+            void render(Map &tiles) override;
 
             static KeyBoard::Key getKeyboardEvent(const sf::Event &event);
             bool checkConnection(sf::Clock clock);
@@ -42,6 +43,12 @@ class SFML : public IRenderer {
             sf::RenderWindow m_window;
             SFMLClient m_client;
             sf::Clock m_timeoutClock;
+
+            sf::Texture t_tile;
+            sf::Sprite s_tile;
+
+            sf::Texture t_background;
+            sf::Sprite s_background;
 
             static std::array<gui::KeyBoard::Key, sf::Keyboard::KeyCount> KEY_CODE_ARRAY;
 

@@ -44,7 +44,7 @@ void gui::Gui::Run()
         if (event < KeyBoard::Key::COUNT && EVENT_ARRAY.at(event) != nullptr) {
             EVENT_ARRAY.at(event)(*this);
         }
-        m_renderer->render();
+        m_renderer->render(m_map);
     }
     // DEBUG TILE      - To remove
     for (auto &row : m_map.getTiles()) {
