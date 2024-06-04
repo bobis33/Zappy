@@ -33,7 +33,7 @@ gui::Tile gui::Parser::parseTileContent(std::string &tileContent)
         }
     }
     std::istringstream iss(tileContent);
-    std::vector<unsigned int> values((std::istream_iterator<int>(iss)), std::istream_iterator<int>())
+    std::vector<unsigned int> values((std::istream_iterator<int>(iss)), std::istream_iterator<int>());
     if (values.size() != 9) {
         throw std::runtime_error("Invalid tile content");
     }
