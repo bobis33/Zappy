@@ -18,7 +18,7 @@ namespace gui {
 
         public:
 
-            static const std::unordered_map<std::string, std::function<void(gui::Gui&, const std::string&)>> ProtocolMap;
+            static const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)>> ProtocolMap;
 
     }; // class Protocol
 

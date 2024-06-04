@@ -11,17 +11,24 @@
 
 std::string gui::SFMLClient::getResponse()
 {
-    std::array<char, MAX_OCTETS_READ> data{};
-    sf::Clock clk{};
-    std::size_t size = 0;
+    bool isInIt = true;
+    std::string string;
+    std::array<char, MAX_OCTETS_READ> response{};
+    std::size_t received = 0;
+    std::vector<std::array<char, MAX_OCTETS_READ>> responseList;
 
-    while (clk.getElapsedTime().asSeconds() < TIMEOUT) {
-        if (m_socket.receive(&data, MAX_OCTETS_READ, size) == sf::Socket::Done) {
-            return data.data();
+    while (isInIt && (received == MAX_OCTETS_READ - 1 || received == MAX_OCTETS_READ)) {
+        response.fill(0);
+        if (m_socket.receive(&response, MAX_OCTETS_READ, received) == sf::Socket::Done) {
+            responseList.push_back(response);
+            isInIt = false;
         }
     }
 
-    return "";
+    for (const auto& data : responseList) {
+        string += std::string(data.data(), MAX_OCTETS_READ);
+    }
+    return string;
 }
 
 bool gui::SFMLClient::getResponse(const std::string& cmd)

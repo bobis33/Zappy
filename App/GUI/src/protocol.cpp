@@ -7,14 +7,14 @@
 
 #include "GUI/Protocol.hpp"
 
-const std::unordered_map<std::string, std::function<void(gui::Gui&, const std::string&)>> gui::Protocol::ProtocolMap = {
+const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)>> gui::Protocol::ProtocolMap = {
         {"msz", [](Gui& gui, const std::string& cmd) {
             gui.initMap({
                 std::stoi(cmd.substr(0, cmd.find(' '))),
                 std::stoi(cmd.substr(cmd.find(' ') + 1, cmd.size()))
             });
         }},
-        {"bct", [](Gui& gui, const std::string& cmd) {
+        {"bct", [](Gui& gui, std::string cmd) {
             gui.getMap().addTile(Parser::parseTileContent(cmd));
         }},
         {"mct", [](Gui&, const std::string&) {}},
