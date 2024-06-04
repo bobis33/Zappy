@@ -7,8 +7,16 @@
 
 #pragma once
 
-#include <stdbool.h>
+    #include <netinet/in.h>
 
-#include "Server/arguments.h"
+    #include "Server/arguments.h"
+
+typedef struct server_s {
+    int fd;
+    uint16_t port;
+    int max_clients;
+    struct sockaddr_in socket;
+    struct protoent *pe;
+} server_t;
 
 bool run_server(arguments_t *args);

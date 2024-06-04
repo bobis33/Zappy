@@ -12,7 +12,7 @@
 
 bool bind_port(arguments_t *args, char *arg)
 {
-    args->port = atoi(arg);
+    args->port = (u_int16_t) atoi(arg);
     return true;
 }
 

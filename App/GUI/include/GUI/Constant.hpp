@@ -33,4 +33,5 @@ namespace gui {
     static constexpr const std::string_view DEFAULT_NAME = "ZAPPY";
     static constexpr const int MAX_MAP_SIZE = 30;
 
+
 } // namespace gui

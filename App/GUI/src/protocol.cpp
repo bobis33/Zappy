@@ -5,6 +5,8 @@
 ** protocol
 */
 
+#include <iostream>
+
 #include "GUI/Protocol.hpp"
 
 const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)>> gui::Protocol::ProtocolMap = {

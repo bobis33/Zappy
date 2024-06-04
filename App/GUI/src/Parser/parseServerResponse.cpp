@@ -38,17 +38,16 @@ gui::Tile gui::Parser::parseTileContent(std::string &tileContent)
     }
     return {
         {
-            {Resource::Type::FOOD, values.at(2)},
-            {Resource::Type::LINEMATE, values.at(3)},
-            {Resource::Type::DERAUMERE, values.at(4)},
-            {Resource::Type::SIBUR, values.at(5)},
-            {Resource::Type::MENDIANE, values.at(6)},
-            {Resource::Type::PHIRAS, values.at(7)},
-            {Resource::Type::THYSTAME, values.at(8)}
-        },
+            {Resource::Type::FOOD, values.at(2) ? values.at(2) : 0},
+            {Resource::Type::LINEMATE, values.at(3) ? values.at(3) : 0},
+            {Resource::Type::DERAUMERE, values.at(4) ? values.at(4) : 0},
+            {Resource::Type::SIBUR, values.at(5) ? values.at(5) : 0},
+            {Resource::Type::MENDIANE, values.at(6) ? values.at(6) : 0},
+            {Resource::Type::PHIRAS, values.at(7) ? values.at(7) : 0},
+            {Resource::Type::THYSTAME, 0}},
         {
-            values.at(0),
-            values.at(1)
+            values.at(0) ? values.at(0) : 0,
+            values.at(1) ? values.at(1) : 0
         }
     };
 }
