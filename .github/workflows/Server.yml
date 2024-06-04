@@ -8,14 +8,18 @@ on:
 env:
   EXECUTABLE: "zappy_server"
   WORKDIR: "App/Server"
+
 jobs:
-  build:
+
+  check_compilation:
     runs-on: ubuntu-latest
     container:
-        image: epitechcontent/epitest-docker:latest
-
+      image: epitechcontent/epitest-docker:latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+
+      - name: checkout repository
+        uses: actions/checkout@master
 
       - name: Check compilation
         run: |
@@ -30,4 +34,36 @@ jobs:
           if [[ ! -x "./${EXECUTABLE}" ]]; then
           echo "Error: Binary ${EXECUTABLE} not found."
           exit 1
+          fi
+
+  check_coding_style:
+    needs: check_compilation
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    container: ghcr.io/epitech/coding-style-checker:latest
+    steps:
+
+      - name: checkout repository
+        uses: actions/checkout@master
+
+      - name: run coding-style
+        run: |
+          cd $WORKDIR
+          check.sh ./src /tmp
+
+      - name: display coding-style errors
+        run: |
+          cd $WORKDIR
+          input=/tmp/coding-style-reports.log
+          while IFS= read -r -a line; do
+            fields=($(printf "%s" "$line"|cut -d':' --output-delimiter=' ' -f1-))
+            echo "::error title=${fields[2]} coding style error,file=${fields[0]},line=${fields[1]}::${fields[3]}"
+          done < $input || true
+
+      - name: count coding-style errors
+        run: |
+          cd $WORKDIR
+          NB_ERROR=$(cat /tmp/coding-style-reports.log | wc -l)
+          if [ $NB_ERROR -gt 0 ]; then
+            exit 1
           fi
