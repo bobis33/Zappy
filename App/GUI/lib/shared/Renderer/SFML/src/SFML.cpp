@@ -77,11 +77,11 @@ void gui::SFML::render(Map &tiles)
     float scale = std::min(scaleX, scaleY);
     s_tile.setScale(scale, scale);
 
-    for (unsigned int y = 0; y < tiles.getHeight(); y++) {
-        for (unsigned int x = 0; x < tiles.getWidth(); x++) {
+    for (auto& row : tiles.getTiles()) {
+        for (auto& tile : row) {
             s_tile.setPosition(
-                x * (s_tile.getGlobalBounds().width),
-                y * (s_tile.getGlobalBounds().height)
+                tile.getPosition().x * (s_tile.getGlobalBounds().width),
+                tile.getPosition().y * (s_tile.getGlobalBounds().height)
             );
             m_window.draw(s_tile);
         }
