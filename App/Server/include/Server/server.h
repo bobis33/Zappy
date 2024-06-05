@@ -21,8 +21,9 @@ typedef struct server_s {
 } server_t;
 
 typedef enum server_status_e {
-    RUNNING,
-    STOPPED
+    RUNNING = 0,
+    STOPPED,
+    STOPPED_ERROR
 } server_status_t;
 
 bool run_server(arguments_t *args);

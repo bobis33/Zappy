@@ -47,7 +47,14 @@ void gui::Gui::Run()
         m_renderer->render();
     }
     // DEBUG TILE      - To remove
-    std::cout << "Map size: " << m_map.getWidth() << " " << m_map.getHeight() << '\n';
+    for (auto &row : m_map.getTiles()) {
+        for (auto &tile : row) {
+            std::cout << "Tile: " << tile.getPosition().x << " " << tile.getPosition().y << '\n';
+            for (auto &resource : tile.getInventory().resources) {
+                std::cout << "Resource: " << resource.quantity << " " << resource.density << '\n';
+            }
+        }
+    }
 }
 
 std::vector<std::string> gui::Gui::getData(const std::string &data)

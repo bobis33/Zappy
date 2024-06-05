@@ -75,48 +75,64 @@ static client_t *init_client_data(int server_fd)
     return client;
 }
 
+static void viva_el_coding_style(client_t *client, server_t *server, int fd)
+{
+    data_t *current_client = get_client_by_fd(client, fd);
+
+    if (fd != server->fd && fd != STDIN_FILENO) {
+        if (!current_client || !client_inputs(fd)) {
+            remove_client(client, fd);
+        }
+    }
+    free(current_client);
+}
+
+static server_status_t loop_fds(client_t *client, server_t *server)
+{
+    int new_fd = 0;
+
+    for (int index_fd = 0; index_fd <= client->max_fd; index_fd++) {
+        if (!FD_ISSET(index_fd, &client->read_fds)) {
+            continue;
+        }
+        if (index_fd == server->fd &&
+            !create_client(client, server->fd, new_fd)) {
+            free(client);
+            return STOPPED_ERROR;
+        }
+        if (index_fd == STDIN_FILENO && server_inputs() == STOPPED) {
+            FD_CLR(server->fd, &client->master_fds);
+            close(server->fd);
+            free(client);
+            return STOPPED;
+        }
+        viva_el_coding_style(client, server, index_fd);
+    }
+    return RUNNING;
+}
+
 static bool main_loop(server_t *server)
 {
-    int nb_fds = 0;
-    int rv_select = 0;
-    int new_fd = 0;
     client_t *client = init_client_data(server->fd);
-    data_t *current_client = NULL;
 
     while (true) {
-        nb_fds = client->max_fd + 1;
         client->read_fds = client->master_fds;
-        rv_select = select(nb_fds, &client->read_fds, NULL, NULL, NULL);
-        if (rv_select == ERROR) {
-            perror("select");
+        if (is_perror(select(client->max_fd + 1,
+            &client->read_fds, NULL, NULL, NULL), "select")) {
             free(client);
             return false;
         }
-        for (int i = 0; i <= client->max_fd; i++) {
-            if (FD_ISSET(i, &client->read_fds)) {
-                if (i == server->fd) {
-                    if (!create_client(client, server->fd, new_fd)) {
-                        free(client);
-                        return false;
-                    }
-                } else if (i == STDIN_FILENO) {
-                    if (server_inputs() == STOPPED) {
-                        FD_CLR(server->fd, &client->master_fds);
-                        close(server->fd);
-                        free(client);
-                        return true;
-                    }
-                } else {
-                    current_client = NULL;
-                    current_client = get_client_by_fd(client, i);
-                    if (!current_client || !client_inputs(i)) {
-                        remove_client(client, i);
-                    }
-                }
-            }
+        switch (loop_fds(client, server)) {
+            case RUNNING:
+                break;
+            case STOPPED:
+                return true;
+            case STOPPED_ERROR:
+                return false;
+            default:
+                break;
         }
     }
-    return true;
 }
 
 bool run_server(arguments_t *args)
@@ -133,5 +149,6 @@ bool run_server(arguments_t *args)
         free(server);
         return false;
     }
+    free(server);
     return true;
 }
