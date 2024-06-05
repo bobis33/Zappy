@@ -119,16 +119,14 @@ static bool main_loop(server_t *server)
 {
     client_t *client = init_client_data(server->fd);
 
-    while (true) {
+    while (!*stop_signal_catched()) {
         client->read_fds = client->master_fds;
-        if (is_perror(select(client->max_fd + 1,
-            &client->read_fds, NULL, NULL, NULL), "select")) {
+        if (select(client->max_fd + 1,
+            &client->read_fds, NULL, NULL, NULL) < 0) {
             free(client);
-            return false;
+            return true;
         }
         switch (loop_fds(client, server)) {
-            case RUNNING:
-                break;
             case STOPPED:
                 return true;
             case STOPPED_ERROR:
@@ -137,6 +135,7 @@ static bool main_loop(server_t *server)
                 break;
         }
     }
+    return true;
 }
 
 bool run_server(arguments_t *args)

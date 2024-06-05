@@ -10,6 +10,13 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+bool *stop_signal_catched(void)
+{
+    static bool globalStop = false;
+
+    return &globalStop;
+}
+
 bool is_perror(const int is_perror, const char *msg)
 {
     if (is_perror == -1) {

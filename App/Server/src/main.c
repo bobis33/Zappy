@@ -7,9 +7,16 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <signal.h>
 
 #include "Server/parser.h"
 #include "Server/server.h"
+
+static void my_handler(int signal)
+{
+    (void) signal;
+    *stop_signal_catched() = true;
+}
 
 static void debug_print(arguments_t *args)
 {
@@ -37,7 +44,11 @@ static void free_server(arguments_t *args)
 int main(const int argc, char *const argv[])
 {
     arguments_t *args = NULL;
+    struct sigaction sigIntHandler = {0};
 
+    sigIntHandler.sa_handler = my_handler;
+    sigemptyset(&sigIntHandler.sa_mask);
+    sigaction(SIGINT, &sigIntHandler, NULL);
     if (!parse_args(&args, argc, argv)) {
         return EPITECH_EXIT_ERROR;
     }

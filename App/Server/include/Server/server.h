@@ -26,5 +26,6 @@ typedef enum server_status_e {
     STOPPED_ERROR
 } server_status_t;
 
+bool *stop_signal_catched(void);
 bool run_server(arguments_t *args);
 server_status_t server_inputs(void);
