@@ -7,7 +7,6 @@
 
 #include <getopt.h>
 #include <regex>
-#include <iostream>
 
 #include "GUI/Parser.hpp"
 #include "GUI/Constant.hpp"

@@ -7,7 +7,6 @@
 
 #include <iterator>
 #include <sstream>
-#include <iostream>
 
 #include "GUI/Protocol.hpp"
 
@@ -27,11 +26,11 @@ void gui::Parser::processData(const std::vector<std::string>& data, Gui &gui)
 
 gui::Tile gui::Parser::parseTileContent(std::string &tileContent)
 {
-    for (char & index : tileContent) {
-        if (index == 0) {
-            index = ' ';
-        }
-    }
+    tileContent.erase(
+            std::remove(tileContent.begin(), tileContent.end(), '\0'),
+            tileContent.end()
+    );
+
     std::istringstream iss(tileContent);
     std::vector<unsigned int> values((std::istream_iterator<int>(iss)), std::istream_iterator<int>());
     if (values.size() != 9) {
