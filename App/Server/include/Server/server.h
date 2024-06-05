@@ -21,7 +21,7 @@ typedef struct server_s {
 } server_t;
 
 typedef enum server_status_e {
-    RUNNING = 0,
+    RUNNING,
     STOPPED,
     STOPPED_ERROR
 } server_status_t;

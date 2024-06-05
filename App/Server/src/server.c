@@ -16,10 +16,6 @@
 
 static bool open_server(server_t *server)
 {
-    server->fd = socket(AF_INET, SOCK_STREAM, server->pe->p_proto);
-    if (is_perror(server->fd, "socket")){
-        return false;
-    }
     if (is_perror(bind(server->fd,
         (const struct sockaddr *)&server->socket,
         sizeof(struct sockaddr_in)), "bind")) {
@@ -33,17 +29,12 @@ static bool open_server(server_t *server)
     return true;
 }
 
-static bool init_server(server_t *server, arguments_t *args)
+static bool connect_socket(server_t *server, int *new_fd)
 {
     struct protoent proto;
     struct protoent *proto_ptr = NULL;
     char buffer[MAX_BUFFER_SIZE];
 
-    server->port = args->port;
-    server->max_clients = args->clients_nb * args->nb_teams;
-    server->socket.sin_family = AF_INET;
-    server->socket.sin_port = htons(server->port);
-    server->socket.sin_addr.s_addr = INADDR_ANY;
     if (getprotobyname_r("TCP",
         &proto,
         buffer,
@@ -52,7 +43,21 @@ static bool init_server(server_t *server, arguments_t *args)
         return false;
     }
     server->pe = proto_ptr;
+    server->fd = socket(AF_INET, SOCK_STREAM, server->pe->p_proto);
+    if (is_perror(server->fd, "socket")){
+        return false;
+    }
     return true;
+}
+
+static bool init_server(server_t *server, arguments_t *args)
+{
+    server->port = args->port;
+    server->max_clients = args->clients_nb * args->nb_teams;
+    server->socket.sin_family = AF_INET;
+    server->socket.sin_port = htons(server->port);
+    server->socket.sin_addr.s_addr = INADDR_ANY;
+    return connect_socket(server, &server->fd);
 }
 
 static client_t *init_client_data(int server_fd)
@@ -61,7 +66,7 @@ static client_t *init_client_data(int server_fd)
 
     if (!client) {
         perror("malloc");
-        return false;
+        return NULL;
     }
     client->client_len = sizeof(client->socket);
     FD_ZERO(&client->master_fds);
@@ -84,7 +89,6 @@ static void viva_el_coding_style(client_t *client, server_t *server, int fd)
             remove_client(client, fd);
         }
     }
-    free(current_client);
 }
 
 static server_status_t loop_fds(client_t *client, server_t *server)

@@ -27,6 +27,9 @@ static void debug_print(arguments_t *args)
 
 static void free_server(arguments_t *args)
 {
+    for (int i = 0; i < args->nb_teams; i++) {
+        free((void *)args->team_names[i]);
+    }
     free((void *)args->team_names);
     free(args);
 }
@@ -40,6 +43,7 @@ int main(const int argc, char *const argv[])
     }
     debug_print(args);
     if (!run_server(args)) {
+        free_server(args);
         return EPITECH_EXIT_ERROR;
     }
     free_server(args);

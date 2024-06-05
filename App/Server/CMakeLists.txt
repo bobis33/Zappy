@@ -35,6 +35,8 @@ target_sources(${PROJECT_NAME} PRIVATE
         ${SRC_DIR}/client_tools.c
         ${SRC_DIR}/input/client.c
         ${SRC_DIR}/input/server.c
+        ${SRC_DIR}/input/cmd_server.c
+        ${SRC_DIR}/input/cmd_client.c
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR})

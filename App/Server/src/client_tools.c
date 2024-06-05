@@ -35,17 +35,6 @@ bool create_client(client_t *client, int server_fd, int new_fd)
     return false;
 }
 
-void remove_client(client_t *client, int fd)
-{
-    close(fd);
-    FD_CLR(fd, &client->master_fds);
-    for (int i = 0; i < MAX_CLIENTS; i++) {
-        if (client->clients[i].fd == fd) {
-            client->clients[i].fd = ERROR;
-        }
-    }
-}
-
 data_t *get_client_by_fd(client_t *client, int fd)
 {
     for (register int index = 0; index < MAX_CLIENTS; index++) {
@@ -54,4 +43,11 @@ data_t *get_client_by_fd(client_t *client, int fd)
         }
     }
     return NULL;
+}
+
+void remove_client(client_t *client, int fd)
+{
+    close(fd);
+    FD_CLR(fd, &client->master_fds);
+    get_client_by_fd(client, fd)->fd = ERROR;
 }
