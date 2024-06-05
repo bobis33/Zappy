@@ -6,7 +6,6 @@
 */
 
 #include "GUI/SFML.hpp"
-#include <iostream>
 
 std::array<gui::KeyBoard::Key, sf::Keyboard::KeyCount> gui::SFML::KEY_CODE_ARRAY;
 
@@ -29,23 +28,14 @@ void gui::SFML::init(const std::string &name, std::pair<const unsigned int,const
     m_window.create(sf::VideoMode(resolution.first, resolution.second, bitsPerPixel), name, sf::Style::Resize | sf::Style::Close);
     m_timeoutClock.restart();
 
-    if (!t_tile.loadFromFile("assets/textures/forest_.png")) {
+    if (!m_tileTexture.loadFromFile("assets/textures/forest.png")) {
         throw std::runtime_error("Failed to load texture");
     }
 
     sf::IntRect textureRect(100, 85, 40, 40);
-    s_tile.setTexture(t_tile);
-    s_tile.setTextureRect(textureRect);
+    m_tileSprite.setTexture(m_tileTexture);
+    m_tileSprite.setTextureRect(textureRect);
 
-    if (!t_background.loadFromFile("assets/textures/background.jpg")) {
-        throw std::runtime_error("Failed to load background texture");
-    }
-
-    s_background.setTexture(t_background);
-    s_background.setScale(
-        static_cast<float>(resolution.first) / t_background.getSize().x,
-        static_cast<float>(resolution.second) / t_background.getSize().y
-    );
 }
 
 bool gui::SFML::checkConnection(sf::Clock clock)
@@ -62,17 +52,16 @@ bool gui::SFML::checkConnection(sf::Clock clock)
     return true;
 }
 
-void gui::SFML::render(Map &tiles)
+void gui::SFML::render(Map &map)
 {
     m_window.clear({0, 0, 0, 0});
-    m_window.draw(s_background);
     sf::Vector2u windowSize = m_window.getSize();
 
     float windowAspectRatio = static_cast<float>(windowSize.x) / windowSize.y;
-    float tileAspectRatio = static_cast<float>(s_tile.getTextureRect().width) / s_tile.getTextureRect().height;
+    float tileAspectRatio = static_cast<float>(m_tileSprite.getTextureRect().width) / m_tileSprite.getTextureRect().height;
 
-    float scaleX = static_cast<float>(windowSize.x) / (tiles.getWidth() * s_tile.getTextureRect().width);
-    float scaleY = static_cast<float>(windowSize.y) / (tiles.getHeight() * s_tile.getTextureRect().height);
+    float scaleX = static_cast<float>(windowSize.x) / (map.getWidth() * m_tileSprite.getTextureRect().width);
+    float scaleY = static_cast<float>(windowSize.y) / (map.getHeight() * m_tileSprite.getTextureRect().height);
 
     if (windowAspectRatio > tileAspectRatio) {
         scaleX = scaleY;
@@ -80,15 +69,15 @@ void gui::SFML::render(Map &tiles)
         scaleY = scaleX;
     }
 
-    s_tile.setScale(scaleX, scaleY);
+    m_tileSprite.setScale(scaleX, scaleY);
 
-    for (auto& row : tiles.getTiles()) {
+    for (auto& row : map.getTiles()) {
         for (auto& tile : row) {
-            s_tile.setPosition(
-                tile.getPosition().x * (s_tile.getGlobalBounds().width),
-                tile.getPosition().y * (s_tile.getGlobalBounds().height)
+            m_tileSprite.setPosition(
+                tile.getPosition().x * (m_tileSprite.getGlobalBounds().width),
+                tile.getPosition().y * (m_tileSprite.getGlobalBounds().height)
             );
-            m_window.draw(s_tile);
+            m_window.draw(m_tileSprite);
         }
     }
     m_window.display();
