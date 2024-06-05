@@ -31,7 +31,7 @@ void cmd_builtin_client(const char *cmd, const int fd)
 
 bool client_inputs(const int fd)
 {
-    char cmd[MAX_BUFFER_SIZE] = "\0";
+    char cmd[MAX_BUFFER_SIZE] = {0};
     ssize_t read_value = read(fd, cmd, sizeof(cmd));
 
     switch (read_value) {

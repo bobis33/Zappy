@@ -12,9 +12,15 @@
 
     #include "Server/constant.h"
 
+typedef enum identity_e {
+    GRAPHIC,
+    AI
+} identity_t;
+
 typedef struct data_s {
     int fd;
     struct sockaddr_in socket;
+    identity_t identity;
 } data_t;
 
 typedef struct client_s {
