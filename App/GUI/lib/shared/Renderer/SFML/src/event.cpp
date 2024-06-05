@@ -17,6 +17,9 @@ gui::KeyBoard::Key gui::SFML::getEvents()
                 return KeyBoard::Key::CLOSE;
             case sf::Event::KeyPressed:
                 return getKeyboardEvent(event);
+            case sf::Event::Resized:
+                m_window.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
+                break;
 
             default:
                 break;

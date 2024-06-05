@@ -68,14 +68,19 @@ void gui::SFML::render(Map &tiles)
     m_window.draw(s_background);
     sf::Vector2u windowSize = m_window.getSize();
 
-    float maxTileWidth = (windowSize.x - (tiles.getWidth())) / tiles.getWidth();
-    float maxTileHeight = (windowSize.y - (tiles.getHeight())) / tiles.getHeight();
+    float windowAspectRatio = static_cast<float>(windowSize.x) / windowSize.y;
+    float tileAspectRatio = static_cast<float>(s_tile.getTextureRect().width) / s_tile.getTextureRect().height;
 
-    float scaleX = maxTileWidth / s_tile.getTextureRect().width + 0.02;
-    float scaleY = maxTileHeight / s_tile.getTextureRect().height + 0.02;
+    float scaleX = static_cast<float>(windowSize.x) / (tiles.getWidth() * s_tile.getTextureRect().width);
+    float scaleY = static_cast<float>(windowSize.y) / (tiles.getHeight() * s_tile.getTextureRect().height);
 
-    float scale = std::min(scaleX, scaleY);
-    s_tile.setScale(scale, scale);
+    if (windowAspectRatio > tileAspectRatio) {
+        scaleX = scaleY;
+    } else {
+        scaleY = scaleX;
+    }
+
+    s_tile.setScale(scaleX, scaleY);
 
     for (auto& row : tiles.getTiles()) {
         for (auto& tile : row) {
