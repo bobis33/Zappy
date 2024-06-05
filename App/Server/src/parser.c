@@ -61,9 +61,10 @@ static bool parse_flag_help(const char *argv)
     return true;
 }
 
-static void parse_flags(char *const argv[],
-                        arguments_t **args,
-                        const int option_char)
+static void parse_flags(
+    char *const argv[],
+    arguments_t **args,
+    const int option_char)
 {
     for (unsigned int i = 0; FLAG_BINDING[i].flag; i++) {
         if (FLAG_BINDING[i].flag == option_char && 'n' != option_char) {
