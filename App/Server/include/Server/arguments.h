@@ -10,7 +10,7 @@
 #include <stdbool.h>
 
 typedef struct arguments_s {
-    int port;
+    u_int16_t port;
     int width;
     int height;
     int nb_teams;
