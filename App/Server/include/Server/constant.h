@@ -7,9 +7,13 @@
 
 #pragma once
 
-#define EPITECH_EXIT_SUCCESS 0
-#define EPITECH_EXIT_ERROR 84
-#define ERROR -1
+typedef enum return_e {
+    EPITECH_EXIT_SUCCESS = 0,
+    EPITECH_EXIT_ERROR = 84,
+    SUCCESS = 0,
+    ERROR = -1
+
+} return_t;
 
 #define MAX_CLIENTS 1024
 #define MAX_BUFFER_SIZE 1024

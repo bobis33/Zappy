@@ -10,6 +10,7 @@
     #include <netinet/in.h>
 
     #include "Server/arguments.h"
+    #include "client.h"
 
 typedef struct server_s {
     int fd;
@@ -19,4 +20,10 @@ typedef struct server_s {
     struct protoent *pe;
 } server_t;
 
+typedef enum server_status_e {
+    RUNNING,
+    STOPPED
+} server_status_t;
+
 bool run_server(arguments_t *args);
+server_status_t server_inputs(void);

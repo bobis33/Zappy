@@ -8,6 +8,7 @@
 #pragma once
 
     #include <netinet/in.h>
+    #include <stdbool.h>
 
     #include "Server/constant.h"
 
@@ -24,3 +25,9 @@ typedef struct client_s {
     struct sockaddr_in socket;
     data_t clients[MAX_CLIENTS];
 } client_t;
+
+bool create_client(client_t *client, int server_fd, int new_fd);
+void remove_client(client_t *client, int fd);
+data_t *get_client_by_fd(client_t *client, int fd);
+
+bool client_inputs(int fd);

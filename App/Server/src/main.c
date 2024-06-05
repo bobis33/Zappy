@@ -5,12 +5,9 @@
 ** main.c
 */
 
-#include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "Server/constant.h"
-#include "Server/arguments.h"
 #include "Server/parser.h"
 #include "Server/server.h"
 
