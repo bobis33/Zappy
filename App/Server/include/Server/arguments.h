@@ -8,6 +8,7 @@
 #pragma once
 
 #include <stdbool.h>
+#include <stdlib.h>
 
 typedef struct arguments_s {
     u_int16_t port;

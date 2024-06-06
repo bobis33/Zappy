@@ -7,14 +7,15 @@
 
 #pragma once
 
-    #include <netinet/in.h>
-    #include <stdbool.h>
+#include <netinet/in.h>
+#include <stdbool.h>
 
-    #include "Server/constant.h"
+#include "Server/constant.h"
 
 typedef enum identity_e {
+    AI,
     GRAPHIC,
-    AI
+    NONE
 } identity_t;
 
 typedef struct data_s {

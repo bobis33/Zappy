@@ -11,4 +11,4 @@
 
 #include "Server/arguments.h"
 
-bool parse_args(arguments_t **args, const int ac, char *const av[]);
+bool parse_args(arguments_t **args, int argc, char *const argv[]);

@@ -9,5 +9,5 @@
 
 #include <stdbool.h>
 
-bool print_msg(const int fd, const char *msg);
-bool is_perror(const int is_error, const char *msg);
+bool print_msg(int fd, const char *msg);
+bool is_perror(int is_error, const char *msg);
