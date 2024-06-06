@@ -17,7 +17,10 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
         {"bct", [](Gui& gui, std::string cmd) {
             gui.getMap().addTile(Parser::parseTileContent(cmd));
         }},
-        {"mct", [](Gui&, const std::string&) {}},
+        {"mct", [](Gui& gui, const std::string& cmd) {
+            // gui.getMap().countResources();
+            std::cout << "mct ok" << std::endl;
+        }},
         {"pnw", [](Gui&, const std::string&) {}},
         {"tna", [](Gui&, const std::string&) {}},
         {"ppo", [](Gui&, const std::string&) {}},

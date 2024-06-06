@@ -11,6 +11,7 @@
 
 #include "GUI/Constant.hpp"
 #include "GUI/Map/Tile.hpp"
+#include <iostream>
 
 namespace gui {
 
@@ -28,6 +29,16 @@ namespace gui {
             void addTile(const Tile& tile) { m_tiles.at(tile.getPosition().x).at(tile.getPosition().y) = tile; };
 
             [[nodiscard]] std::vector<std::vector<Tile>>& getTiles() { return m_tiles; };
+            void countResources() {
+                for (auto &row : m_tiles) {
+                    for (auto &tile : row) {
+                        std::cout << "Tile: " << tile.getPosition().x << " " << tile.getPosition().y << '\n';
+                        for (auto &resource : tile.getInventory().resources) {
+                            std::cout << "Resource: " << resource.quantity << " " << resource.density << '\n';
+                        }
+                    }
+                }
+            };
 
         private:
 

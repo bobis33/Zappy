@@ -5,6 +5,8 @@
 ** SFML.cpp
 */
 
+#include <iostream>
+
 #include "GUI/SFML.hpp"
 
 std::array<gui::KeyBoard::Key, sf::Keyboard::KeyCount> gui::SFML::KEY_CODE_ARRAY;
