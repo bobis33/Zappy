@@ -9,9 +9,9 @@
 #include "Server/tools.h"
 #include "Server/arguments.h"
 
+// char *cmd_parse = // del 4 char of freq
 void cmd_frequence(const int fd, const char *frequence)
 {
-    char *cmd_parse = // del 4 char of freq
     print_msg(1, "sgt ");
     print_msg(1, frequence);
     print_msg(1, "\n");
@@ -33,7 +33,7 @@ void cmd_map_size(const int fd, const char *map_size)
 
 void cmd_map_tile_content(const int fd, const char *tile_content)
 {
-    print_msg(fd, "mct ");
-    print_msg(fd, tile_content);
-    print_msg(fd, "\n");
+    print_msg(1, "mct ");
+    print_msg(1, tile_content);
+    print_msg(1, "\n");
 }
