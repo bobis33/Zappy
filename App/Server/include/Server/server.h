@@ -7,10 +7,10 @@
 
 #pragma once
 
-    #include <netinet/in.h>
+#include <netinet/in.h>
 
-    #include "Server/arguments.h"
-    #include "client.h"
+#include "Server/arguments.h"
+#include "Server/client.h"
 
 typedef struct server_s {
     int fd;

@@ -7,14 +7,21 @@
 
 #pragma once
 
-    #include <netinet/in.h>
-    #include <stdbool.h>
+#include <netinet/in.h>
+#include <stdbool.h>
 
-    #include "Server/constant.h"
+#include "Server/constant.h"
+
+typedef enum identity_e {
+    AI,
+    GRAPHIC,
+    NONE
+} identity_t;
 
 typedef struct data_s {
     int fd;
     struct sockaddr_in socket;
+    identity_t identity;
 } data_t;
 
 typedef struct client_s {
