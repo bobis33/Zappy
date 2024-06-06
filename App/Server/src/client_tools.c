@@ -28,7 +28,7 @@ bool create_client(client_t *client, int server_fd, int new_fd)
         if (client->clients[i].fd == ERROR) {
             client->clients[i].fd = new_fd;
             FD_SET(new_fd, &client->master_fds);
-            print_msg(new_fd, "Connected\n");
+            print_msg(new_fd, "WELCOME\n");
             return true;
         }
     }

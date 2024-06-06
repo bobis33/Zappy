@@ -16,6 +16,7 @@ typedef struct server_s {
     int fd;
     uint16_t port;
     int max_clients;
+    game_t *game;
     struct sockaddr_in socket;
     struct protoent *pe;
 } server_t;

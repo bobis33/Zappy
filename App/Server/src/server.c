@@ -52,11 +52,13 @@ static bool connect_socket(server_t *server)
 
 static bool init_server(server_t *server, arguments_t *args)
 {
+    server->game = NULL;
     server->port = args->port;
     server->max_clients = args->clients_nb * args->nb_teams;
     server->socket.sin_family = AF_INET;
     server->socket.sin_port = htons(server->port);
     server->socket.sin_addr.s_addr = INADDR_ANY;
+    init_game(args, &server->game);
     return connect_socket(server);
 }
 
@@ -76,6 +78,7 @@ static client_t *init_client_data(int server_fd)
     memset(client->clients, 0, sizeof(client->clients));
     for (int i = 0; i < MAX_CLIENTS; i++) {
         client->clients[i].fd = ERROR;
+        client->clients[i].identity = NONE;
     }
     return client;
 }
@@ -85,7 +88,7 @@ static void viva_el_coding_style(client_t *client, server_t *server, int fd)
     data_t *current_client = get_client_by_fd(client, fd);
 
     if (fd != server->fd && fd != STDIN_FILENO) {
-        if (!current_client || !client_inputs(fd)) {
+        if (!current_client || !client_inputs(server->game, client, fd)) {
             remove_client(client, fd);
         }
     }
@@ -152,6 +155,7 @@ bool run_server(arguments_t *args)
         free(server);
         return false;
     }
+    free_game_resources(server->game);
     free(server);
     return true;
 }

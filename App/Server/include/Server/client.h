@@ -11,6 +11,7 @@
 #include <stdbool.h>
 
 #include "Server/constant.h"
+#include "Server/game.h"
 
 typedef enum identity_e {
     AI,
@@ -37,4 +38,4 @@ bool create_client(client_t *client, int server_fd, int new_fd);
 void remove_client(client_t *client, int fd);
 data_t *get_client_by_fd(client_t *client, int fd);
 
-bool client_inputs(int fd);
+bool client_inputs(game_t *game, client_t *client, int fd);

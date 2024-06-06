@@ -11,7 +11,6 @@
 
 #include "Server/parser.h"
 #include "Server/server.h"
-#include "Server/game.h"
 
 static void my_handler(int signal)
 {
@@ -45,7 +44,6 @@ static void free_server(arguments_t *args)
 int main(const int argc, char *const argv[])
 {
     arguments_t *args = NULL;
-    game_t *game = NULL;
     struct sigaction sigIntHandler = {0};
 
     sigIntHandler.sa_handler = my_handler;
@@ -54,13 +52,11 @@ int main(const int argc, char *const argv[])
     if (!parse_args(&args, argc, argv)) {
         return EPITECH_EXIT_ERROR;
     }
-    init_game(args, &game);
     debug_print(args);
     if (!run_server(args)) {
         free_server(args);
         return EPITECH_EXIT_ERROR;
     }
-    free_game_resources(game);
     free_server(args);
     return EPITECH_EXIT_SUCCESS;
 }
