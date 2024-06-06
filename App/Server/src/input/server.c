@@ -7,7 +7,6 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <malloc.h>
 
 #include "Server/server.h"
 #include "Server/cmd_server.h"

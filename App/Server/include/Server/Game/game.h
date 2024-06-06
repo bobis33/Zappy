@@ -10,6 +10,7 @@
 #include <stdbool.h>
 
 #include "Server/arguments.h"
+#include "Server/Game/clock.h"
 
 typedef enum direction_e {
     NORTH,
@@ -31,6 +32,7 @@ typedef enum resource_type_e {
 
 typedef struct resource_s {
     int quantity;
+    double density;
     resource_type_t type;
 } resource_t;
 
@@ -54,10 +56,10 @@ typedef struct map_s {
 } map_t;
 
 typedef struct game_s {
-    int freq;
     int max_clients;
     int nb_teams;
     map_t *map;
+    server_clock_t *clock;
     char **team_names;
 } game_t;
 
