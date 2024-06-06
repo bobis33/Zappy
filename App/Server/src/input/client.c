@@ -48,7 +48,11 @@ static void cmd_builtin_client(
 {
     data_t *client_data = get_client_by_fd(client, fd);
     cmd_builtin_client_t cmd_builtin[] = {
-            {NULL, NULL}
+        {"sgt", cmd_frequence},
+        {"tna", cmd_team_names},
+        {"msz", cmd_map_size},
+        {"mct", cmd_map_tile_content},
+        {NULL, NULL}
     };
 
     if (client_data->identity == NONE &&
@@ -57,8 +61,8 @@ static void cmd_builtin_client(
     }
     for (int i = 0; cmd_builtin[i].command; i++) {
         if (strcmp(cmd, cmd_builtin[i].command) == 0) {
-            cmd_builtin[i].function();
-            return;
+        cmd_builtin[i].function(fd, cmd);
+        return;
         }
     }
     print_msg(fd, "Unknown command: ");
