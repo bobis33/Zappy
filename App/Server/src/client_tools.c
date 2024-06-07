@@ -47,7 +47,11 @@ data_t *get_client_by_fd(client_t *client, int fd)
 
 void remove_client(client_t *client, int fd)
 {
+    data_t *client_data = get_client_by_fd(client, fd);
+
     close(fd);
     FD_CLR(fd, &client->master_fds);
-    get_client_by_fd(client, fd)->fd = ERROR;
+    if (client_data != NULL) {
+        client_data->fd = ERROR;
+    }
 }
