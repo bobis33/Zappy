@@ -5,7 +5,9 @@
 ** game
 */
 
-#include "Server/game.h"
+#include <time.h>
+
+#include "Server/Game/game.h"
 
 void free_game_resources(game_t *game)
 {
@@ -63,12 +65,19 @@ static void init_tile_resources(game_t *game)
             game->map->tiles[i][j].pos_x = i;
             game->map->tiles[i][j].pos_y = j;
             game->map->tiles[i][j].resources[FOOD].quantity = 0;
+            game->map->tiles[i][j].resources[FOOD].density = 0.5;
             game->map->tiles[i][j].resources[LINEMATE].quantity = 0;
+            game->map->tiles[i][j].resources[LINEMATE].density = 0.3;
             game->map->tiles[i][j].resources[DERAUMERE].quantity = 0;
+            game->map->tiles[i][j].resources[DERAUMERE].density = 0.15;
             game->map->tiles[i][j].resources[SIBUR].quantity = 0;
+            game->map->tiles[i][j].resources[SIBUR].density = 0.1;
             game->map->tiles[i][j].resources[MENDIANE].quantity = 0;
+            game->map->tiles[i][j].resources[MENDIANE].density = 0.1;
             game->map->tiles[i][j].resources[PHIRAS].quantity = 0;
+            game->map->tiles[i][j].resources[PHIRAS].density = 0.08;
             game->map->tiles[i][j].resources[THYSTAME].quantity = 0;
+            game->map->tiles[i][j].resources[THYSTAME].density = 0.05;
         }
     }
 }
@@ -82,7 +91,9 @@ bool init_game(arguments_t *args, game_t **game_ptr)
         return false;
     }
     game = *game_ptr;
-    game->freq = args->freq;
+    game->clock = malloc(sizeof(server_clock_t));
+    game->clock->freq = args->freq;
+    clock_gettime(CLOCK_MONOTONIC, &game->clock->value);
     game->max_clients = args->clients_nb;
     game->nb_teams = args->nb_teams;
     game->team_names = args->team_names;

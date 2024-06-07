@@ -11,7 +11,7 @@
 #include <stdbool.h>
 
 #include "Server/constant.h"
-#include "Server/game.h"
+#include "Server/Game/game.h"
 
 typedef enum identity_e {
     AI,
@@ -21,7 +21,6 @@ typedef enum identity_e {
 
 typedef struct data_s {
     int fd;
-    struct sockaddr_in socket;
     identity_t identity;
 } data_t;
 
