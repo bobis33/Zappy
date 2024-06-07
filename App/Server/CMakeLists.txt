@@ -36,7 +36,15 @@ target_sources(${PROJECT_NAME} PRIVATE
         ${SRC_DIR}/input/client.c
         ${SRC_DIR}/input/server.c
         ${SRC_DIR}/input/cmd_server.c
-        ${SRC_DIR}/input/cmd_client.c
+        ${SRC_DIR}/input/cmd_client/cmd_frequence_update.c
+        ${SRC_DIR}/input/cmd_client/cmd_frequence.c
+        ${SRC_DIR}/input/cmd_client/cmd_map_size.c
+        ${SRC_DIR}/input/cmd_client/cmd_map_tile_content.c
+        ${SRC_DIR}/input/cmd_client/cmd_player_inventory.c
+        ${SRC_DIR}/input/cmd_client/cmd_player_lvl.c
+        ${SRC_DIR}/input/cmd_client/cmd_player_pos.c
+        ${SRC_DIR}/input/cmd_client/cmd_team_names.c
+        ${SRC_DIR}/input/cmd_client/cmd_tile_content.c
         ${SRC_DIR}/game/game.c
         ${SRC_DIR}/game/clock.c
 )
