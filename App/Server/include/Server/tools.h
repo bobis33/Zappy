@@ -9,5 +9,6 @@
 
 #include <stdbool.h>
 
+void free_array(char **array);
 bool print_msg(int fd, const char *msg);
 bool is_perror(int is_error, const char *msg);

@@ -11,7 +11,8 @@
 
 #include "Server/client.h"
 #include "Server/tools.h"
-#include "Server/cmd_client.h"
+#include "Server/cmd_ai_client.h"
+#include "Server/cmd_gui_client.h"
 
 static bool identify_client(
     game_t *game,
@@ -26,7 +27,7 @@ static bool identify_client(
         return false;
     }
     for (int i = 0; i < game->nb_teams; i++) {
-        tmp_team_name = malloc(strlen(game->team_names[i]) + 2);
+        tmp_team_name = malloc(strlen(game->team_names[i]) + 3);
         tmp_team_name = strcpy(tmp_team_name, game->team_names[i]);
         tmp_team_name = strcat(tmp_team_name, "\n");
         if (strcmp(cmd, tmp_team_name) == 0) {
@@ -43,26 +44,26 @@ static bool identify_client(
 static void cmd_builtin_client(
     game_t *game,
     client_t *client,
-    const char *cmd,
+    char *cmd,
     const int fd)
 {
-    data_t *client_data = get_client_by_fd(client, fd);
-    cmd_builtin_client_t cmd_builtin[] = {
-            {NULL, NULL}
-    };
+    data_t *client_data;
 
+    client_data = get_client_by_fd(client, fd);
     if (client_data->identity == NONE &&
         !identify_client(game, client_data, cmd, fd)) {
         return;
     }
-    for (int i = 0; cmd_builtin[i].command; i++) {
-        if (strcmp(cmd, cmd_builtin[i].command) == 0) {
-            cmd_builtin[i].function();
-            return;
-        }
+    switch (client_data->identity) {
+        case GRAPHIC:
+            cmd_gui_client(game, client, cmd, fd);
+            break;
+        case AI:
+            cmd_ai_client(game, client, cmd, fd);
+            break;
+        default:
+            break;
     }
-    print_msg(fd, "Unknown command: ");
-    print_msg(fd, cmd);
 }
 
 bool client_inputs(game_t *game, client_t *client, const int fd)

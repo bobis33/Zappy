@@ -12,7 +12,13 @@
 #include "Server/cmd_server.h"
 #include "Server/tools.h"
 
-server_status_t cmd_builtin_server(const char *cmd)
+static server_status_t cmd_quit(void)
+{
+    print_msg(1, "Shutdown server ...\n");
+    return STOPPED;
+}
+
+static server_status_t cmd_builtin_server(const char *cmd)
 {
     cmd_builtin_server_t cmd_builtin[] = {
         {"/quit\n", cmd_quit},

@@ -25,6 +25,7 @@ void free_game_resources(game_t *game)
         free(game->map->tiles);
     }
     free(game->map);
+    free(game->clock);
     free(game);
 }
 
@@ -98,8 +99,8 @@ bool init_game(arguments_t *args, game_t **game_ptr)
     game->nb_teams = args->nb_teams;
     game->team_names = args->team_names;
     if (!init_map(game, args->width, args->height) || !init_tiles(game)) {
+        free(game->clock);
         free_game_resources(game);
-        *game_ptr = NULL;
         return false;
     }
     init_tile_resources(game);

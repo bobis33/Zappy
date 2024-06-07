@@ -9,6 +9,14 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
+
+void free_array(char **array)
+{
+    for (int j = 0; array[j] != NULL; j++)
+        free(array[j]);
+    free(array);
+}
 
 bool *stop_signal_catched(void)
 {
