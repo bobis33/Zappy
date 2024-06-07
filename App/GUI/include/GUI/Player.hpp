@@ -35,6 +35,7 @@ namespace gui {
             Inventory& getInventory() { return m_inventory; };
             Position& getPosition() { return m_position; };
             unsigned int getLevel() const { return m_level; };
+            unsigned int getId() const { return m_id; };
 
             void setAction(const Action action) { m_action = action; };
             void setDirection(const Direction direction) { m_direction = direction; };
@@ -48,6 +49,7 @@ namespace gui {
             Inventory m_inventory;
             Position m_position;
             Direction m_direction{Direction::UP};
+            unsigned int m_id{0};
             unsigned int m_level{1};
 
     }; // class Player

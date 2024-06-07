@@ -22,7 +22,9 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
             std::cout << "mct ok" << std::endl;
         }},
         {"pnw", [](Gui&, const std::string&) {}},
-        {"tna", [](Gui&, const std::string&) {}},
+        {"tna", [](Gui& gui, const std::string& cmd) {
+            gui.setTeamName(cmd); // Tmp -> add another method after to display the team names in the window
+        }},
         {"ppo", [](Gui&, const std::string&) {}},
         {"plv", [](Gui&, const std::string&) {}},
         {"pin", [](Gui&, const std::string&) {}},
@@ -34,12 +36,25 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
         {"pdr", [](Gui&, const std::string&) {}},
         {"pgt", [](Gui&, const std::string&) {}},
         {"pdi", [](Gui&, const std::string&) {}},
-        {"enw", [](Gui&, const std::string&) {}},
-        {"eht", [](Gui&, const std::string&) {}},
+        {"enw", [](Gui& gui, const std::string& cmd) {
+            gui.initEgg(
+                std::stoi(cmd.substr(0, cmd.find(' '))),
+                std::stoi(cmd.substr(cmd.find(' ') + 1, cmd.size())),
+                {std::stoi(cmd.substr(cmd.find(' ') + 3, cmd.size())),
+                 std::stoi(cmd.substr(cmd.find(' ') + 5, cmd.size()))}
+            );
+        }},
+        {"eht", [](Gui& gui, const std::string& cmd) {
+            gui.matureEgg(std::stoi(cmd));
+        }},
         {"ebo", [](Gui&, const std::string&) {}},
         {"pex", [](Gui&, const std::string&) {}},
-        {"sgt", [](Gui&, const std::string&) {}},
-        {"sst", [](Gui&, const std::string&) {}},
+        {"sgt", [](Gui& gui, const std::string& cmd) {
+            gui.setFrequency(std::stoi(cmd));
+        }},
+        {"sst", [](Gui& gui, const std::string& cmd) {
+            gui.setFrequency(std::stoi(cmd));
+        }},
         {"seg", [](Gui&, const std::string&) {}},
         {"smg", [](Gui&, const std::string&) {}},
         {"suc", [](Gui&, const std::string&) {}},
