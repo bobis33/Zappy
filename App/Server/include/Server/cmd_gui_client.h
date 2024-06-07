@@ -14,13 +14,13 @@ typedef struct cmd_builtin_client_s {
     void (*function)(const int fd, char **arg);
 } cmd_builtin_client_t;
 
-void cmd_gui_client(game_t *game, client_t *client, char *cmd, const int fd);
-void cmd_map_size(const int fd, char **cmd);
-void cmd_tile_content(const int fd, char **cmd);
-void cmd_map_tile_content(const int fd, char **cmd);
-void cmd_team_names(const int fd, char **cmd);
-void cmd_player_pos(const int fd, char **cmd);
-void cmd_player_lvl(const int fd, char **cmd);
-void cmd_player_inventory(const int fd, char **cmd);
-void cmd_frequence(const int fd, char **cmd);
-void cmd_frequence_update(const int fd, char **cmd);
+void cmd_gui_client(game_t *game, client_t *client, char *cmd, int fd);
+void cmd_map_size(int fd, char **cmd);
+void cmd_tile_content(int fd, char **cmd);
+void cmd_map_tile_content(int fd, char **cmd);
+void cmd_team_names(int fd, char **cmd);
+void cmd_player_pos(int fd, char **cmd);
+void cmd_player_lvl(int fd, char **cmd);
+void cmd_player_inventory(int fd, char **cmd);
+void cmd_frequency(int fd, char **cmd);
+void cmd_frequency_update(int fd, char **cmd);

@@ -5,20 +5,20 @@
 ** cmd_tile_content
 */
 
+#include <stdio.h>
+
 #include "Server/cmd_gui_client.h"
 #include "Server/tools.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 void cmd_tile_content(const int fd, char **cmd)
 {
-    int x = atoi(cmd[1]);
-    int y = atoi(cmd[2]);
+    int width = atoi(cmd[1]);
+    int height = atoi(cmd[2]);
 
-    if (x < 0 || y < 0) {
+    if (width < 0 || height < 0) {
         print_msg(fd, "ko\n");
         return;
     }
-    printf("bct %d %d\n", x, y);
+    printf("bct %d %d\n", width, height);
     print_msg(fd, "content of tile\n");
 }

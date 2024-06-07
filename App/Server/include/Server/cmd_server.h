@@ -13,5 +13,3 @@ typedef struct cmd_builtin_server_s {
     const char *command;
     server_status_t (*function)(void);
 } cmd_builtin_server_t;
-
-server_status_t cmd_quit(void);

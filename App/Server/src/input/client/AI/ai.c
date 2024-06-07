@@ -5,11 +5,12 @@
 ** ai_cmd
 */
 
-#include "Server/cmd_ai_client.h"
-#include "Server/tools.h"
 #include <string.h>
 
-const cmd_ai_client_t cmd_ai[] = {
+#include "Server/cmd_ai_client.h"
+#include "Server/tools.h"
+
+static const cmd_ai_client_t cmd_ai[] = {
     {"Forward\n", cmd_forward},
     {"Right\n", cmd_right},
     {"Left\n", cmd_left},
