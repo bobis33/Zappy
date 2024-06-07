@@ -35,16 +35,30 @@ target_sources(${PROJECT_NAME} PRIVATE
         ${SRC_DIR}/client_tools.c
         ${SRC_DIR}/input/client.c
         ${SRC_DIR}/input/server.c
+        ${SRC_DIR}/input/ai_cmd.c
+        ${SRC_DIR}/input/gui_cmd.c
         ${SRC_DIR}/input/cmd_server.c
-        ${SRC_DIR}/input/cmd_client/cmd_frequence_update.c
-        ${SRC_DIR}/input/cmd_client/cmd_frequence.c
-        ${SRC_DIR}/input/cmd_client/cmd_map_size.c
-        ${SRC_DIR}/input/cmd_client/cmd_map_tile_content.c
-        ${SRC_DIR}/input/cmd_client/cmd_player_inventory.c
-        ${SRC_DIR}/input/cmd_client/cmd_player_lvl.c
-        ${SRC_DIR}/input/cmd_client/cmd_player_pos.c
-        ${SRC_DIR}/input/cmd_client/cmd_team_names.c
-        ${SRC_DIR}/input/cmd_client/cmd_tile_content.c
+        ${SRC_DIR}/input/cmd_ai_client/cmd_broadcast.c
+        ${SRC_DIR}/input/cmd_ai_client/cmd_connection_nbr.c
+        ${SRC_DIR}/input/cmd_ai_client/cmd_eject.c
+        ${SRC_DIR}/input/cmd_ai_client/cmd_fork.c
+        ${SRC_DIR}/input/cmd_ai_client/cmd_forward.c
+        ${SRC_DIR}/input/cmd_ai_client/cmd_incantation.c
+        ${SRC_DIR}/input/cmd_ai_client/cmd_inventory.c
+        ${SRC_DIR}/input/cmd_ai_client/cmd_left.c
+        ${SRC_DIR}/input/cmd_ai_client/cmd_look.c
+        ${SRC_DIR}/input/cmd_ai_client/cmd_right.c
+        ${SRC_DIR}/input/cmd_ai_client/cmd_set.c
+        ${SRC_DIR}/input/cmd_ai_client/cmd_take.c
+        ${SRC_DIR}/input/cmd_gui_client/cmd_frequence_update.c
+        ${SRC_DIR}/input/cmd_gui_client/cmd_frequence.c
+        ${SRC_DIR}/input/cmd_gui_client/cmd_map_size.c
+        ${SRC_DIR}/input/cmd_gui_client/cmd_map_tile_content.c
+        ${SRC_DIR}/input/cmd_gui_client/cmd_player_inventory.c
+        ${SRC_DIR}/input/cmd_gui_client/cmd_player_lvl.c
+        ${SRC_DIR}/input/cmd_gui_client/cmd_player_pos.c
+        ${SRC_DIR}/input/cmd_gui_client/cmd_team_names.c
+        ${SRC_DIR}/input/cmd_gui_client/cmd_tile_content.c
         ${SRC_DIR}/game/game.c
         ${SRC_DIR}/game/clock.c
 )

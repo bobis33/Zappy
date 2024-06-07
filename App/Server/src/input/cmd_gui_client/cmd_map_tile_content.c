@@ -5,7 +5,7 @@
 ** cmd_map_tile_content
 */
 
-#include "Server/cmd_client.h"
+#include "Server/cmd_gui_client.h"
 #include "Server/tools.h"
 
 void cmd_map_tile_content(const int fd, char **cmd)

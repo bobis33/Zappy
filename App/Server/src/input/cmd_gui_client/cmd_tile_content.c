@@ -5,7 +5,7 @@
 ** cmd_tile_content
 */
 
-#include "Server/cmd_client.h"
+#include "Server/cmd_gui_client.h"
 #include "Server/tools.h"
 #include <stdio.h>
 #include <stdlib.h>
