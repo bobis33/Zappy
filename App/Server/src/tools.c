@@ -11,18 +11,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void free_array(char **array)
-{
-    for (int j = 0; array[j] != NULL; j++)
-        free(array[j]);
-    free(array);
-}
-
 bool *stop_signal_catched(void)
 {
     static bool globalStop = false;
 
     return &globalStop;
+}
+
+void free_array(char **array)
+{
+    for (int i = 0; array[i] != NULL; i++) {
+        free(array[i]);
+    }
+    free(array);
 }
 
 bool is_perror(const int is_perror, const char *msg)

@@ -11,14 +11,10 @@
 
 void free_game_resources(game_t *game)
 {
-    if (!game) {
+    if (game == NULL) {
         return;
     }
-    if (!game->map) {
-        free(game);
-        return;
-    }
-    if (game->map->tiles) {
+    if (game->map->tiles != NULL) {
         for (int i = 0; i < game->map->width; i++) {
             free(game->map->tiles[i]);
         }

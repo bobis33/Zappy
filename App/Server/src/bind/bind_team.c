@@ -9,6 +9,7 @@
 #include <stdlib.h>
 
 #include "Server/arguments.h"
+#include "Server/constant.h"
 
 bool bind_team(arguments_t *args, char *arg)
 {
@@ -21,11 +22,12 @@ bool bind_team(arguments_t *args, char *arg)
     }
     if (!args->team_names ||
         strcmp(new_team_name, "GRAPHIC") == 0 ||
-        args->nb_teams == 10) {
+        args->nb_teams == MAX_TEAMS) {
         free(new_team_name);
         return false;
     }
     args->nb_teams++;
     args->team_names[args->nb_teams - 1] = new_team_name;
+    args->team_names[args->nb_teams] = NULL;
     return true;
 }

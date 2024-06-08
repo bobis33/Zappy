@@ -47,7 +47,7 @@ static void cmd_builtin_client(
     char *cmd,
     const int fd)
 {
-    data_t *client_data;
+    data_t *client_data = NULL;
 
     client_data = get_client_by_fd(client, fd);
     if (client_data->identity == NONE &&
