@@ -50,9 +50,56 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
             player.setTeamName(data[5]);
             gui.addPlayer(player);
         }},
-        {"ppo", [](Gui&, const std::string&) {}},
-        {"plv", [](Gui&, const std::string&) {}},
-        {"pin", [](Gui&, const std::string&) {}},
+        {"ppo", [](Gui &gui, const std::string &cmd) {
+            std::vector<std::string> data = Protocol::parseCommand(cmd);
+            for (auto &player : gui.getPlayers()) {
+                if (player.getId() != static_cast<unsigned int>(std::stoi(data[0].substr(1, data[0].size())))) {
+                    continue;
+                }
+                switch (std::stoi(data[3])) {
+                    case 1:
+                        player.setOrientation(Player::Orientation::NORTH);
+                        break;
+                    case 2:
+                        player.setOrientation(Player::Orientation::EAST);
+                        break;
+                    case 3:
+                        player.setOrientation(Player::Orientation::SOUTH);
+                        break;
+                    case 4:
+                        player.setOrientation(Player::Orientation::WEST);
+                        break;
+
+                    default:
+                        player.setOrientation(Player::Orientation::NORTH);
+                }
+            };
+
+            // to finish -> no need to create a new player, just update the existing one based on the id
+        }},
+        {"plv", [](Gui &gui, const std::string &cmd) {
+            std::vector<std::string> data = Protocol::parseCommand(cmd);
+            for (auto &player : gui.getPlayers()) {
+                if (player.getId() == static_cast<unsigned int>(std::stoi(data[0].substr(1, data[0].size())))) {
+                    player.setLevel(static_cast<unsigned int>(std::stoi(data[1])));
+                }
+            }
+
+            // to finish
+        }},
+        {"pin", [](Gui &gui, const std::string &cmd) {
+            std::vector<std::string> data = Protocol::parseCommand(cmd);
+            for (auto &player : gui.getPlayers()) {
+                if (player.getId() != static_cast<unsigned int>(std::stoi(data[0].substr(1, data[0].size())))) {
+                    continue;
+                }
+                for (size_t i = 0; i < 6; i++) {
+                    player.getInventory().setQuantity(static_cast<Resource::Type>(i), static_cast<unsigned int>(std::stoi(data[i + 3])));
+                }
+            }
+
+            // to finish
+        }},
         {"pex", [](Gui&, const std::string&) {}},
         {"pbc", [](Gui&, const std::string&) {}},
         {"pic", [](Gui&, const std::string&) {}},
@@ -80,7 +127,13 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
 
             // to finish
         }},
-        {"edi", [](Gui&, const std::string&) {}},
+        {"edi", [](Gui &, const std::string &) {
+            /*
+            gui.eggDeath(std::stoi(cmd.substr(1, cmd.size());
+            */
+
+           // to finish
+        }},
         {"sgt", [](Gui &gui, const std::string &cmd) {
             gui.setFrequency(std::stoi(cmd));
         }},

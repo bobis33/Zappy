@@ -36,6 +36,7 @@ namespace gui {
             void initMap(const std::pair<unsigned, unsigned> &size);
             void initEgg(const unsigned int &eggId, const int &playerId, const std::pair<unsigned int, unsigned int> &pos);
             void matureEgg(const unsigned int &eggId);
+            void eggDeath(const unsigned int &eggId);
 
             [[nodiscard]] static std::vector<std::string> getData(const std::string &data);
 

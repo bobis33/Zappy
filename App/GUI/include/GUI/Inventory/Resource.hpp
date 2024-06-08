@@ -15,15 +15,15 @@ namespace gui {
 
         public:
 
-            enum class Type {
-                FOOD,
-                LINEMATE,
-                DERAUMERE,
-                SIBUR,
-                MENDIANE,
-                PHIRAS,
-                THYSTAME,
-                NONE
+            enum Type {
+                FOOD = 0,
+                LINEMATE = 1,
+                DERAUMERE = 2,
+                SIBUR = 3,
+                MENDIANE = 4,
+                PHIRAS = 5,
+                THYSTAME = 6,
+                NONE = 7
             };
 
             Resource(Type type, unsigned int quantity);
