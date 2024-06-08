@@ -7,7 +7,6 @@
 
 #include <functional>
 #include <sstream>
-#include <iostream>
 
 #include "GUI/Constant.hpp"
 #include "GUI/Gui.hpp"
@@ -44,16 +43,7 @@ void gui::Gui::Run()
         if (event < KeyBoard::Key::COUNT && EVENT_ARRAY.at(event) != nullptr) {
             EVENT_ARRAY.at(event)(*this);
         }
-        m_renderer->render();
-    }
-    // DEBUG TILE      - To remove
-    for (auto &row : m_map.getTiles()) {
-        for (auto &tile : row) {
-            std::cout << "Tile: " << tile.getPosition().x << " " << tile.getPosition().y << '\n';
-            for (auto &resource : tile.getInventory().resources) {
-                std::cout << "Resource: " << resource.quantity << " " << resource.density << '\n';
-            }
-        }
+        m_renderer->render(m_map);
     }
 }
 
@@ -77,4 +67,18 @@ void gui::Gui::initMap(const std::pair<unsigned int, unsigned int> &size)
     }
     m_map.setWidth(size.first);
     m_map.setHeight(size.second);
+}
+
+void gui::Gui::initEgg(const unsigned int &eggId, const int &playerId, const std::pair<unsigned int, unsigned int> &pos)
+{
+    (void) eggId;
+    (void) playerId;
+    (void) pos;
+    // Tmp -> add egg to the map
+}
+
+void gui::Gui::matureEgg(const unsigned int &eggId)
+{
+    (void) eggId;
+    // Tmp -> remove egg from the map and add a player when a client connects with random direction
 }

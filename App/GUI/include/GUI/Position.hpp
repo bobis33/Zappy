@@ -13,6 +13,8 @@ namespace gui {
 
         public:
 
+            Position() = default;
+
             Position(unsigned int cx, unsigned int cy) : x(cx), y(cy) {};
             ~Position() = default;
 

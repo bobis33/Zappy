@@ -27,6 +27,17 @@ void gui::SFML::init(const std::string &name, std::pair<const unsigned int,const
 
     m_window.create(sf::VideoMode(resolution.first, resolution.second, bitsPerPixel), name, sf::Style::Resize | sf::Style::Close);
     m_timeoutClock.restart();
+
+    sf::Texture texture;
+    if (!texture.loadFromFile("assets/textures/forest.png")) {
+        throw std::runtime_error("Failed to load texture");
+    }
+    addTexture(texture, "forest");
+    sf::Sprite sprite;
+    sf::IntRect textureRect(100, 85, 40, 40);
+    sprite.setTexture(getTextures().at(0).first);
+    sprite.setTextureRect(textureRect);
+    addSprite(sprite, "forest");
 }
 
 bool gui::SFML::checkConnection(sf::Clock clock)
@@ -43,8 +54,27 @@ bool gui::SFML::checkConnection(sf::Clock clock)
     return true;
 }
 
-void gui::SFML::render()
+void gui::SFML::render(Map &map)
 {
-    m_window.display();
     m_window.clear({0, 0, 0, 0});
+    sf::Vector2u windowSize = m_window.getSize();
+
+    float windowAspectRatio = static_cast<float>(windowSize.x) / static_cast<float>(windowSize.y);
+    float spriteAspectRatio = static_cast<float>(getSprites().at(0).first.getTextureRect().width) / static_cast<float>(getSprites().at(0).first.getTextureRect().height);
+    float scaleX = static_cast<float>(windowSize.x) / static_cast<float>(map.getWidth() * static_cast<unsigned int>(getSprites().at(0).first.getTextureRect().width));
+    float scaleY = static_cast<float>(windowSize.y) / static_cast<float>(map.getHeight() * static_cast<unsigned int>(getSprites().at(0).first.getTextureRect().height));
+
+    windowAspectRatio > spriteAspectRatio ? scaleX = scaleY : scaleY = scaleX;
+    getSprites().at(0).first.setScale(scaleX, scaleY);
+
+    for (auto& row : map.getTiles()) {
+        for (auto& tile : row) {
+            getSprites().at(0).first.setPosition(
+                static_cast<float>(tile.getPosition().x) * (getSprites().at(0).first.getGlobalBounds().width),
+                static_cast<float>(tile.getPosition().y) * (getSprites().at(0).first.getGlobalBounds().height)
+            );
+            m_window.draw(getSprites().at(0).first);
+        }
+    }
+    m_window.display();
 }
