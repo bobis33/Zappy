@@ -57,16 +57,21 @@ bool gui::SFML::checkConnection(sf::Clock clock)
 void gui::SFML::render(Map &map)
 {
     m_window.clear({0, 0, 0, 0});
+    std::vector<float> spritesAspectRatio;
     sf::Vector2u windowSize = m_window.getSize();
-
     float windowAspectRatio = static_cast<float>(windowSize.x) / static_cast<float>(windowSize.y);
-    float spriteAspectRatio = static_cast<float>(getSprites().at(0).first.getTextureRect().width) / static_cast<float>(getSprites().at(0).first.getTextureRect().height);
-    float scaleX = static_cast<float>(windowSize.x) / static_cast<float>(map.getWidth() * static_cast<unsigned int>(getSprites().at(0).first.getTextureRect().width));
-    float scaleY = static_cast<float>(windowSize.y) / static_cast<float>(map.getHeight() * static_cast<unsigned int>(getSprites().at(0).first.getTextureRect().height));
+    float scaleX = 0;
+    float scaleY = 0;
+    size_t i = 0;
 
-    windowAspectRatio > spriteAspectRatio ? scaleX = scaleY : scaleY = scaleX;
-    getSprites().at(0).first.setScale(scaleX, scaleY);
-
+    for (auto &sprite : getSprites()) {
+        spritesAspectRatio.push_back(static_cast<float>(sprite.first.getTextureRect().width) / static_cast<float>(sprite.first.getTextureRect().height));
+        scaleX = static_cast<float>(windowSize.x) / static_cast<float>(map.getWidth() * static_cast<unsigned int>(sprite.first.getTextureRect().width));
+        scaleY = static_cast<float>(windowSize.y) / static_cast<float>(map.getHeight() * static_cast<unsigned int>(sprite.first.getTextureRect().height));
+        windowAspectRatio > spritesAspectRatio.at(i) ? scaleX = scaleY : scaleY = scaleX;
+        sprite.first.setScale(scaleX, scaleY);
+        i++;
+    }
     for (auto& row : map.getTiles()) {
         for (auto& tile : row) {
             getSprites().at(0).first.setPosition(

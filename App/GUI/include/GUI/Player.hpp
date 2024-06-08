@@ -51,7 +51,6 @@ namespace gui {
 
         private:
 
-            bool m_isAlive{true};
             Action m_action{Action::NONE};
             Inventory m_inventory;
             Position m_position;
