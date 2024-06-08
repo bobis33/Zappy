@@ -33,20 +33,25 @@ namespace gui {
 
             void Run();
 
-            static std::vector<std::string> getData(const std::string &data);
-            void setMap(const Map &map) { m_map = map; };
-            Map& getMap() { return m_map; };
             void initMap(const std::pair<unsigned, unsigned> &size);
-            std::string getTeamName() const { return m_teamName; };
-            void setTeamName(const std::string &teamName) { m_teamName = teamName; };
-            void setFrequency(int freq) { m_frequency = freq; };
-            int getFrequency() const { return m_frequency; };
             void initEgg(const unsigned int &eggId, const int &playerId, const std::pair<unsigned int, unsigned int> &pos);
             void matureEgg(const unsigned int &eggId);
 
+            static std::vector<std::string> getData(const std::string &data);
+            Map& getMap() { return m_map; };
+            int getFrequency() const { return m_frequency; };
+            std::vector<std::string>& getTeamNames() { return m_teamNames; };
+            std::vector<Player>& getPlayers() { return m_players; };
+
+            void addTeamName(const std::string &teamName) { for (auto &team : m_teamNames) if (team == teamName) return; m_teamNames.push_back(teamName); };
+            void addPlayer(const Player &player) { m_players.push_back(player); };
+            void setMap(const Map &map) { m_map = map; };
+            void setFrequency(int freq) { m_frequency = freq; };
+
         private:
 
-            std::string m_teamName;
+            std::vector<std::string> m_teamNames;
+            std::vector<Player> m_players;
             std::unique_ptr<IRenderer> m_renderer;
             std::vector<std::string> m_data;
             RendererMode m_mode{RendererMode::GAME};

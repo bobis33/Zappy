@@ -59,25 +59,19 @@ void gui::SFML::render(Map &map)
     m_window.clear({0, 0, 0, 0});
     sf::Vector2u windowSize = m_window.getSize();
 
-    float windowAspectRatio = static_cast<float>(windowSize.x) / windowSize.y;
-    float tileAspectRatio = static_cast<float>(m_tileSprite.getTextureRect().width) / m_tileSprite.getTextureRect().height;
+    float windowAspectRatio = static_cast<float>(windowSize.x) / static_cast<float>(windowSize.y);
+    float tileAspectRatio = static_cast<float>(m_tileSprite.getTextureRect().width) / static_cast<float>(m_tileSprite.getTextureRect().height);
+    float scaleX = static_cast<float>(windowSize.x) / static_cast<float>(map.getWidth() * static_cast<unsigned int>(m_tileSprite.getTextureRect().width));
+    float scaleY = static_cast<float>(windowSize.y) / static_cast<float>(map.getHeight() * static_cast<unsigned int>(m_tileSprite.getTextureRect().height));
 
-    float scaleX = static_cast<float>(windowSize.x) / (map.getWidth() * m_tileSprite.getTextureRect().width);
-    float scaleY = static_cast<float>(windowSize.y) / (map.getHeight() * m_tileSprite.getTextureRect().height);
-
-    if (windowAspectRatio > tileAspectRatio) {
-        scaleX = scaleY;
-    } else {
-        scaleY = scaleX;
-    }
-
+    windowAspectRatio > tileAspectRatio ? scaleX = scaleY : scaleY = scaleX;
     m_tileSprite.setScale(scaleX, scaleY);
 
     for (auto& row : map.getTiles()) {
         for (auto& tile : row) {
             m_tileSprite.setPosition(
-                tile.getPosition().x * (m_tileSprite.getGlobalBounds().width),
-                tile.getPosition().y * (m_tileSprite.getGlobalBounds().height)
+                static_cast<float>(tile.getPosition().x) * (m_tileSprite.getGlobalBounds().width),
+                static_cast<float>(tile.getPosition().y) * (m_tileSprite.getGlobalBounds().height)
             );
             m_window.draw(m_tileSprite);
         }

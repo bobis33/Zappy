@@ -6,24 +6,49 @@
 */
 
 #include "GUI/Protocol.hpp"
+#include "GUI/Player.hpp"
 
 const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)>> gui::Protocol::ProtocolMap = {
-        {"msz", [](Gui& gui, const std::string& cmd) {
+        {"msz", [](Gui &gui, const std::string &cmd) {
             gui.initMap({
                 std::stoi(cmd.substr(0, cmd.find(' '))),
                 std::stoi(cmd.substr(cmd.find(' ') + 1, cmd.size()))
             });
         }},
-        {"bct", [](Gui& gui, std::string cmd) {
+        {"bct", [](Gui &gui, std::string cmd) {
             gui.getMap().addTile(Parser::parseTileContent(cmd));
         }},
-        {"mct", [](Gui& gui, const std::string& cmd) {
-            // gui.getMap().countResources();
-            std::cout << "mct ok" << std::endl;
+        {"tna", [](Gui &gui, const std::string &cmd) {
+            gui.addTeamName(cmd);
         }},
-        {"pnw", [](Gui&, const std::string&) {}},
-        {"tna", [](Gui& gui, const std::string& cmd) {
-            gui.setTeamName(cmd); // Tmp -> add another method after to display the team names in the window
+        {"pnw", [](Gui &gui, const std::string &cmd) {
+            std::vector<std::string> data = Protocol::parseCommand(cmd);
+            Player::Orientation orientation;
+            Player player;
+            switch (std::stoi(data[3])) {
+                case 1:
+                    orientation = Player::Orientation::NORTH;
+                    break;
+                case 2:
+                    orientation = Player::Orientation::EAST;
+                    break;
+                case 3:
+                    orientation = Player::Orientation::SOUTH;
+                    break;
+                case 4:
+                    orientation = Player::Orientation::WEST;
+                    break;
+
+                default:
+                    orientation = Player::Orientation::NORTH;
+            }
+            player.setId(static_cast<unsigned int>(std::stoi(data[0].substr(1, data[0].size()))));
+            player.getPosition().x = static_cast<unsigned int>(std::stoi(data[1]));
+            player.getPosition().y = static_cast<unsigned int>(std::stoi(data[2]));
+            player.setOrientation(orientation);
+            player.setLevel(static_cast<unsigned int>(std::stoi(data[4])));
+            player.setTeamName(data[5]);
+            gui.addPlayer(player);
         }},
         {"ppo", [](Gui&, const std::string&) {}},
         {"plv", [](Gui&, const std::string&) {}},
@@ -36,27 +61,37 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
         {"pdr", [](Gui&, const std::string&) {}},
         {"pgt", [](Gui&, const std::string&) {}},
         {"pdi", [](Gui&, const std::string&) {}},
-        {"enw", [](Gui& gui, const std::string& cmd) {
+        {"enw", [](Gui &gui, const std::string &cmd) {
             gui.initEgg(
                 std::stoi(cmd.substr(0, cmd.find(' '))),
                 std::stoi(cmd.substr(cmd.find(' ') + 1, cmd.size())),
                 {std::stoi(cmd.substr(cmd.find(' ') + 3, cmd.size())),
                  std::stoi(cmd.substr(cmd.find(' ') + 5, cmd.size()))}
             );
+
+            // to finish
         }},
-        {"eht", [](Gui& gui, const std::string& cmd) {
-            gui.matureEgg(std::stoi(cmd));
+        {"ebo", [](Gui &gui, const std::string &cmd) {
+            gui.matureEgg(std::stoi(cmd.substr(1, cmd.size())));
         }},
-        {"ebo", [](Gui&, const std::string&) {}},
-        {"pex", [](Gui&, const std::string&) {}},
-        {"sgt", [](Gui& gui, const std::string& cmd) {
+        {"edi", [](Gui&, const std::string&) {}},
+        {"sgt", [](Gui &gui, const std::string &cmd) {
             gui.setFrequency(std::stoi(cmd));
         }},
-        {"sst", [](Gui& gui, const std::string& cmd) {
+        {"sst", [](Gui &gui, const std::string &cmd) {
             gui.setFrequency(std::stoi(cmd));
         }},
-        {"seg", [](Gui&, const std::string&) {}},
-        {"smg", [](Gui&, const std::string&) {}},
-        {"suc", [](Gui&, const std::string&) {}},
-        {"sbp", [](Gui&, const std::string&) {}},
+        {"seg", [](Gui&, const std::string &cmd) {
+            // end game, cmd = teamName
+        }},
+        {"smg", [](Gui&, const std::string &cmd) {
+            std::cout << "Server message : " << cmd << "\n";
+            // display server message
+        }},
+        {"suc", [](Gui &gui, const std::string&) {
+            std::cout << "Unknown command\n";
+        }},
+        {"sbp", [](Gui&, const std::string&) {
+            std::cout << "Bad parameters\n";
+        }},
 };
