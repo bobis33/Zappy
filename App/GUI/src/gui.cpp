@@ -7,7 +7,6 @@
 
 #include <functional>
 #include <sstream>
-#include <iostream>
 
 #include "GUI/Constant.hpp"
 #include "GUI/Gui.hpp"
@@ -46,16 +45,6 @@ void gui::Gui::Run()
         }
         m_renderer->render(m_map);
     }
-
-    // DEBUG TILE      - To remove
-    // for (auto &row : m_map.getTiles()) {
-    //     for (auto &tile : row) {
-    //         std::cout << "Tile: " << tile.getPosition().x << " " << tile.getPosition().y << '\n';
-    //         for (auto &resource : tile.getInventory().resources) {
-    //             std::cout << "Resource: " << resource.quantity << " " << resource.density << '\n';
-    //         }
-    //     }
-    // }
 }
 
 std::vector<std::string> gui::Gui::getData(const std::string &data)
@@ -90,5 +79,6 @@ void gui::Gui::initEgg(const unsigned int &eggId, const int &playerId, const std
 
 void gui::Gui::matureEgg(const unsigned int &eggId)
 {
+    (void) eggId;
     // Tmp -> remove egg from the map and add a player when a client connects with random direction
 }

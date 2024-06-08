@@ -33,13 +33,13 @@ namespace gui {
             Player() = default;
             ~Player() = default;
 
-            Action getAction() const { return m_action; };
-            Orientation getOrientation() const { return m_orientation; };
-            Inventory& getInventory() { return m_inventory; };
-            Position& getPosition() { return m_position; };
-            unsigned int getLevel() const { return m_level; };
-            unsigned int getId() const { return m_id; };
-            std::string getTeamName() const { return m_teamName; };
+            [[nodiscard]] Action getAction() const { return m_action; };
+            [[nodiscard]] Orientation getOrientation() const { return m_orientation; };
+            [[nodiscard]] Inventory& getInventory() { return m_inventory; };
+            [[nodiscard]] Position& getPosition() { return m_position; };
+            [[nodiscard]] unsigned int getLevel() const { return m_level; };
+            [[nodiscard]] unsigned int getId() const { return m_id; };
+            [[nodiscard]] std::string getTeamName() const { return m_teamName; };
 
             void setAction(const Action action) { m_action = action; };
             void setOrientation(const Orientation orientation) { m_orientation = orientation; };

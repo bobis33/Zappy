@@ -20,7 +20,7 @@ namespace gui {
 
             static const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)>> ProtocolMap;
 
-            static std::vector<std::string> parseCommand(const std::string &data) {
+            [[nodiscard]] static std::vector<std::string> parseCommand(const std::string &data) {
                 std::vector<std::string> dataVector;
                 std::string tmp;
                 for (const auto &c : data) {

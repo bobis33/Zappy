@@ -18,7 +18,7 @@ gui::KeyBoard::Key gui::SFML::getEvents()
             case sf::Event::KeyPressed:
                 return getKeyboardEvent(event);
             case sf::Event::Resized:
-                m_window.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
+                m_window.setView(sf::View(sf::FloatRect(0, 0, static_cast<float>(event.size.width), static_cast<float>(event.size.height))));
                 break;
 
             default:

@@ -61,18 +61,24 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
         {"pdr", [](Gui&, const std::string&) {}},
         {"pgt", [](Gui&, const std::string&) {}},
         {"pdi", [](Gui&, const std::string&) {}},
-        {"enw", [](Gui &gui, const std::string &cmd) {
+        {"enw", [](Gui &, const std::string &) {
+            /*
             gui.initEgg(
                 std::stoi(cmd.substr(0, cmd.find(' '))),
                 std::stoi(cmd.substr(cmd.find(' ') + 1, cmd.size())),
                 {std::stoi(cmd.substr(cmd.find(' ') + 3, cmd.size())),
                  std::stoi(cmd.substr(cmd.find(' ') + 5, cmd.size()))}
             );
+             */
 
             // to finish
         }},
-        {"ebo", [](Gui &gui, const std::string &cmd) {
+        {"ebo", [](Gui &, const std::string &) {
+            /*
             gui.matureEgg(std::stoi(cmd.substr(1, cmd.size())));
+             */
+
+            // to finish
         }},
         {"edi", [](Gui&, const std::string&) {}},
         {"sgt", [](Gui &gui, const std::string &cmd) {
@@ -81,14 +87,14 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
         {"sst", [](Gui &gui, const std::string &cmd) {
             gui.setFrequency(std::stoi(cmd));
         }},
-        {"seg", [](Gui&, const std::string &cmd) {
+        {"seg", [](Gui&, const std::string &) {
             // end game, cmd = teamName
         }},
         {"smg", [](Gui&, const std::string &cmd) {
             std::cout << "Server message : " << cmd << "\n";
             // display server message
         }},
-        {"suc", [](Gui &gui, const std::string&) {
+        {"suc", [](Gui &, const std::string&) {
             std::cout << "Unknown command\n";
         }},
         {"sbp", [](Gui&, const std::string&) {
