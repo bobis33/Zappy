@@ -66,14 +66,61 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
 
             // to finish
         }},
-        {"pex", [](Gui&, const std::string&) {}},
-        {"pbc", [](Gui&, const std::string&) {}},
-        {"pic", [](Gui&, const std::string&) {}},
-        {"pie", [](Gui&, const std::string&) {}},
-        {"pfk", [](Gui&, const std::string&) {}},
-        {"pdr", [](Gui&, const std::string&) {}},
-        {"pgt", [](Gui&, const std::string&) {}},
-        {"pdi", [](Gui&, const std::string&) {}},
+        {"pex", [](Gui&, const std::string&) {
+            int playerId = std::stoi(cmd.substr(1, cmd.size()));
+            // expulse player
+        }},
+        {"pbc", [](Gui&, const std::string&) {
+            std::vector<std::string> data = Protocol::parseCommand(cmd);
+            int playerId = std::stoi(data[0].substr(1, data[i].size()));
+            const std::string msg = data[1];
+            // broadcast message
+        }},
+        {"pic", [](Gui&, const std::string&) {
+            std::vector<std::string> data = Protocol::parseCommand(cmd);
+            std::vector<int> players;
+            unsigned int x = std::stoi(data[0]);
+            unsigned int y = std::stoi(data[1]);
+            unsigned int level = std::stoi(data[2]);
+            for (size_t i = 3; i < data.size(); i++) {
+                players.push_back(std::stoi(data[i].substr(1, data[i].size())));
+            }
+            // start incantation
+        }},
+        {"pie", [](Gui&, const std::string&) {
+            std::vector<std::string> data = Protocol::parseCommand(cmd);
+            unsigned int x = std::stoi(data[0]);
+            unsigned int y = std::stoi(data[1]);
+            unsigned int result = std::stoi(data[2]);
+            // end incantation
+        }},
+        {"pfk", [](Gui&, const std::string&) {
+            std::vector<std::string> data = Protocol::parseCommand(cmd);
+            int playerId = std::stoi(data[0].substr(1, data[0].size()));
+            // start egg laying
+        }},
+        {"pdr", [](Gui&, const std::string&) {
+            std::vector<std::string> data = Protocol::parseCommand(cmd);
+            int playerId = std::stoi(data[0].substr(1, data[0].size()));
+            int resourceId = std::stoi(data[1]);
+            // drop resource
+        }},
+        {"pgt", [](Gui&, const std::string&) {
+            std::vector<std::string> data = Protocol::parseCommand(cmd);
+            int playerId = std::stoi(data[0].substr(1, data[0].size()));
+            int resourceId = std::stoi(data[1]);
+            // take resource
+        }},
+        {"pdi", [](Gui&, const std::string&) {
+            std::vector<std::string> data = Protocol::parseCommand(cmd);
+            int playerId = std::stoi(data[0].substr(1, data[0].size()));
+            for (auto &player : gui.getPlayers()) {
+                if (player.getId() == playerId) {
+                    // player death
+                }
+            }
+            // player death
+        }},
         {"enw", [](Gui &, const std::string &) {
             /*
             gui.initEgg(
@@ -106,8 +153,8 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
         {"sst", [](Gui &gui, const std::string &cmd) {
             gui.setFrequency(std::stoi(cmd));
         }},
-        {"seg", [](Gui&, const std::string &) {
-            // end game, cmd = teamName
+        {"seg", [](Gui&, const std::string&) {
+            gui.setMode(Gui::RendererMode::END);
         }},
         {"smg", [](Gui&, const std::string &cmd) {
             std::cout << "Server message : " << cmd << "\n";
