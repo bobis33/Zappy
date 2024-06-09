@@ -23,29 +23,11 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
         }},
         {"pnw", [](Gui &gui, const std::string &cmd) {
             std::vector<std::string> data = Protocol::parseCommand(cmd);
-            Player::Orientation orientation;
             Player player;
-            switch (std::stoi(data[3])) {
-                case 1:
-                    orientation = Player::Orientation::NORTH;
-                    break;
-                case 2:
-                    orientation = Player::Orientation::EAST;
-                    break;
-                case 3:
-                    orientation = Player::Orientation::SOUTH;
-                    break;
-                case 4:
-                    orientation = Player::Orientation::WEST;
-                    break;
-
-                default:
-                    orientation = Player::Orientation::NORTH;
-            }
+            player.setOrientation(Parser::parseOrientation(data[3]));
             player.setId(static_cast<unsigned int>(std::stoi(data[0].substr(1, data[0].size()))));
             player.getPosition().x = static_cast<unsigned int>(std::stoi(data[1]));
             player.getPosition().y = static_cast<unsigned int>(std::stoi(data[2]));
-            player.setOrientation(orientation);
             player.setLevel(static_cast<unsigned int>(std::stoi(data[4])));
             player.setTeamName(data[5]);
             gui.addPlayer(player);
@@ -56,23 +38,7 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
                 if (player.getId() != static_cast<unsigned int>(std::stoi(data[0].substr(1, data[0].size())))) {
                     continue;
                 }
-                switch (std::stoi(data[3])) {
-                    case 1:
-                        player.setOrientation(Player::Orientation::NORTH);
-                        break;
-                    case 2:
-                        player.setOrientation(Player::Orientation::EAST);
-                        break;
-                    case 3:
-                        player.setOrientation(Player::Orientation::SOUTH);
-                        break;
-                    case 4:
-                        player.setOrientation(Player::Orientation::WEST);
-                        break;
-
-                    default:
-                        player.setOrientation(Player::Orientation::NORTH);
-                }
+                player.setOrientation(Parser::parseOrientation(data[3]));
             };
 
             // to finish -> no need to create a new player, just update the existing one based on the id

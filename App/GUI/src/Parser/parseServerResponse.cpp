@@ -10,18 +10,21 @@
 
 #include "GUI/Protocol.hpp"
 
-void gui::Parser::processData(const std::vector<std::string>& data, Gui &gui)
+gui::Player::Orientation gui::Parser::parseOrientation(const std::string &orientation)
 {
-
-    for (const std::string& line : data) {
-        auto command_val = Protocol::ProtocolMap.find(line.substr(0, 3));
-        if (command_val != Protocol::ProtocolMap.end()) {
-            if (line.substr(4, line.size()).empty()) {
-                continue;
-            }
-            command_val->second(gui, line.substr(4, line.size()));
-        }
+    switch (std::stoi(orientation)) {
+        case 1:
+            return Player::Orientation::NORTH;
+        case 2:
+            return Player::Orientation::EAST;
+        case 3:
+            return Player::Orientation::SOUTH;
+        case 4:
+            return Player::Orientation::WEST;
+        default:
+            break;
     }
+    throw std::runtime_error("Invalid orientation");
 }
 
 gui::Tile gui::Parser::parseTileContent(std::string &tileContent)
@@ -51,4 +54,18 @@ gui::Tile gui::Parser::parseTileContent(std::string &tileContent)
             values.at(1)
         }
     };
+}
+
+void gui::Parser::processData(const std::vector<std::string>& data, Gui &gui)
+{
+
+    for (const std::string& line : data) {
+        auto command_val = Protocol::ProtocolMap.find(line.substr(0, 3));
+        if (command_val != Protocol::ProtocolMap.end()) {
+            if (line.substr(4, line.size()).empty()) {
+                continue;
+            }
+            command_val->second(gui, line.substr(4, line.size()));
+        }
+    }
 }
