@@ -8,8 +8,12 @@
 #include "Server/cmd_gui_client.h"
 #include "Server/tools.h"
 
-void cmd_team_names(const int fd, char **cmd)
+void cmd_team_names(const int fd, char **cmd, game_t *game)
 {
     (void)cmd;
-    print_msg(fd, "team names\n");
+    for (int i = 0; i < game->nb_teams; i++) {
+        print_msg(fd, "tna ");
+        print_msg(fd, game->team_names[i]);
+        print_msg(fd, "\n");
+    }
 }

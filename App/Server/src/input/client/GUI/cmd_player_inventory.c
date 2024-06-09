@@ -5,16 +5,15 @@
 ** cmd_player_inventory
 */
 
-#include <stdio.h>
-
 #include "Server/cmd_gui_client.h"
 #include "Server/tools.h"
 
-void cmd_player_inventory(const int fd, char **cmd)
+void cmd_player_inventory(const int fd, char **cmd, game_t *game)
 {
     int player_id = 0;
     char *player_id_str = cmd[1];
 
+    (void)game;
     player_id_str++;
     player_id = atoi(player_id_str);
     printf("player_id = %d\n", player_id);

@@ -8,8 +8,28 @@
 #include "Server/cmd_gui_client.h"
 #include "Server/tools.h"
 
-void cmd_map_tile_content(const int fd, char **cmd)
+static void display_tile_content(int fd, game_t *game, int width, int height)
+{
+    char *content = malloc(sizeof(char) * 21);
+
+    for (int i = 0; i < COUNT; i++) {
+        sprintf(content, "%d",
+            game->map->tiles[height][width].resources[i].quantity);
+        print_msg(fd, content);
+        if (i < COUNT - 1)
+            print_msg(fd, " ");
+    }
+    free(content);
+}
+
+void cmd_map_tile_content(const int fd, char **cmd, game_t *game)
 {
     (void)cmd;
-    print_msg(fd, "content of all tiles of the map\n");
+    for (int height = 0; height < game->map->height; height++) {
+        for (int width = 0; width < game->map->width; width++) {
+            print_msg(fd, "bct ");
+            display_tile_content(fd, game, width, height);
+            print_msg(fd, "\n");
+        }
+    }
 }

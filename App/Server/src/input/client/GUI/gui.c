@@ -41,12 +41,11 @@ void cmd_gui_client(game_t *game, client_t *client, char *cmd, const int fd)
 {
     char **cmd_array = malloc(sizeof(char *) + 1);
 
-    (void)game;
     (void)client;
     cmd_array = parse_command(cmd, cmd_array);
     for (int i = 0; cmd_builtin[i].command; i++) {
         if (strcmp(cmd, cmd_builtin[i].command) == 0) {
-            cmd_builtin[i].function(fd, cmd_array);
+            cmd_builtin[i].function(fd, cmd_array, game);
             free_array(cmd_array);
             return;
         }
