@@ -2,6 +2,29 @@
 
 [![CI AI][ci-ai-badge]][ci-ai]
 
+## Usage
+
+### Build
+
+```bash
+$> cd App/AI
+$> make
+[...]
+```
+> if it doesn't work, try the following command:
+```bash
+$> make re
+[...]
+```
+
+### Run
+
+```bash 
+$> ./zappy_ai -p port -n teamName -h host
+    port		is the port number
+    teamName	is the name of the team
+    host		is the host name
+```
 
 ## Informations
 

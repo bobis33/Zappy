@@ -5,7 +5,7 @@
 ## Makefile
 ##
 
-SRC			=		src/main.py \
+SRC			=		src/main.py
 
 NAME        =       zappy_ai
 
