@@ -1,0 +1,18 @@
+#!/usr/bin/python3
+
+import sys
+
+from src.Core import Core
+
+def debugNeeded() -> bool:
+    debug = input("Do you want to use debug mode [Y/N]: ")
+    if debug.find("Y") != -1 or debug.find("y") != -1:
+        return True
+    return False
+
+if __name__ == "__main__":
+    core = Core(len(sys.argv), sys.argv)
+    debug = debugNeeded()
+    core.client.connect()
+    core.client.run(debug)
+    core.client.disconnect()
