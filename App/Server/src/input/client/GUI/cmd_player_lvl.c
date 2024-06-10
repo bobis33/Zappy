@@ -10,12 +10,13 @@
 
 void cmd_player_lvl(const int fd, char **cmd, game_t *game)
 {
-    int player_id = 0;
-    char *player_id_str = cmd[1];
+    int player_id = atoi(cmd[1]);
 
-    (void)game;
-    player_id_str++;
-    player_id = atoi(player_id_str);
-    printf("player_id = %d\n", player_id);
-    print_msg(fd, "player level\n");
+    if (player_id < 0 || player_id >= game->max_clients) {
+        print_msg(fd, "ko\n");
+        return;
+    }
+    print_msg(fd, "plv ");
+    print_msg(fd, cmd[1]);
+    dprintf(fd, " %d\n", game->players[player_id].level);
 }

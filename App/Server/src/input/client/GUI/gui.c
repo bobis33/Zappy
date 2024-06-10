@@ -7,8 +7,8 @@
 
 #include <string.h>
 
-#include "Server/tools.h"
 #include "Server/cmd_gui_client.h"
+#include "Server/tools.h"
 
 const cmd_builtin_client_t cmd_builtin[] = {
     {"msz\n", cmd_map_size},
