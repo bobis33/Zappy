@@ -27,10 +27,10 @@ class Command:
 
     def getLevel(self):
         return self.level
-    
+
     def getTeam(self):
         return self.team
-    
+
     def setTeams(self, teams):
         self.team = teams
 
@@ -39,22 +39,22 @@ class Command:
 
     def getInfoServer(self):
         return self.infoServer
-    
+
     def setInfoServer(self, infoServer):
         return self.infoServer
-    
+
     def countListRequired(self):
         list = str(self.infoServer)
         counter = list.count(',')
         counter += 1
         return counter
-    
+
     def parseElm(self, info : str) -> str:
         newinfo = info.replace('[', '')
         result = newinfo.replace(']', '')
         return result
-    
-    
+
+
     def createList(self, debug):
         print(f'LEVEL: {self.getLevel()}')
         count = self.countListRequired()
@@ -73,9 +73,8 @@ class Command:
                 result_dict[i] = lst[i]
             else:
                 result_dict[i] = []
-        analyse = self.analysis.analyse_cases(result_dict, debug)
-        return result_dict, analyse
-    
+        self.analysis.analyse_cases(result_dict, debug, lambda x:None)
+        return result_dict
 
     def __repr__(self) -> str:
         return str(self.infoServer)

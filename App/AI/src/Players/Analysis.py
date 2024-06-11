@@ -29,7 +29,7 @@ class Analysis:
 
     def calculate_importance(self, dist_case, item_count, multiplier):
         return (dist_case + 1) * 5 + ((item_count + 1) / 2) * multiplier
-    
+
     def recalcul_food(self, nb_case):
         distance_case = self.calculate_distance(nb_case)
         distance_case = distance_case - 1
@@ -65,15 +65,13 @@ class Analysis:
             return "Right"
         else:
             return "error"
-        
+
     def choose_action(self, item, last_item):
         result = []
         if self.mostImportItem[1] > self.lastMoreimportItem[1]:
-            # result.append("I will go to the last more important item")
             result.append(str(self.choose_direction(self.lastMoreimportItem)))
             self.lastMoreimportItem = ("no item", 1000, 0)
         else:
-            # result.append("I will go to the most important item")
             if self.mostImportItem[2] == 0:
                 result.append("Take " + str(self.mostImportItem[0]))
             else:
@@ -86,8 +84,8 @@ class Analysis:
                 self.recalcul_food(self.lastMoreimportItem[2])
         else:
             self.lastMoreimportItem = ("no item", 1000, 0)
-    
-    def analyse_cases(self, dictal, debug):
+
+    def analyse_cases(self, dictal, debug, callback):
         self.lastMoreimportItem = self.mostImportItem
         self.upgrade_last_more_important_item()
         self.mostImportItem = ("no item", 1000, 0)
@@ -99,9 +97,11 @@ class Analysis:
         if debug == True:
             action = self.choose_action(self.mostImportItem, self.lastMoreimportItem)
             print(f"I will go to the last more important item\n -> {action[0]}")
+            command = action[0]
+            command = self.bot.parse_command(command)
         else:
             action = self.choose_action(self.mostImportItem, self.lastMoreimportItem)
             command = action[0]
             command = self.bot.parse_command(command)
             print("Command : " + command)
-        return command
+        callback(command)

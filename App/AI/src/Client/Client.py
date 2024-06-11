@@ -5,6 +5,7 @@ import sys
 from typing import Optional
 from enum import Enum
 from src.Command.Command import commands, Command
+from src.Players.Analysis import Analysis
 
 class REQUEST(Enum):
     TRUE = 1
@@ -21,10 +22,11 @@ class TCPClient:
         self.level = 1
         self.team = self.name
         self.command = None
-    
+        self.analyse = Analysis()
+
     def is_connected(self) -> bool:
         return self.sockfd is not None
-    
+
     def connect(self):
         self.name = self.name.replace('\n', '')
         print(f"Connecting.. server on the port {self.port} with the team {self.name} in the host {self.machine}")
@@ -57,7 +59,7 @@ class TCPClient:
         except socket.error as e:
             print("Receive failed")
             sys.exit(84)
-    
+
     def disconnect(self) -> None:
         if self.is_connected():
             self.sockfd.close()
@@ -73,19 +75,19 @@ class TCPClient:
 
     def get_message_from_server(self) -> Optional[str]:
         return self.message
-    
+
     def set_message_from_server(self, message) -> None:
         self.message = message
 
     def getLevel(self) -> int:
         return self.level
-    
+
     def setLevel(self, level) -> None:
         self.level = level
 
     def getTeams(self) -> str:
         return self.team
-    
+
     def setTeams(self, teams) -> None:
         self.team = teams
 
@@ -104,24 +106,31 @@ class TCPClient:
         if "Current level:" in reply:
             level = reply.split("Current level:")[1]
             self.level = int(level.strip())
+        if "ko" in reply:
+            print("You're dead !")
+            exit(84)
         return True
 
     def run(self, debug: bool):
-        request = "Look\n"
-        look_next = True
-        
+
+        counter = 0
+        command = None
+
+        def command_callback(cmd):
+            nonlocal command
+            command = cmd
+
         while self.request == 1:
             try:
-                if not self.handle_request(request):
+                if counter % 2 == 0:
+                    line = "Look\n"
+                else:
+                    line = command + "\n"
+                if not self.handle_request(line):
                     break
                 if self.command is not None:
-                    result_dict, analyse = self.command.createList(debug)
-                    print(f"Dict: -> {result_dict}")
-                    print(f"Analyse: -> {analyse}")
-                    if look_next:
-                        request = "Look\n"
-                    else:
-                        request = f"{analyse}\n"
-                    look_next = not look_next 
+                    result_dict = self.command.createList(debug)
+                    self.analyse.analyse_cases(result_dict,debug, command_callback)
             except EOFError:
                 self.request = 0
+            counter += 1
