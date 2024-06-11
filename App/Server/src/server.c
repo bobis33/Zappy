@@ -58,7 +58,7 @@ static bool init_server(server_t *server, arguments_t *args)
     server->socket.sin_family = AF_INET;
     server->socket.sin_port = htons(server->port);
     server->socket.sin_addr.s_addr = INADDR_ANY;
-    init_game(args, &server->game);
+    start_game(args, &server->game);
     return connect_socket(server);
 }
 
@@ -155,7 +155,6 @@ bool run_server(arguments_t *args)
         free(server);
         return false;
     }
-    free_game_resources(server->game);
     free(server);
     return true;
 }

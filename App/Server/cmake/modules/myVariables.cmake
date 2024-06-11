@@ -10,6 +10,10 @@ set(SRC_DIR
         ${CMAKE_SOURCE_DIR}/src/
 )
 
+set(SRC_CMD_DIR
+        ${SRC_DIR}/input
+)
+
 SET(INCLUDE_DIR
         ${CMAKE_SOURCE_DIR}/include/
 )

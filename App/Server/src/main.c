@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <signal.h>
+#include <time.h>
 
 #include "Server/parser.h"
 #include "Server/server.h"
@@ -46,6 +47,7 @@ int main(const int argc, char *const argv[])
     arguments_t *args = NULL;
     struct sigaction sigIntHandler = {0};
 
+    srand(time(NULL));
     sigIntHandler.sa_handler = my_handler;
     sigemptyset(&sigIntHandler.sa_mask);
     sigaction(SIGINT, &sigIntHandler, NULL);

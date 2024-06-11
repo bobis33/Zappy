@@ -25,6 +25,49 @@ endif()
 # Main executable
 add_executable(${PROJECT_NAME} ${SOURCES})
 
+set (SOURCES_GAME
+        ${SRC_DIR}/game/clock.c
+        ${SRC_DIR}/game/game.c
+        ${SRC_DIR}/game/map.c
+        ${SRC_DIR}/game/resource.c
+)
+
+set(SOURCES_CMD_AI
+        ${SRC_CMD_DIR}/client/AI/ai.c
+        ${SRC_CMD_DIR}/client/AI/cmd_broadcast.c
+        ${SRC_CMD_DIR}/client/AI/cmd_connection_nbr.c
+        ${SRC_CMD_DIR}/client/AI/cmd_eject.c
+        ${SRC_CMD_DIR}/client/AI/cmd_fork.c
+        ${SRC_CMD_DIR}/client/AI/cmd_forward.c
+        ${SRC_CMD_DIR}/client/AI/cmd_incantation.c
+        ${SRC_CMD_DIR}/client/AI/cmd_inventory.c
+        ${SRC_CMD_DIR}/client/AI/cmd_left.c
+        ${SRC_CMD_DIR}/client/AI/cmd_look.c
+        ${SRC_CMD_DIR}/client/AI/cmd_right.c
+        ${SRC_CMD_DIR}/client/AI/cmd_set.c
+        ${SRC_CMD_DIR}/client/AI/cmd_take.c
+)
+
+set(SOURCES_CMD_GUI
+        ${SRC_CMD_DIR}/client/GUI/gui.c
+        ${SRC_CMD_DIR}/client/GUI/cmd_frequency_update.c
+        ${SRC_CMD_DIR}/client/GUI/cmd_frequency.c
+        ${SRC_CMD_DIR}/client/GUI/cmd_map_size.c
+        ${SRC_CMD_DIR}/client/GUI/cmd_map_tile_content.c
+        ${SRC_CMD_DIR}/client/GUI/cmd_player_inventory.c
+        ${SRC_CMD_DIR}/client/GUI/cmd_player_lvl.c
+        ${SRC_CMD_DIR}/client/GUI/cmd_player_pos.c
+        ${SRC_CMD_DIR}/client/GUI/cmd_team_names.c
+        ${SRC_CMD_DIR}/client/GUI/cmd_tile_content.c
+)
+
+set(SOURCES_INPUT
+        ${SRC_DIR}/input/server.c
+        ${SRC_DIR}/input/client/client.c
+        ${SOURCES_CMD_AI}
+        ${SOURCES_CMD_GUI}
+)
+
 target_sources(${PROJECT_NAME} PRIVATE
         ${SRC_DIR}/main.c
         ${SRC_DIR}/parser.c
@@ -33,33 +76,8 @@ target_sources(${PROJECT_NAME} PRIVATE
         ${SRC_DIR}/bind/bind_team.c
         ${SRC_DIR}/tools.c
         ${SRC_DIR}/client_tools.c
-        ${SRC_DIR}/input/server.c
-        ${SRC_DIR}/input/client/client.c
-        ${SRC_DIR}/input/client/AI/ai.c
-        ${SRC_DIR}/input/client/GUI/gui.c
-        ${SRC_DIR}/input/client/AI/cmd_broadcast.c
-        ${SRC_DIR}/input/client/AI/cmd_connection_nbr.c
-        ${SRC_DIR}/input/client/AI/cmd_eject.c
-        ${SRC_DIR}/input/client/AI/cmd_fork.c
-        ${SRC_DIR}/input/client/AI/cmd_forward.c
-        ${SRC_DIR}/input/client/AI/cmd_incantation.c
-        ${SRC_DIR}/input/client/AI/cmd_inventory.c
-        ${SRC_DIR}/input/client/AI/cmd_left.c
-        ${SRC_DIR}/input/client/AI/cmd_look.c
-        ${SRC_DIR}/input/client/AI/cmd_right.c
-        ${SRC_DIR}/input/client/AI/cmd_set.c
-        ${SRC_DIR}/input/client/AI/cmd_take.c
-        ${SRC_DIR}/input/client/GUI/cmd_frequence_update.c
-        ${SRC_DIR}/input/client/GUI/cmd_frequence.c
-        ${SRC_DIR}/input/client/GUI/cmd_map_size.c
-        ${SRC_DIR}/input/client/GUI/cmd_map_tile_content.c
-        ${SRC_DIR}/input/client/GUI/cmd_player_inventory.c
-        ${SRC_DIR}/input/client/GUI/cmd_player_lvl.c
-        ${SRC_DIR}/input/client/GUI/cmd_player_pos.c
-        ${SRC_DIR}/input/client/GUI/cmd_team_names.c
-        ${SRC_DIR}/input/client/GUI/cmd_tile_content.c
-        ${SRC_DIR}/game/game.c
-        ${SRC_DIR}/game/clock.c
+        ${SOURCES_GAME}
+        ${SOURCES_INPUT}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR})
