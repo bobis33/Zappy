@@ -5,9 +5,10 @@
 ** cmd_look
 */
 
-#include "Server/tools.h"
+#include "Server/cmd_ai_client.h"
 
-void cmd_look(const int fd)
+void cmd_look(const int fd, game_t *game)
 {
+    (void)game;
     print_msg(fd, "[tile1, tile2, ...]\n");
 }

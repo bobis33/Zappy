@@ -5,9 +5,25 @@
 ** cmd_left
 */
 
-#include "Server/tools.h"
+#include "Server/cmd_ai_client.h"
 
-void cmd_left(const int fd)
+void cmd_left(const int fd, game_t *game)
 {
-    print_msg(fd, "ok\n");
+    switch (game->players[fd].direction) {
+        case NORTH:
+            rotate_west(fd, game);
+            break;
+        case SOUTH:
+            rotate_east(fd, game);
+            break;
+        case EAST:
+            rotate_north(fd, game);
+            break;
+        case WEST:
+            rotate_south(fd, game);
+            break;
+        default:
+            print_msg(fd, "ko\n");
+            return;
+    }
 }

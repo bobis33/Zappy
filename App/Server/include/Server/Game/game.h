@@ -16,6 +16,7 @@
 #include "Server/Game/player.h"
 
 typedef struct game_s {
+    int actual_clients;
     int max_clients;
     int nb_teams;
     map_t *map;

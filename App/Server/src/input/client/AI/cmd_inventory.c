@@ -5,9 +5,10 @@
 ** cmd_inventory
 */
 
-#include "Server/tools.h"
+#include "Server/cmd_ai_client.h"
 
-void cmd_inventory(const int fd)
+void cmd_inventory(const int fd, game_t *game)
 {
+    (void)game;
     print_msg(fd, "[linemate n, sibur n, ...]\n");
 }

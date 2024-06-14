@@ -49,6 +49,7 @@ static void cmd_builtin_client(
 {
     data_t *client_data = NULL;
 
+    game->actual_clients = 0;
     client_data = get_client_by_fd(client, fd);
     if (client_data->identity == NONE &&
         !identify_client(game, client_data, cmd, fd)) {
@@ -56,9 +57,11 @@ static void cmd_builtin_client(
     }
     switch (client_data->identity) {
         case GRAPHIC:
+            game->actual_clients++;
             cmd_gui_client(game, client, cmd, fd);
             break;
         case AI:
+            game->actual_clients++;
             cmd_ai_client(game, client, cmd, fd);
             break;
         default:

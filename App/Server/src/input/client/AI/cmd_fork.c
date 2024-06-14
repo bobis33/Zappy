@@ -5,9 +5,10 @@
 ** cmd_fork
 */
 
-#include "Server/tools.h"
+#include "Server/cmd_ai_client.h"
 
-void cmd_fork(const int fd)
+void cmd_fork(const int fd, game_t *game)
 {
+    (void)game;
     print_msg(fd, "ok\n");
 }
