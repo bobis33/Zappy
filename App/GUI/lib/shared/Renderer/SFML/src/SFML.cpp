@@ -117,17 +117,13 @@ void gui::SFML::render(Map &map)
         for (auto& tile : row) {
             float tilePosX = static_cast<float>(tile.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width;
             float tilePosY = static_cast<float>(tile.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height;
-
-            float newTilePosY = windowSize.y - tilePosY - getSprites().at(0).first.getGlobalBounds().height;
-            float finalTilePosX = windowSize.x - newTilePosY - getSprites().at(0).first.getGlobalBounds().width;
-
-            getSprites().at(0).first.setPosition(finalTilePosX, tilePosX);
+            getSprites().at(0).first.setPosition(tilePosY, tilePosX);
             m_window.draw(getSprites().at(0).first);
 
             const auto& resources = tile.getInventory().resources;
             for (size_t i = 0; i < 7; i++) {
                 if (resources[i].quantity > 0) {
-                    getSprites().at(i + 1).first.setPosition(finalTilePosX, tilePosX);
+                    getSprites().at(i + 1).first.setPosition(tilePosY, tilePosX);
                     m_window.draw(getSprites().at(i + 1).first);
                 }
             }
