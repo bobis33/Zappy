@@ -29,7 +29,7 @@ void gui::SFML::init(const std::string &name, std::pair<const unsigned int,const
     m_timeoutClock.restart();
 
     sf::Texture texture;
-    if (!texture.loadFromFile("assets/textures/forest.png")) {
+    if (!texture.loadFromFile("assets/textures/Tile2.png")) {
         throw std::runtime_error("Failed to load texture");
     }
     addTexture(texture, "forest");
@@ -62,30 +62,21 @@ void gui::SFML::init(const std::string &name, std::pair<const unsigned int,const
     }
     addTexture(texture, "thystame");
     sf::Sprite sprite;
-    sf::IntRect textureRect(100, 85, 40, 40);
     sprite.setTexture(getTextures().at(0).first);
-    sprite.setTextureRect(textureRect);
     addSprite(sprite, "forest");
     sprite.setTexture(getTextures().at(1).first);
-    sprite.setTextureRect(sf::IntRect(0, 0, 10, 31));
     addSprite(sprite, "food");
     sprite.setTexture(getTextures().at(2).first);
-    sprite.setTextureRect(sf::IntRect(0, 0, 18, 30));
     addSprite(sprite, "linemate");
     sprite.setTexture(getTextures().at(3).first);
-    sprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
     addSprite(sprite, "deraumere");
     sprite.setTexture(getTextures().at(4).first);
-    sprite.setTextureRect(sf::IntRect(0, 0, 30, 32));
     addSprite(sprite, "sibur");
     sprite.setTexture(getTextures().at(5).first);
-    sprite.setTextureRect(sf::IntRect(0, 0, 32, 30));
     addSprite(sprite, "mendiane");
     sprite.setTexture(getTextures().at(6).first);
-    sprite.setTextureRect(sf::IntRect(0, 0, 28, 30));
     addSprite(sprite, "phiras");
     sprite.setTexture(getTextures().at(7).first);
-    sprite.setTextureRect(sf::IntRect(0, 0, 28, 30));
     addSprite(sprite, "thystame");
 }
 
@@ -121,42 +112,24 @@ void gui::SFML::render(Map &map)
         sprite.first.setScale(scaleX, scaleY);
         i++;
     }
+
     for (auto& row : map.getTiles()) {
         for (auto& tile : row) {
-            getSprites().at(0).first.setPosition(
-                static_cast<float>(tile.getPosition().x) * (getSprites().at(0).first.getGlobalBounds().width),
-                static_cast<float>(tile.getPosition().y) * (getSprites().at(0).first.getGlobalBounds().height)
-            );
-            getSprites().at(1).first.setPosition(                           // le pinard
-                static_cast<float>(tile.getPosition().x) * (getSprites().at(0).first.getGlobalBounds().width) + 48,
-                static_cast<float>(tile.getPosition().y) * (getSprites().at(0).first.getGlobalBounds().height) + 43
-            );
-            getSprites().at(2).first.setPosition(                           // le petit vert
-                static_cast<float>(tile.getPosition().x) * (getSprites().at(0).first.getGlobalBounds().width) + 20,
-                static_cast<float>(tile.getPosition().y) * (getSprites().at(0).first.getGlobalBounds().height) + 15
-            );
-            getSprites().at(3).first.setPosition(                           // le rubis
-                static_cast<float>(tile.getPosition().x) * (getSprites().at(0).first.getGlobalBounds().width) + 40,
-                static_cast<float>(tile.getPosition().y) * (getSprites().at(0).first.getGlobalBounds().height) + 15
-            );
-            getSprites().at(4).first.setPosition(                           // le gros vert
-                static_cast<float>(tile.getPosition().x) * (getSprites().at(0).first.getGlobalBounds().width) + 70,
-                static_cast<float>(tile.getPosition().y) * (getSprites().at(0).first.getGlobalBounds().height) + 15
-            );
-            getSprites().at(5).first.setPosition(                           // le diamant
-                static_cast<float>(tile.getPosition().x) * (getSprites().at(0).first.getGlobalBounds().width) + 15,
-                static_cast<float>(tile.getPosition().y) * (getSprites().at(0).first.getGlobalBounds().height) + 70
-            );
-            getSprites().at(6).first.setPosition(                           // l'ambre
-                static_cast<float>(tile.getPosition().x) * (getSprites().at(0).first.getGlobalBounds().width) + 42,
-                static_cast<float>(tile.getPosition().y) * (getSprites().at(0).first.getGlobalBounds().height) + 70
-            );
-            getSprites().at(7).first.setPosition(                           // l'amethyste
-                static_cast<float>(tile.getPosition().x) * (getSprites().at(0).first.getGlobalBounds().width) + 70,
-                static_cast<float>(tile.getPosition().y) * (getSprites().at(0).first.getGlobalBounds().height) + 70
-            );
-            for (const auto& sprite : getSprites()) {
-                m_window.draw(sprite.first);
+            float tilePosX = static_cast<float>(tile.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width;
+            float tilePosY = static_cast<float>(tile.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height;
+
+            float newTilePosY = windowSize.y - tilePosY - getSprites().at(0).first.getGlobalBounds().height;
+            float finalTilePosX = windowSize.x - newTilePosY - getSprites().at(0).first.getGlobalBounds().width;
+
+            getSprites().at(0).first.setPosition(finalTilePosX, tilePosX);
+            m_window.draw(getSprites().at(0).first);
+
+            const auto& resources = tile.getInventory().resources;
+            for (size_t i = 0; i < 7; i++) {
+                if (resources[i].quantity > 0) {
+                    getSprites().at(i + 1).first.setPosition(finalTilePosX, tilePosX);
+                    m_window.draw(getSprites().at(i + 1).first);
+                }
             }
         }
     }
