@@ -94,14 +94,9 @@ class Analysis:
                 if item in self.inventory.items:
                     self.analyse_item(i, item)
         print(f"Most important item : {self.mostImportItem[0]} at case {self.mostImportItem[1]}")
-        if debug == True:
-            action = self.choose_action(self.mostImportItem, self.lastMoreimportItem)
-            print(f"I will go to the last more important item\n -> {action[0]}")
-            command = action[0]
-            command = self.bot.parse_command(command)
-        else:
-            action = self.choose_action(self.mostImportItem, self.lastMoreimportItem)
-            command = action[0]
-            command = self.bot.parse_command(command)
-            print("Command : " + command)
+        action = self.choose_action(self.mostImportItem, self.lastMoreimportItem)
+        command = action[0]
+
+        command = self.bot.parse_command(command)
+        print("Command: " + command)
         callback(command)
