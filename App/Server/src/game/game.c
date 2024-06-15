@@ -6,6 +6,8 @@
 */
 
 #include "Server/Game/game.h"
+#include "Server/Game/player.h"
+#include "Server/tools.h"
 
 void free_game_resources(game_t *game)
 {
@@ -29,19 +31,15 @@ void free_game_resources(game_t *game)
     free(game);
 }
 
-static bool init_player(game_t *game, map_t **map_ptr)
+static bool init_player(game_t *game)
 {
-    *map_ptr = malloc(sizeof(player_t *) *
-        ((unsigned long)game->max_clients *
-        (unsigned long)game->nb_teams));
-    if (!*map_ptr) {
-        return false;
-    }
-    game->map = *map_ptr;
+    int max_player = game->max_clients * game->nb_teams;
+
+    game->players = malloc(sizeof(player_t *) * (unsigned long) max_player);
     if (!game->players) {
         return false;
     }
-    for (int i = 0; i < game->max_clients; i++) {
+    for (int i = 0; i < max_player; i++) {
         game->players[i] = NULL;
     }
     return true;
@@ -67,7 +65,7 @@ bool start_game(arguments_t *args, game_t **game_ptr)
     }
     game = *game_ptr;
     fill_game(game, args);
-    if (!init_player(game, &game->map) ||
+    if (!init_player(game) ||
         !init_map(game, args->width, args->height)) {
         free_game_resources(game);
         return false;

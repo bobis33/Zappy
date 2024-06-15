@@ -9,7 +9,7 @@
 
 #include <stdbool.h>
 
-#include "Server/Game/game.h"
+#include "Server/Game/resource.h"
 
 typedef struct tile_s {
     int pos_x;

@@ -30,6 +30,7 @@ set (SOURCES_GAME
         ${SRC_DIR}/game/game.c
         ${SRC_DIR}/game/map.c
         ${SRC_DIR}/game/resource.c
+        ${SRC_DIR}/game/player.c
 )
 
 set(SOURCES_CMD_AI

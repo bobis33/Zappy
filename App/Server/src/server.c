@@ -58,7 +58,9 @@ static bool init_server(server_t *server, arguments_t *args)
     server->socket.sin_family = AF_INET;
     server->socket.sin_port = htons(server->port);
     server->socket.sin_addr.s_addr = INADDR_ANY;
-    start_game(args, &server->game);
+    if (!start_game(args, &server->game)) {
+        return false;
+    }
     return connect_socket(server);
 }
 
@@ -120,12 +122,13 @@ static server_status_t loop_fds(client_t *client, server_t *server)
 
 static bool main_loop(server_t *server)
 {
+    struct timeval timeout = {1, 0};
     client_t *client = init_client_data(server->fd);
 
     while (!*stop_signal_catched()) {
         client->read_fds = client->master_fds;
         if (select(client->max_fd + 1,
-            &client->read_fds, NULL, NULL, NULL) < 0) {
+            &client->read_fds, NULL, NULL, &timeout) < 0) {
             free(client);
             return true;
         }
@@ -155,6 +158,7 @@ bool run_server(arguments_t *args)
         free(server);
         return false;
     }
+    free_game_resources(server->game);
     free(server);
     return true;
 }
