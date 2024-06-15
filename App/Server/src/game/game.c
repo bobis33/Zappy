@@ -5,81 +5,57 @@
 ** game
 */
 
-#include <time.h>
-
 #include "Server/Game/game.h"
+#include "Server/Game/player.h"
+#include "Server/tools.h"
 
 void free_game_resources(game_t *game)
 {
-    if (game == NULL) {
-        return;
-    }
-    if (game->map->tiles != NULL) {
+    free(game->clock);
+    if (game->map != NULL && game->map->tiles != NULL) {
         for (int i = 0; i < game->map->width; i++) {
             free(game->map->tiles[i]);
         }
         free(game->map->tiles);
     }
     free(game->map);
-    free(game->clock);
+    if (game->players == NULL) {
+        return;
+    }
+    for (int i = 0; i < game->max_clients; i++) {
+        if (game->players[i] != NULL) {
+            free(game->players[i]);
+        }
+    }
+    free(game->players);
     free(game);
 }
 
-static bool init_map(game_t *game, const int width, const int height)
+static bool init_player(game_t *game)
 {
-    game->map = malloc(sizeof(map_t));
-    if (!game->map) {
-        return false;
-    }
-    game->map->width = width;
-    game->map->height = height;
-    game->map->tiles = NULL;
-    return true;
-}
+    int max_player = game->max_clients * game->nb_teams;
 
-static bool init_tiles(game_t *game)
-{
-    game->map->tiles =
-        malloc(sizeof(tile_t *) * (unsigned long)game->map->width);
-    if (!game->map->tiles) {
+    game->players = malloc(sizeof(player_t *) * (unsigned long) max_player);
+    if (!game->players) {
         return false;
     }
-    for (int i = 0; i < game->map->width; i++) {
-        game->map->tiles[i] =
-            malloc(sizeof(tile_t) * (unsigned long)game->map->height);
-        if (!game->map->tiles[i]) {
-            free(game->map->tiles);
-            return false;
-        }
+    for (int i = 0; i < max_player; i++) {
+        game->players[i] = NULL;
     }
     return true;
 }
 
-static void init_tile_resources(game_t *game)
+static void fill_game(game_t *game, arguments_t *args)
 {
-    for (int i = 0; i < game->map->width; i++) {
-        for (int j = 0; j < game->map->height; j++) {
-            game->map->tiles[i][j].pos_x = i;
-            game->map->tiles[i][j].pos_y = j;
-            game->map->tiles[i][j].resources[FOOD].quantity = 0;
-            game->map->tiles[i][j].resources[FOOD].density = 0.5;
-            game->map->tiles[i][j].resources[LINEMATE].quantity = 0;
-            game->map->tiles[i][j].resources[LINEMATE].density = 0.3;
-            game->map->tiles[i][j].resources[DERAUMERE].quantity = 0;
-            game->map->tiles[i][j].resources[DERAUMERE].density = 0.15;
-            game->map->tiles[i][j].resources[SIBUR].quantity = 0;
-            game->map->tiles[i][j].resources[SIBUR].density = 0.1;
-            game->map->tiles[i][j].resources[MENDIANE].quantity = 0;
-            game->map->tiles[i][j].resources[MENDIANE].density = 0.1;
-            game->map->tiles[i][j].resources[PHIRAS].quantity = 0;
-            game->map->tiles[i][j].resources[PHIRAS].density = 0.08;
-            game->map->tiles[i][j].resources[THYSTAME].quantity = 0;
-            game->map->tiles[i][j].resources[THYSTAME].density = 0.05;
-        }
-    }
+    game->clock = malloc(sizeof(server_clock_t));
+    game->clock->freq = args->freq;
+    clock_gettime(CLOCK_MONOTONIC, &game->clock->value);
+    game->max_clients = args->clients_nb;
+    game->nb_teams = args->nb_teams;
+    game->team_names = args->team_names;
 }
 
-bool init_game(arguments_t *args, game_t **game_ptr)
+bool start_game(arguments_t *args, game_t **game_ptr)
 {
     game_t *game = NULL;
 
@@ -88,17 +64,11 @@ bool init_game(arguments_t *args, game_t **game_ptr)
         return false;
     }
     game = *game_ptr;
-    game->clock = malloc(sizeof(server_clock_t));
-    game->clock->freq = args->freq;
-    clock_gettime(CLOCK_MONOTONIC, &game->clock->value);
-    game->max_clients = args->clients_nb;
-    game->nb_teams = args->nb_teams;
-    game->team_names = args->team_names;
-    if (!init_map(game, args->width, args->height) || !init_tiles(game)) {
-        free(game->clock);
+    fill_game(game, args);
+    if (!init_player(game) ||
+        !init_map(game, args->width, args->height)) {
         free_game_resources(game);
         return false;
     }
-    init_tile_resources(game);
     return true;
 }

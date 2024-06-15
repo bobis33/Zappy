@@ -5,6 +5,8 @@
 ** clock
 */
 
+#include <time.h>
+
 #pragma once
 
 typedef struct server_clock_s {
