@@ -23,6 +23,15 @@ namespace gui {
                 resources({food, linemate, deraumere, sibur, mendiane, phiras, thystame}) {};
             explicit Inventory(std::vector<Resource> cresources): resources(std::move(cresources)) {};
 
+            void setQuantity(Resource::Type type, unsigned int quantity) {
+                for (auto &resource : resources) {
+                    if (resource.type == type) {
+                        resource.quantity = quantity;
+                        return;
+                    }
+                }
+            };
+
             std::vector<Resource> resources;
 
     }; // class Inventory

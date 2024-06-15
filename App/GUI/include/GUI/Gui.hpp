@@ -23,7 +23,8 @@ namespace gui {
 
             enum class RendererMode {
                 GAME,
-                SETTINGS
+                SETTINGS,
+                END
             };
 
             explicit Gui(const Argument &args);
@@ -36,6 +37,7 @@ namespace gui {
             void initMap(const std::pair<unsigned, unsigned> &size);
             void initEgg(const unsigned int &eggId, const int &playerId, const std::pair<unsigned int, unsigned int> &pos);
             void matureEgg(const unsigned int &eggId);
+            void eggDeath(const unsigned int &eggId);
 
             [[nodiscard]] static std::vector<std::string> getData(const std::string &data);
 
@@ -43,11 +45,13 @@ namespace gui {
             [[nodiscard]] int getFrequency() const { return m_frequency; };
             [[nodiscard]] std::vector<std::string>& getTeamNames() { return m_teamNames; };
             [[nodiscard]] std::vector<Player>& getPlayers() { return m_players; };
+            [[nodiscard]] RendererMode getMode() const { return m_mode; };
 
             void addTeamName(const std::string &teamName) { for (auto &team : m_teamNames) if (team == teamName) return; m_teamNames.push_back(teamName); };
             void addPlayer(const Player &player) { m_players.push_back(player); };
             void setMap(const Map &map) { m_map = map; };
             void setFrequency(int freq) { m_frequency = freq; };
+            void setMode(RendererMode mode) { m_mode = mode; };
 
         private:
 

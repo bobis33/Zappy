@@ -82,3 +82,9 @@ void gui::Gui::matureEgg(const unsigned int &eggId)
     (void) eggId;
     // Tmp -> remove egg from the map and add a player when a client connects with random direction
 }
+
+void gui::Gui::eggDeath(const unsigned int &eggId)
+{
+    (void) eggId;
+    // Tmp -> remove egg from the map
+}
