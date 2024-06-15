@@ -9,21 +9,6 @@
 
 void cmd_right(const int fd, game_t *game)
 {
-    switch (game->players[fd].direction) {
-        case NORTH:
-            rotate_east(fd, game);
-            break;
-        case SOUTH:
-            rotate_west(fd, game);
-            break;
-        case EAST:
-            rotate_south(fd, game);
-            break;
-        case WEST:
-            rotate_north(fd, game);
-            break;
-        default:
-            print_msg(fd, "ko\n");
-            return;
-    }
+    (void)game;
+    (void)fd;
 }

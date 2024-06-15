@@ -18,6 +18,8 @@ void cmd_player_pos(const int fd, char **cmd, game_t *game)
     }
     print_msg(fd, "ppo ");
     print_msg(fd, cmd[1]);
-    dprintf(fd, " %d %d %d\n", game->players[player_id].pos_x,
-        game->players[player_id].pos_y, game->players[player_id].direction);
+    dprintf(fd, " %d %d %d\n",
+        game->players[player_id]->position.x,
+        game->players[player_id]->position.y,
+        game->players[player_id]->direction);
 }

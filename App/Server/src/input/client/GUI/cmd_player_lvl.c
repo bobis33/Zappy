@@ -18,5 +18,5 @@ void cmd_player_lvl(const int fd, char **cmd, game_t *game)
     }
     print_msg(fd, "plv ");
     print_msg(fd, cmd[1]);
-    dprintf(fd, " %d\n", game->players[player_id].level);
+    dprintf(fd, " %d\n", game->players[player_id]->level);
 }
