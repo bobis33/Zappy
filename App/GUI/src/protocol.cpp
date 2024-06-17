@@ -38,6 +38,8 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
                 if (player.getId() != static_cast<unsigned int>(std::stoi(data[0].substr(1, data[0].size())))) {
                     continue;
                 }
+                player.getPosition().x = static_cast<unsigned int>(std::stoi(data[1]));
+                player.getPosition().y = static_cast<unsigned int>(std::stoi(data[2]));
                 player.setOrientation(Parser::parseOrientation(data[3]));
             };
 

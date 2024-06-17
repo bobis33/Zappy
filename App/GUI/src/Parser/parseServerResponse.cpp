@@ -62,16 +62,15 @@ gui::Egg gui::Parser::parseEggContent(const std::vector<std::string> &eggContent
         throw std::runtime_error("Invalid egg content");
     }
     return {
-        std::stoi(eggContent[0]),
+        static_cast<unsigned int>(std::stoi(eggContent[0])),
         std::stoi(eggContent[1]),
-        std::stoi(eggContent[2]),
-        std::stoi(eggContent[3])
+        static_cast<unsigned int>(std::stoi(eggContent[2])),
+        static_cast<unsigned int>(std::stoi(eggContent[3]))
     };
 }
 
 void gui::Parser::processData(const std::vector<std::string>& data, Gui &gui)
 {
-
     for (const std::string& line : data) {
         auto command_val = Protocol::ProtocolMap.find(line.substr(0, 3));
         if (command_val != Protocol::ProtocolMap.end()) {

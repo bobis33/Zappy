@@ -44,6 +44,9 @@ class SFML : public IRenderer {
             void addSprite(const sf::Sprite &sprite, const std::string &name) { m_sprites.push_back({sprite, name}); };
             void addTexture(const sf::Texture &texture, const std::string &name) { m_textures.push_back({texture, name}); };
 
+            sf::Clock playerClock;
+            int playerframe = 0;
+
         private:
 
             sf::RenderWindow m_window;

@@ -66,6 +66,10 @@ void gui::SFML::init(const std::string &name, std::pair<const unsigned int,const
         throw std::runtime_error("Failed to load texture");
     }
     addTexture(texture, "egg");
+    if (!texture.loadFromFile("assets/textures/idle.png")) {
+        throw std::runtime_error("Failed to load texture");
+    }
+    addTexture(texture, "player");
     sf::Sprite sprite;
     sprite.setTexture(getTextures().at(0).first);
     addSprite(sprite, "forest");
@@ -85,6 +89,8 @@ void gui::SFML::init(const std::string &name, std::pair<const unsigned int,const
     addSprite(sprite, "thystame");
     sprite.setTexture(getTextures().at(8).first);
     addSprite(sprite, "egg");
+    sprite.setTexture(getTextures().at(9).first);
+    addSprite(sprite, "player");
 }
 
 bool gui::SFML::checkConnection(sf::Clock clock)
@@ -126,13 +132,36 @@ void gui::SFML::render(Map &map, std::vector<Egg> &egg)
             float tilePosY = static_cast<float>(tile.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height;
             getSprites().at(0).first.setPosition(tilePosY, tilePosX);
             m_window.draw(getSprites().at(0).first);
-
             for (auto &egg : egg) {
                 getSprites().at(8).first.setPosition(
                     static_cast<float>(egg.getY()) * getSprites().at(0).first.getGlobalBounds().height,
                     static_cast<float>(egg.getX()) * getSprites().at(0).first.getGlobalBounds().width);
                 m_window.draw(getSprites().at(8).first);
             }
+        }
+        
+    }
+
+    //print pos player
+
+
+    // Affichage du player
+    if (playerClock.getElapsedTime().asSeconds() > 0.1) {
+        playerframe++;
+        if (playerframe > 4)
+            playerframe = 0;
+        playerClock.restart();
+    }
+    sf::IntRect playerRect(playerframe * 32, 0, 32, 32);
+    getSprites().at(9).first.setTextureRect(playerRect);
+    getSprites().at(9).first.setPosition(0, 0);
+    m_window.draw(getSprites().at(9).first);
+    //
+
+    for (auto& player : map.getTiles()) {
+        for (auto& tile : player) {
+            float tilePosX = static_cast<float>(tile.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width;
+            float tilePosY = static_cast<float>(tile.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height;
 
             const auto& resources = tile.getInventory().resources;
             for (size_t i = 0; i < 7; i++) {
