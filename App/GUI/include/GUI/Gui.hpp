@@ -41,8 +41,6 @@ namespace gui {
             void eggDeath(const unsigned int &eggId);
             void addEgg(const Egg& egg) { m_eggs.push_back(egg);}
 
-            [[nodiscard]] static std::vector<std::string> getData(const std::string &data);
-
             [[nodiscard]] Map& getMap() { return m_map; };
             [[nodiscard]] int getFrequency() const { return m_frequency; };
             [[nodiscard]] std::vector<std::string>& getTeamNames() { return m_teamNames; };

@@ -81,3 +81,15 @@ void gui::Parser::processData(const std::vector<std::string>& data, Gui &gui)
         }
     }
 }
+
+std::vector<std::string> gui::Parser::getData(const std::string &data)
+{
+    std::vector<std::string> tmp;
+    std::string tmpData;
+    std::stringstream ss(data);
+
+    while (std::getline(ss, tmpData, '\n')) {
+        tmp.push_back(tmpData);
+    }
+    return tmp;
+}

@@ -31,7 +31,7 @@ gui::Gui::Gui(const gui::Argument &args)
         throw RunTimeException("Failed to connect to server");
     }
 
-    Parser::processData(getData(m_renderer->getClient().getResponse()), *this);
+    Parser::processData(Parser::getData(m_renderer->getClient().getResponse()), *this);
 }
 
 void gui::Gui::Run()
@@ -43,20 +43,9 @@ void gui::Gui::Run()
         if (event < KeyBoard::Key::COUNT && EVENT_ARRAY.at(event) != nullptr) {
             EVENT_ARRAY.at(event)(*this);
         }
-        m_renderer->render(m_map, m_eggs);
+        Parser::processData(Parser::getData(m_renderer->getClient().getResponse()), *this);
+        m_renderer->render(m_map, m_eggs, m_players);
     }
-}
-
-std::vector<std::string> gui::Gui::getData(const std::string &data)
-{
-    std::vector<std::string> tmp;
-    std::string tmpData;
-    std::stringstream ss(data);
-
-    while (std::getline(ss, tmpData, '\n')) {
-        tmp.push_back(tmpData);
-    }
-    return tmp;
 }
 
 void gui::Gui::initMap(const std::pair<unsigned int, unsigned int> &size)

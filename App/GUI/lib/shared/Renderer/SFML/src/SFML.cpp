@@ -7,6 +7,8 @@
 
 #include "GUI/SFML.hpp"
 #include "GUI/Egg.hpp"
+#include "GUI/Player.hpp"
+#include "GUI/Parser.hpp"
 
 std::array<gui::KeyBoard::Key, sf::Keyboard::KeyCount> gui::SFML::KEY_CODE_ARRAY;
 
@@ -107,7 +109,7 @@ bool gui::SFML::checkConnection(sf::Clock clock)
     return true;
 }
 
-void gui::SFML::render(Map &map, std::vector<Egg> &egg)
+void gui::SFML::render(Map &map, std::vector<Egg> &egg, std::vector<Player> &player)
 {
     m_window.clear({0, 0, 0, 0});
     std::vector<float> spritesAspectRatio;
@@ -138,12 +140,16 @@ void gui::SFML::render(Map &map, std::vector<Egg> &egg)
                     static_cast<float>(egg.getX()) * getSprites().at(0).first.getGlobalBounds().width);
                 m_window.draw(getSprites().at(8).first);
             }
+            for (auto &player : player) {
+                std::cout << "player x: " << player.getPosition().x << " player y: " << player.getPosition().y << std::endl;
+                getSprites().at(9).first.setPosition(
+                    static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height,
+                    static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width);
+                m_window.draw(getSprites().at(9).first);
+            }
         }
         
     }
-
-    //print pos player
-
 
     // Affichage du player
     if (playerClock.getElapsedTime().asSeconds() > 0.1) {
@@ -154,8 +160,6 @@ void gui::SFML::render(Map &map, std::vector<Egg> &egg)
     }
     sf::IntRect playerRect(playerframe * 32, 0, 32, 32);
     getSprites().at(9).first.setTextureRect(playerRect);
-    getSprites().at(9).first.setPosition(0, 0);
-    m_window.draw(getSprites().at(9).first);
     //
 
     for (auto& player : map.getTiles()) {
