@@ -7,8 +7,24 @@
 
 #include "Server/cmd_ai_client.h"
 
-void cmd_left(const int fd, game_t *game)
+void cmd_left(player_t *player, game_t *game)
 {
     (void)game;
-    (void)fd;
+    switch (player->direction) {
+        case NORTH:
+            rotate_west(player);
+            break;
+        case SOUTH:
+            rotate_east(player);
+            break;
+        case EAST:
+            rotate_north(player);
+            break;
+        case WEST:
+            rotate_south(player);
+            break;
+        default:
+            print_msg(player->fd_client, "ko\n");
+            return;
+    }
 }

@@ -7,7 +7,9 @@
 
 #include "Server/cmd_ai_client.h"
 
-void cmd_connection_nbr(const int fd, game_t *game)
+void cmd_connection_nbr(player_t *player, game_t *game)
 {
-    dprintf(fd, "%d\n", game->actual_clients);
+    (void)game;
+    dprintf(player->fd_client, "%d\n", player->id); //Replace player->id by
+    // nbr of actual connections
 }

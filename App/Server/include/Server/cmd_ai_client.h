@@ -14,24 +14,24 @@
 
 typedef struct cmd_ai_client_s {
     const char *command;
-    void (*function)(const int fd, game_t *game);
+    void (*function)(player_t *player, game_t *game);
 } cmd_ai_client_t;
 
-void cmd_ai_client(game_t *game, client_t *client, char *cmd, int fd);
-void rotate_west(const int fd, game_t *game);
-void rotate_east(const int fd, game_t *game);
-void rotate_north(const int fd, game_t *game);
-void rotate_south(const int fd, game_t *game);
-void cmd_forward(int fd, game_t *game);
-void cmd_right(int fd, game_t *game);
-void cmd_left(int fd, game_t *game);
-void cmd_look(int fd, game_t *game);
-void cmd_inventory(int fd, game_t *game);
-void cmd_broadcast(int fd, game_t *game);
-void cmd_connection_nbr(int fd, game_t *game);
-void cmd_fork(int fd, game_t *game);
-void cmd_eject(int fd, game_t *game);
-void cmd_take(int fd, game_t *game);
-void cmd_set(int fd, game_t *game);
-void cmd_incantation(int fd, game_t *game);
-void cmd_dead(int fd, game_t *game);
+void cmd_ai_client(player_t *player, game_t *game, char *cmd);
+void rotate_west(player_t *player);
+void rotate_east(player_t *player);
+void rotate_north(player_t *player);
+void rotate_south(player_t *player);
+void cmd_forward(player_t *player, game_t *game);
+void cmd_right(player_t *player, game_t *game);
+void cmd_left(player_t *player, game_t *game);
+void cmd_look(player_t *player, game_t *game);
+void cmd_inventory(player_t *player, game_t *game);
+void cmd_broadcast(player_t *player, game_t *game);
+void cmd_connection_nbr(player_t *player, game_t *game);
+void cmd_fork(player_t *player, game_t *game);
+void cmd_eject(player_t *player, game_t *game);
+void cmd_take(player_t *player, game_t *game);
+void cmd_set(player_t *player, game_t *game);
+void cmd_incantation(player_t *player, game_t *game);
+void cmd_dead(player_t *player, game_t *game);

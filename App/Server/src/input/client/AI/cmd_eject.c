@@ -7,8 +7,8 @@
 
 #include "Server/cmd_ai_client.h"
 
-void cmd_eject(const int fd, game_t *game)
+void cmd_eject(player_t *player, game_t *game)
 {
     (void)game;
-    print_msg(fd, "ok/ko\n");
+    print_msg(player->fd_client, "ok/ko\n");
 }

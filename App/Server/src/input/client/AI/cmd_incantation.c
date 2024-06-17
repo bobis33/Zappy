@@ -7,10 +7,10 @@
 
 #include "Server/cmd_ai_client.h"
 
-void cmd_incantation(const int fd, game_t *game)
+void cmd_incantation(player_t *player, game_t *game)
 {
     (void)game;
-    print_msg(fd, "Elevation underway\n");
-    print_msg(fd, "Current level: UN MILLION\n");
-    print_msg(fd, "ko\n");
+    print_msg(player->fd_client, "Elevation underway\n");
+    print_msg(player->fd_client, "Current level: UN MILLION\n");
+    print_msg(player->fd_client, "ko\n");
 }

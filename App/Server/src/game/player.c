@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "Server/Game/game.h"
 #include "Server/Game/player.h"
 #include "Server/Game/clock.h"
 
@@ -19,11 +20,12 @@ player_t *create_player(
 {
     player_t *new_player = malloc(sizeof(player_t));
 
-    if (!new_player) {
+    if (!new_player)
         return NULL;
-    }
-    new_player->id = id;
+    game->index_client++;
+    new_player->id = game->index_client;
     new_player->level = 1;
+    new_player->fd_client = fd;
     new_player->team_name = team_name;
     new_player->position = position;
     new_player->direction = NORTH;

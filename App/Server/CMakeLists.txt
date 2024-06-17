@@ -49,6 +49,7 @@ set(SOURCES_CMD_AI
         ${SRC_CMD_DIR}/client/AI/cmd_right.c
         ${SRC_CMD_DIR}/client/AI/cmd_set.c
         ${SRC_CMD_DIR}/client/AI/cmd_take.c
+        ${SRC_CMD_DIR}/client/AI/rotate_player.c
 )
 
 set(SOURCES_CMD_GUI

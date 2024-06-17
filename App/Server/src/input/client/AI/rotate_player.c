@@ -7,26 +7,26 @@
 
 #include "Server/cmd_ai_client.h"
 
-void rotate_west(const int fd, game_t *game)
+void rotate_west(player_t *player)
 {
-    game->players[fd].direction = WEST;
-    print_msg(fd, "ok\n");
+    player->direction = WEST;
+    print_msg(player->fd_client, "ok\n");
 }
 
-void rotate_east(const int fd, game_t *game)
+void rotate_east(player_t *player)
 {
-    game->players[fd].direction = EAST;
-    print_msg(fd, "ok\n");
+    player->direction = EAST;
+    print_msg(player->fd_client, "ok\n");
 }
 
-void rotate_north(const int fd, game_t *game)
+void rotate_north(player_t *player)
 {
-    game->players[fd].direction = NORTH;
-    print_msg(fd, "ok\n");
+    player->direction = NORTH;
+    print_msg(player->fd_client, "ok\n");
 }
 
-void rotate_south(const int fd, game_t *game)
+void rotate_south(player_t *player)
 {
-    game->players[fd].direction = SOUTH;
-    print_msg(fd, "ok\n");
+    player->direction = SOUTH;
+    print_msg(player->fd_client, "ok\n");
 }

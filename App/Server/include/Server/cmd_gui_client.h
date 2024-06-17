@@ -15,7 +15,7 @@ typedef struct cmd_builtin_client_s {
     void (*function)(const int fd, char **arg, game_t *game);
 } cmd_builtin_client_t;
 
-void cmd_gui_client(game_t *game, client_t *client, char *cmd, int fd);
+void cmd_gui_client(game_t *game, char *cmd, int fd);
 void cmd_map_size(int fd, char **cmd, game_t *game);
 void cmd_tile_content(int fd, char **cmd, game_t *game);
 void cmd_map_tile_content(int fd, char **cmd, game_t *game);

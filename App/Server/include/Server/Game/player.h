@@ -21,8 +21,8 @@ typedef enum orientation_e {
 } orientation_t;
 
 typedef struct player_s {
-    int level;
     int id;
+    int level;
     int fd_client;
     char *team_name;
     __time_t food_time;

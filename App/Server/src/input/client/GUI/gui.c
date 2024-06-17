@@ -37,11 +37,10 @@ static char **parse_command(char *cmd, char **cmd_array)
     return cmd_array;
 }
 
-void cmd_gui_client(game_t *game, client_t *client, char *cmd, const int fd)
+void cmd_gui_client(game_t *game, char *cmd, const int fd)
 {
     char **cmd_array = malloc(sizeof(char *) + 1);
 
-    (void)client;
     cmd_array = parse_command(cmd, cmd_array);
     for (int i = 0; cmd_builtin[i].command; i++) {
         if (strcmp(cmd, cmd_builtin[i].command) == 0) {

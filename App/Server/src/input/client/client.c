@@ -14,6 +14,16 @@
 #include "Server/cmd_ai_client.h"
 #include "Server/cmd_gui_client.h"
 
+static void ai_loop(game_t *game, const int fd, char *cmd)
+{
+    for (int i = 0; game->players[i] != NULL; i++) {
+        if (game->players[i]->fd_client == fd) {
+            cmd_ai_client(game->players[i], game, cmd);
+            return;
+        }
+    }
+}
+
 static bool identify_client(
     game_t *game,
     data_t *client_data,
@@ -32,6 +42,7 @@ static bool identify_client(
         tmp_team_name = strcat(tmp_team_name, "\n");
         if (strcmp(cmd, tmp_team_name) == 0) {
             client_data->identity = AI;
+            add_player(create_player(game, game->team_names[i], fd), game);
             free(tmp_team_name);
             return false;
         }
@@ -49,7 +60,6 @@ static void cmd_builtin_client(
 {
     data_t *client_data = NULL;
 
-    game->actual_clients = 0;
     client_data = get_client_by_fd(client, fd);
     if (client_data->identity == NONE &&
         !identify_client(game, client_data, cmd, fd)) {
@@ -57,12 +67,10 @@ static void cmd_builtin_client(
     }
     switch (client_data->identity) {
         case GRAPHIC:
-            game->actual_clients++;
-            cmd_gui_client(game, client, cmd, fd);
+            cmd_gui_client(game, cmd, fd);
             break;
         case AI:
-            game->actual_clients++;
-            cmd_ai_client(game, client, cmd, fd);
+            ai_loop(game, fd, cmd);
             break;
         default:
             break;
