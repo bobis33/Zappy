@@ -111,13 +111,7 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
         }},
         {"pdi", [](Gui &gui, const std::string &cmd) {
             std::vector<std::string> data = Protocol::parseCommand(cmd);
-            int playerId = std::stoi(data[0].substr(1, data[0].size()));
-            for (auto &player : gui.getPlayers()) {
-                if (player.getId() == playerId) {
-                    // player death
-                }
-            }
-            // player death
+            gui.removePlayer(static_cast<unsigned int>(std::stoi(data[0].substr(1, data[0].size()))));
         }},
         {"enw", [](Gui &gui, const std::string &cmd) {
             /*

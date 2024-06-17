@@ -49,6 +49,7 @@ namespace gui {
 
             void addTeamName(const std::string &teamName) { for (auto &team : m_teamNames) if (team == teamName) return; m_teamNames.push_back(teamName); };
             void addPlayer(const Player &player) { m_players.push_back(player); };
+            void removePlayer(const unsigned int &id) { m_players.erase(std::remove_if(m_players.begin(), m_players.end(), [id](const Player &player) { return player.getId() == id; }), m_players.end()); };
             void setMap(const Map &map) { m_map = map; };
             void setFrequency(int freq) { m_frequency = freq; };
             void setMode(RendererMode mode) { m_mode = mode; };
