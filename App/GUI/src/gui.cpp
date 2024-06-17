@@ -43,7 +43,7 @@ void gui::Gui::Run()
         if (event < KeyBoard::Key::COUNT && EVENT_ARRAY.at(event) != nullptr) {
             EVENT_ARRAY.at(event)(*this);
         }
-        m_renderer->render(m_map);
+        m_renderer->render(m_map, m_eggs);
     }
 }
 
@@ -67,14 +67,6 @@ void gui::Gui::initMap(const std::pair<unsigned int, unsigned int> &size)
     }
     m_map.setWidth(size.first);
     m_map.setHeight(size.second);
-}
-
-void gui::Gui::initEgg(const unsigned int &eggId, const int &playerId, const std::pair<unsigned int, unsigned int> &pos)
-{
-    (void) eggId;
-    (void) playerId;
-    (void) pos;
-    // Tmp -> add egg to the map
 }
 
 void gui::Gui::matureEgg(const unsigned int &eggId)

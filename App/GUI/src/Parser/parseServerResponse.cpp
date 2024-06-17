@@ -56,6 +56,19 @@ gui::Tile gui::Parser::parseTileContent(std::string &tileContent)
     };
 }
 
+gui::Egg gui::Parser::parseEggContent(const std::vector<std::string> &eggContent)
+{
+    if (eggContent.size() != 4) {
+        throw std::runtime_error("Invalid egg content");
+    }
+    return {
+        std::stoi(eggContent[0]),
+        std::stoi(eggContent[1]),
+        std::stoi(eggContent[2]),
+        std::stoi(eggContent[3])
+    };
+}
+
 void gui::Parser::processData(const std::vector<std::string>& data, Gui &gui)
 {
 

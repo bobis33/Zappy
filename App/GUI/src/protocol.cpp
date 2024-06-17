@@ -114,14 +114,8 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
             gui.removePlayer(static_cast<unsigned int>(std::stoi(data[0].substr(1, data[0].size()))));
         }},
         {"enw", [](Gui &gui, const std::string &cmd) {
-            /*
-            gui.initEgg(
-                std::stoi(cmd.substr(0, cmd.find(' '))),
-                std::stoi(cmd.substr(cmd.find(' ') + 1, cmd.size())),
-                {std::stoi(cmd.substr(cmd.find(' ') + 3, cmd.size())),
-                 std::stoi(cmd.substr(cmd.find(' ') + 5, cmd.size()))}
-            );
-             */
+            std::vector<std::string> data = Protocol::parseCommand(cmd);
+            gui.addEgg(Parser::parseEggContent(data));
 
             // to finish
         }},

@@ -22,6 +22,7 @@ namespace gui {
 
             static void processData(const std::vector<std::string>& data, Gui &gui);
             static Tile parseTileContent(std::string &tileContent);
+            static Egg parseEggContent(const std::vector<std::string> &eggContent);
             static Player::Orientation parseOrientation(const std::string &orientation);
 
             class ParserException : public std::exception

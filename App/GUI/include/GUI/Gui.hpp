@@ -15,6 +15,7 @@
 #include "GUI/Argument.hpp"
 #include "GUI/Map/Map.hpp"
 #include "GUI/Player.hpp"
+#include "GUI/Egg.hpp"
 
 namespace gui {
 
@@ -36,9 +37,9 @@ namespace gui {
             void Run();
 
             void initMap(const std::pair<unsigned, unsigned> &size);
-            void initEgg(const unsigned int &eggId, const int &playerId, const std::pair<unsigned int, unsigned int> &pos);
             void matureEgg(const unsigned int &eggId);
             void eggDeath(const unsigned int &eggId);
+            void addEgg(const Egg& egg) { m_eggs.push_back(egg);}
 
             [[nodiscard]] static std::vector<std::string> getData(const std::string &data);
 
@@ -47,6 +48,7 @@ namespace gui {
             [[nodiscard]] std::vector<std::string>& getTeamNames() { return m_teamNames; };
             [[nodiscard]] std::vector<Player>& getPlayers() { return m_players; };
             [[nodiscard]] RendererMode getMode() const { return m_mode; };
+            [[nodiscard]] std::vector<Egg> getEggs() const { return m_eggs; };
 
             void addTeamName(const std::string &teamName) { for (auto &team : m_teamNames) if (team == teamName) return; m_teamNames.push_back(teamName); };
             void addPlayer(const Player &player) { m_players.push_back(player); };
@@ -65,6 +67,7 @@ namespace gui {
             std::pair<int, int> m_mapSize{0, 0};
             Map m_map{30, 30, {}};
             int m_frequency{0};
+            std::vector<Egg> m_eggs;
 
     }; // class Gui
 

@@ -6,6 +6,7 @@
 */
 
 #include "GUI/SFML.hpp"
+#include "GUI/Egg.hpp"
 
 std::array<gui::KeyBoard::Key, sf::Keyboard::KeyCount> gui::SFML::KEY_CODE_ARRAY;
 
@@ -61,6 +62,10 @@ void gui::SFML::init(const std::string &name, std::pair<const unsigned int,const
         throw std::runtime_error("Failed to load texture");
     }
     addTexture(texture, "thystame");
+    if (!texture.loadFromFile("assets/textures/resources/egg.png")) {
+        throw std::runtime_error("Failed to load texture");
+    }
+    addTexture(texture, "egg");
     sf::Sprite sprite;
     sprite.setTexture(getTextures().at(0).first);
     addSprite(sprite, "forest");
@@ -78,6 +83,8 @@ void gui::SFML::init(const std::string &name, std::pair<const unsigned int,const
     addSprite(sprite, "phiras");
     sprite.setTexture(getTextures().at(7).first);
     addSprite(sprite, "thystame");
+    sprite.setTexture(getTextures().at(8).first);
+    addSprite(sprite, "egg");
 }
 
 bool gui::SFML::checkConnection(sf::Clock clock)
@@ -94,7 +101,7 @@ bool gui::SFML::checkConnection(sf::Clock clock)
     return true;
 }
 
-void gui::SFML::render(Map &map)
+void gui::SFML::render(Map &map, std::vector<Egg> &egg)
 {
     m_window.clear({0, 0, 0, 0});
     std::vector<float> spritesAspectRatio;
@@ -119,6 +126,13 @@ void gui::SFML::render(Map &map)
             float tilePosY = static_cast<float>(tile.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height;
             getSprites().at(0).first.setPosition(tilePosY, tilePosX);
             m_window.draw(getSprites().at(0).first);
+
+            for (auto &egg : egg) {
+                getSprites().at(8).first.setPosition(
+                    static_cast<float>(egg.getY()) * getSprites().at(0).first.getGlobalBounds().height,
+                    static_cast<float>(egg.getX()) * getSprites().at(0).first.getGlobalBounds().width);
+                m_window.draw(getSprites().at(8).first);
+            }
 
             const auto& resources = tile.getInventory().resources;
             for (size_t i = 0; i < 7; i++) {
