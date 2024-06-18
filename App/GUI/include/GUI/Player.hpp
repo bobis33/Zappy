@@ -20,6 +20,7 @@ namespace gui {
                 MOVE,
                 FEED,
                 ELEVATE,
+                TAKE,
                 NONE
             };
 

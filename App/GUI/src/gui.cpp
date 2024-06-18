@@ -43,7 +43,7 @@ void gui::Gui::Run()
         if (event < KeyBoard::Key::COUNT && EVENT_ARRAY.at(event) != nullptr) {
             EVENT_ARRAY.at(event)(*this);
         }
-        // Parser::processData(Parser::getData(m_renderer->getClient().getResponse()), *this);
+        Parser::processData(Parser::getData(m_renderer->getClient().getResponse()), *this);
         m_renderer->render(m_map, m_eggs, m_players);
     }
 }

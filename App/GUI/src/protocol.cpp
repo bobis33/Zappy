@@ -25,7 +25,7 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
             std::vector<std::string> data = Protocol::parseCommand(cmd);
             Player player;
             player.setOrientation(Parser::parseOrientation(data[3]));
-            player.setId(static_cast<unsigned int>(std::stoi(data[0].substr(1, data[0].size()))));
+            player.setId(static_cast<unsigned int>(std::stoi(data[0])));
             player.getPosition().x = static_cast<unsigned int>(std::stoi(data[1]));
             player.getPosition().y = static_cast<unsigned int>(std::stoi(data[2]));
             player.setLevel(static_cast<unsigned int>(std::stoi(data[4])));
@@ -35,7 +35,7 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
         {"ppo", [](Gui &gui, const std::string &cmd) {
             std::vector<std::string> data = Protocol::parseCommand(cmd);
             for (auto &player : gui.getPlayers()) {
-                if (player.getId() != static_cast<unsigned int>(std::stoi(data[0].substr(1, data[0].size())))) {
+                if (player.getId() != static_cast<unsigned int>(std::stoi(data[0]))) {
                     continue;
                 }
                 player.getPosition().x = static_cast<unsigned int>(std::stoi(data[1]));
@@ -48,7 +48,7 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
         {"plv", [](Gui &gui, const std::string &cmd) {
             std::vector<std::string> data = Protocol::parseCommand(cmd);
             for (auto &player : gui.getPlayers()) {
-                if (player.getId() == static_cast<unsigned int>(std::stoi(data[0].substr(1, data[0].size())))) {
+                if (player.getId() == static_cast<unsigned int>(std::stoi(data[0]))) {
                     player.setLevel(static_cast<unsigned int>(std::stoi(data[1])));
                 }
             }
@@ -58,7 +58,7 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
         {"pin", [](Gui &gui, const std::string &cmd) {
             std::vector<std::string> data = Protocol::parseCommand(cmd);
             for (auto &player : gui.getPlayers()) {
-                if (player.getId() != static_cast<unsigned int>(std::stoi(data[0].substr(1, data[0].size())))) {
+                if (player.getId() != static_cast<unsigned int>(std::stoi(data[0]))) {
                     continue;
                 }
                 for (size_t i = 0; i < 6; i++) {
@@ -107,9 +107,14 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
         }},
         {"pgt", [](Gui &gui, const std::string &cmd) {
             std::vector<std::string> data = Protocol::parseCommand(cmd);
-            int playerId = std::stoi(data[0].substr(1, data[0].size()));
+            int playerId = std::stoi(data[0]);
             int resourceId = std::stoi(data[1]);
-            // take resource
+            // set action
+            auto player = std::find_if(gui.getPlayers().begin(), gui.getPlayers().end(),
+                [playerId](const Player &p) { return p.getId() == playerId; });
+            if (player != gui.getPlayers().end()) {
+                player->setAction(Player::Action::TAKE);
+            }
         }},
         {"pdi", [](Gui &gui, const std::string &cmd) {
             std::vector<std::string> data = Protocol::parseCommand(cmd);

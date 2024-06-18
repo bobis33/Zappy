@@ -71,7 +71,15 @@ void gui::SFML::init(const std::string &name, std::pair<const unsigned int,const
     if (!texture.loadFromFile("assets/textures/idle.png")) {
         throw std::runtime_error("Failed to load texture");
     }
-    addTexture(texture, "player");
+    addTexture(texture, "idle");
+    if (!texture.loadFromFile("assets/textures/take.png")) {
+        throw std::runtime_error("Failed to load texture");
+    }
+    addTexture(texture, "take");
+    if (!texture.loadFromFile("assets/textures/Border1.png")) {
+        throw std::runtime_error("Failed to load texture");
+    }
+    addTexture(texture, "border");
     sf::Sprite sprite;
     sprite.setTexture(getTextures().at(0).first);
     addSprite(sprite, "forest");
@@ -92,7 +100,11 @@ void gui::SFML::init(const std::string &name, std::pair<const unsigned int,const
     sprite.setTexture(getTextures().at(8).first);
     addSprite(sprite, "egg");
     sprite.setTexture(getTextures().at(9).first);
-    addSprite(sprite, "player");
+    addSprite(sprite, "idle");
+    sprite.setTexture(getTextures().at(10).first);
+    addSprite(sprite, "take");
+    sprite.setTexture(getTextures().at(11).first);
+    addSprite(sprite, "border");
 }
 
 bool gui::SFML::checkConnection(sf::Clock clock)
@@ -142,10 +154,17 @@ void gui::SFML::render(Map &map, std::vector<Egg> &egg, std::vector<Player> &pla
                     m_window.draw(getSprites().at(8).first);
             }
             for (auto &player : player) {
-                getSprites().at(9).first.setPosition(
-                    static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height,
-                    static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width);
-                m_window.draw(getSprites().at(9).first);
+                if (player.getAction() == Player::Action::NONE) {
+                    getSprites().at(9).first.setPosition(
+                        static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height,
+                        static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width);
+                    m_window.draw(getSprites().at(9).first);
+                } else if (player.getAction() == Player::Action::TAKE) {
+                    getSprites().at(10).first.setPosition(
+                        static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height,
+                        static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width);
+                    m_window.draw(getSprites().at(10).first);
+                }
             }
         }
     }
@@ -159,6 +178,10 @@ void gui::SFML::render(Map &map, std::vector<Egg> &egg, std::vector<Player> &pla
     }
     sf::IntRect playerRect(playerframe * 32, 0, 32, 32);
     getSprites().at(9).first.setTextureRect(playerRect);
+    //
+
+    int x = 0;
+    int y = 0;
 
     sf::Vector2i mousePosition = sf::Mouse::getPosition(m_window);
     std::cout << "Mouse Position: x = " << mousePosition.x << ", y = " << mousePosition.y << std::endl;
@@ -171,7 +194,8 @@ void gui::SFML::render(Map &map, std::vector<Egg> &egg, std::vector<Player> &pla
             if (mousePosition.x >= tilePosX && mousePosition.x < tilePosX + getSprites().at(0).first.getGlobalBounds().width &&
                 mousePosition.y >= tilePosY && mousePosition.y < tilePosY + getSprites().at(0).first.getGlobalBounds().height) {
                 const auto& resources = tile.getInventory().resources;
-                std::cout << tile.getPosition().x << " " << tile.getPosition().y << std::endl;
+                //std::cout << tile.getPosition().x << " " << tile.getPosition().y << std::endl;
+                getSprites().at(11).first.setPosition(tilePosX, tilePosY);
                 for (size_t i = 0; i < 7; i++) {
                     std::cout << "Resource: " << i << ", Quantity: " << resources[i].quantity << std::endl;
                 }
@@ -186,5 +210,10 @@ void gui::SFML::render(Map &map, std::vector<Egg> &egg, std::vector<Player> &pla
             }
         }
     }
+
+    float borderPosX = static_cast<float>(x) * getSprites().at(0).first.getGlobalBounds().width;
+    float borderPosY = static_cast<float>(y) * getSprites().at(0).first.getGlobalBounds().height;
+    m_window.draw(getSprites().at(11).first);
+
     m_window.display();
 }
