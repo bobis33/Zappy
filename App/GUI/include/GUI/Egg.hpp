@@ -18,12 +18,16 @@ namespace gui {
             [[nodiscard]] int getPlayerId() const { return m_playerId; };
             [[nodiscard]] unsigned int getX() const { return m_x; };
             [[nodiscard]] unsigned int getY() const { return m_y; };
+            [[nodiscard]] bool isDead() const { return is_dead; };
+
+            void setDeath() { is_dead = true; };
 
         private:
             unsigned int m_id;
             int m_playerId;
             unsigned int m_x;
             unsigned int m_y;
+            bool is_dead = false;
 
     }; // class Egg
 

@@ -43,7 +43,7 @@ void gui::Gui::Run()
         if (event < KeyBoard::Key::COUNT && EVENT_ARRAY.at(event) != nullptr) {
             EVENT_ARRAY.at(event)(*this);
         }
-        Parser::processData(Parser::getData(m_renderer->getClient().getResponse()), *this);
+        // Parser::processData(Parser::getData(m_renderer->getClient().getResponse()), *this);
         m_renderer->render(m_map, m_eggs, m_players);
     }
 }
@@ -66,6 +66,5 @@ void gui::Gui::matureEgg(const unsigned int &eggId)
 
 void gui::Gui::eggDeath(const unsigned int &eggId)
 {
-    (void) eggId;
-    // Tmp -> remove egg from the map
+    getEggs().at(eggId).setDeath();
 }

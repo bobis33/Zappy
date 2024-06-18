@@ -130,25 +130,24 @@ void gui::SFML::render(Map &map, std::vector<Egg> &egg, std::vector<Player> &pla
 
     for (auto& row : map.getTiles()) {
         for (auto& tile : row) {
-            float tilePosX = static_cast<float>(tile.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width;
-            float tilePosY = static_cast<float>(tile.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height;
-            getSprites().at(0).first.setPosition(tilePosY, tilePosX);
+            float tilePosX = static_cast<float>(tile.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height;
+            float tilePosY = static_cast<float>(tile.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width;
+            getSprites().at(0).first.setPosition(tilePosX, tilePosY);
             m_window.draw(getSprites().at(0).first);
             for (auto &egg : egg) {
                 getSprites().at(8).first.setPosition(
                     static_cast<float>(egg.getY()) * getSprites().at(0).first.getGlobalBounds().height,
                     static_cast<float>(egg.getX()) * getSprites().at(0).first.getGlobalBounds().width);
-                m_window.draw(getSprites().at(8).first);
+                if (!egg.isDead())
+                    m_window.draw(getSprites().at(8).first);
             }
             for (auto &player : player) {
-                std::cout << "player x: " << player.getPosition().x << " player y: " << player.getPosition().y << std::endl;
                 getSprites().at(9).first.setPosition(
                     static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height,
                     static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width);
                 m_window.draw(getSprites().at(9).first);
             }
         }
-        
     }
 
     // Affichage du player
@@ -160,17 +159,28 @@ void gui::SFML::render(Map &map, std::vector<Egg> &egg, std::vector<Player> &pla
     }
     sf::IntRect playerRect(playerframe * 32, 0, 32, 32);
     getSprites().at(9).first.setTextureRect(playerRect);
-    //
+
+    sf::Vector2i mousePosition = sf::Mouse::getPosition(m_window);
+    std::cout << "Mouse Position: x = " << mousePosition.x << ", y = " << mousePosition.y << std::endl;
 
     for (auto& player : map.getTiles()) {
         for (auto& tile : player) {
             float tilePosX = static_cast<float>(tile.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width;
             float tilePosY = static_cast<float>(tile.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height;
 
+            if (mousePosition.x >= tilePosX && mousePosition.x < tilePosX + getSprites().at(0).first.getGlobalBounds().width &&
+                mousePosition.y >= tilePosY && mousePosition.y < tilePosY + getSprites().at(0).first.getGlobalBounds().height) {
+                const auto& resources = tile.getInventory().resources;
+                std::cout << tile.getPosition().x << " " << tile.getPosition().y << std::endl;
+                for (size_t i = 0; i < 7; i++) {
+                    std::cout << "Resource: " << i << ", Quantity: " << resources[i].quantity << std::endl;
+                }
+            }
+
             const auto& resources = tile.getInventory().resources;
             for (size_t i = 0; i < 7; i++) {
                 if (resources[i].quantity > 0) {
-                    getSprites().at(i + 1).first.setPosition(tilePosY, tilePosX);
+                    getSprites().at(i + 1).first.setPosition(tilePosX, tilePosY);
                     m_window.draw(getSprites().at(i + 1).first);
                 }
             }

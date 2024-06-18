@@ -118,8 +118,6 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
         {"enw", [](Gui &gui, const std::string &cmd) {
             std::vector<std::string> data = Protocol::parseCommand(cmd);
             gui.addEgg(Parser::parseEggContent(data));
-
-            // to finish
         }},
         {"ebo", [](Gui &gui, const std::string &cmd) {
             /*
@@ -129,11 +127,7 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
             // to finish
         }},
         {"edi", [](Gui &gui, const std::string &cmd) {
-            /*
-            gui.eggDeath(std::stoi(cmd.substr(1, cmd.size());
-            */
-
-           // to finish
+            gui.eggDeath(std::stoi(cmd));
         }},
         {"sgt", [](Gui &gui, const std::string &cmd) {
             gui.setFrequency(std::stoi(cmd));
