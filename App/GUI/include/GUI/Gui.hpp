@@ -9,6 +9,7 @@
 
 #include <memory>
 #include <vector>
+#include <algorithm>
 
 #include "GUI/Abstraction/IRenderer.hpp"
 #include "GUI/Argument.hpp"
