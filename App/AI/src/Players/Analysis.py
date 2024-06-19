@@ -48,9 +48,6 @@ class Analysis:
         if item == "food" and item_count < 3:
             importance = importance * 0.5
 
-        print(f"importance of {item} on case {nb_case} : {importance}\n")
-        print(f"distance of case {nb_case} : {dist_case}")
-
         if importance < self.mostImportItem[1]:
             self.mostImportItem = (item, importance, nb_case)
 
@@ -93,10 +90,14 @@ class Analysis:
             for item in case:
                 if item in self.inventory.items:
                     self.analyse_item(i, item)
-        print(f"Most important item : {self.mostImportItem[0]} at case {self.mostImportItem[1]}")
         action = self.choose_action(self.mostImportItem, self.lastMoreimportItem)
         command = action[0]
 
         command = self.bot.parse_command(command)
-        print("Command: " + command)
+        if command == "Take no":
+            print(command)
+            command = "Forward"
+        print("--------- COMMAND ---------")
+        print(command.center(28))
+        print("---------------------------")
         callback(command)

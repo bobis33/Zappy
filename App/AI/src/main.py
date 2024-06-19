@@ -17,3 +17,4 @@ if __name__ == "__main__":
     core.client.run(debug)
     core.client.disconnect()
     core.client.delete_file('client_num.csv')
+    core.client.delete_file('bot.txt')

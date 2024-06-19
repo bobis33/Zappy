@@ -9,6 +9,7 @@ from src.Players.Analysis import Analysis
 import os
 import time
 import csv
+import threading
 
 class REQUEST(Enum):
     TRUE = 1
@@ -30,9 +31,17 @@ class TCPClient:
         self.connect_nbr = -1
         self.analyse = Analysis()
         self.client =  {}
+        self.thread = []
 
     def is_connected(self) -> bool:
         return self.sockfd is not None
+
+    def handle_client(self, client_num):
+        client_info = self.get_client_info(client_num)
+        if client_info == "Client not found":
+            print(f"Client {client_num} not found")
+            return
+        print(f"Handling client {client_num} from team {client_info['TEAM-NAME']} with status {client_info['STATUS']}")
 
     def readCsv(self, filename):
         with open(filename, mode='r') as f:
@@ -43,6 +52,9 @@ class TCPClient:
                     'TEAM-NAME': row['TEAM-NAME'],
                     'STATUS': row['STATUS']
                 }
+                t = threading.Thread(target=self.handle_client, args=(int(row['CLIENT-NUM']),))
+                t.start()
+                self.thread.append(t)
 
     def connect(self):
         self.name = self.name.replace('\n', '')
@@ -50,9 +62,10 @@ class TCPClient:
         self.sockfd = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sockfd.connect((self.machine, self.port))
         reponse = self.sockfd.recv(1024).decode('utf-8')
-        print(f"<---{reponse}")
+        print("-------SERVER PROTOCOL-------")
+        print(f"<---{reponse}", end='')
         self.name += "\n"
-        print(f"---> TEAM-NAME {self.name}")
+        print(f"---> TEAM-NAME {self.name}",end='')
         self.sockfd.send(self.name.encode('utf-8'))
         reponse = self.sockfd.recv(1024).decode('utf-8')
         reponse = reponse.replace('\n',' ')
@@ -62,7 +75,7 @@ class TCPClient:
         self.xMap = size[0]
         self.yMap = size[1]
         print(f"<--- X Y {size}")
-
+        print("-----------------------------\n")
         client = [ [client_num, self.name.strip(), 'Connected'] ]
 
         with open('client_num.csv', 'a', newline='') as file:
@@ -72,7 +85,6 @@ class TCPClient:
             for row in client:
                 csv_writter.writerow(row)
         self.connect_nbr = self.client_connect('client_num.csv')
-        self.readCsv('client_num.csv')
 
     def getMap(self):
         my_map = {}
@@ -88,6 +100,7 @@ class TCPClient:
         reply = self.receive()
         print()
         return reply
+
 
     def receive(self) -> str:
         if not self.is_connected():
@@ -170,12 +183,18 @@ class TCPClient:
             self.level = int(level.strip())
         if "Elevation underway" in reply:
             self.write_file()
+        print(f"---> {reply}", end='')
+        self.readCsv('client_num.csv')
         return True
 
     def client_connect(self, filename):
         with open(filename, 'r') as f:
             lines = f.readlines()
         return len(lines) - 1
+
+    def broadcast(self, text):
+        for client in self.thread:
+            client.send(text)
 
     def running_bot(self, debug : bool) -> None:
         counter = 0
