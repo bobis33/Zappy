@@ -32,16 +32,25 @@ class TCPClient:
         self.analyse = Analysis()
         self.client =  {}
         self.thread = []
+        self.broadcast_channel = []
+        self.client_num = None
+        self.lock = threading.Lock()
 
     def is_connected(self) -> bool:
         return self.sockfd is not None
 
-    def handle_client(self, client_num):
-        client_info = self.get_client_info(client_num)
-        if client_info == "Client not found":
-            print(f"Client {client_num} not found")
-            return
-        print(f"Handling client {client_num} from team {client_info['TEAM-NAME']} with status {client_info['STATUS']}")
+    def broadcast_message_to_all_clients(self, message: str, sender : int):
+        for client_num in self.client:
+            if client_num != sender:
+                self.handle_client(client_num, message)
+
+    def handle_client(self, client_num, message=None):
+        while True:
+            with self.lock:
+                if message or self.broadcast_channel:
+                    message = message or self.broadcast_channel.pop(0)
+                    print(f"Client : {client_num} received message: {message}")
+                    break
 
     def readCsv(self, filename):
         with open(filename, mode='r') as f:
@@ -50,7 +59,8 @@ class TCPClient:
             for row in csv_reader:
                 self.client[int(row['CLIENT-NUM'])] = {
                     'TEAM-NAME': row['TEAM-NAME'],
-                    'STATUS': row['STATUS']
+                    'STATUS': row['STATUS'],
+                    'SOCKET' : socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 }
                 t = threading.Thread(target=self.handle_client, args=(int(row['CLIENT-NUM']),))
                 t.start()
@@ -58,9 +68,12 @@ class TCPClient:
 
     def connect(self):
         self.name = self.name.replace('\n', '')
-        print(f"Connecting.. server on the port {self.port} with the team {self.name} in the host {self.machine}")
         self.sockfd = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sockfd.connect((self.machine, self.port))
+        try:
+            print(f"Connecting.. server on the port {self.port} with the team {self.name} in the host {self.machine}")
+            self.sockfd.connect((self.machine, self.port))
+        except socket.error:
+            exit(84)
         reponse = self.sockfd.recv(1024).decode('utf-8')
         print("-------SERVER PROTOCOL-------")
         print(f"<---{reponse}", end='')
@@ -70,6 +83,7 @@ class TCPClient:
         reponse = self.sockfd.recv(1024).decode('utf-8')
         reponse = reponse.replace('\n',' ')
         client_num, map_size = reponse.split(' ', 1)
+        self.client_num = client_num
         print(f"<--- CLIENT-NUM {client_num}")
         size = map_size.split()
         self.xMap = size[0]
@@ -100,7 +114,6 @@ class TCPClient:
         reply = self.receive()
         print()
         return reply
-
 
     def receive(self) -> str:
         if not self.is_connected():
@@ -227,6 +240,9 @@ class TCPClient:
 
     def get_clientConnected(self):
         return self.connect_nbr
+    
+    def get_current_client_id(self) -> str:
+        return self.client_num
 
     def running_debug(self, debug : bool) -> None:
         while self.request == 1:
@@ -234,6 +250,9 @@ class TCPClient:
                 line = input("Enter command : ") + "\n"
                 if not self.handle_request(line):
                     break
+                if "Broadcast" in line:
+                    cast = line.split()
+                    self.broadcast_message_to_all_clients(cast[1], sender=int(self.get_current_client_id()))
                 if self.command is not None:
                     result_dict = self.command.createList(debug)
             except EOFError:

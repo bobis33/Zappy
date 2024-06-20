@@ -13,6 +13,8 @@ def debugNeeded() -> bool:
 if __name__ == "__main__":
     core = Core(len(sys.argv), sys.argv)
     debug = debugNeeded()
+    if core.client.is_connected():
+        exit(84)
     core.client.connect()
     core.client.run(debug)
     core.client.disconnect()
