@@ -5,7 +5,26 @@
 ** map
 */
 
+#include <stdlib.h>
+
 #include "Server/Game/game.h"
+
+static void distribute_egg(game_t *game, int index)
+{
+    int x = 0;
+    int y = 0;
+
+    for (int j = 0; j < game->max_clients; j++) {
+        x = rand() % game->map->width;
+        y = rand() % game->map->height;
+        if (game->map->tiles[x][y].egg.id != -1) {
+            j--;
+            continue;
+        }
+        game->map->tiles[x][y].egg = // REPLACE 0 WITH LAID TIME
+            create_egg(j, 0, game->team_names[index], (position_t){x, y});
+    }
+}
 
 static void distribute_resources(game_t *game)
 {
@@ -30,8 +49,8 @@ static void fill_tiles(game_t *game)
 {
     for (int i = 0; i < game->map->width; i++) {
         for (int j = 0; j < game->map->height; j++) {
-            game->map->tiles[i][j].pos_x = i;
-            game->map->tiles[i][j].pos_y = j;
+            game->map->tiles[i][j].egg = (egg_t){-1, -1, -1, NULL, {-1, -1}};
+            game->map->tiles[i][j].pos = (position_t){i, j};
             game->map->tiles[i][j].resources[FOOD].quantity = 0;
             game->map->tiles[i][j].resources[FOOD].density = 0.5;
             game->map->tiles[i][j].resources[LINEMATE].quantity = 0;
@@ -67,6 +86,9 @@ bool init_tiles(game_t *game)
     }
     fill_tiles(game);
     distribute_resources(game);
+    for (int i = 0; i < game->nb_teams; i++) {
+        distribute_egg(game, i);
+    }
     return true;
 }
 

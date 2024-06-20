@@ -17,8 +17,8 @@ typedef struct egg_s {
     position_t pos;
 } egg_t;
 
-egg_t *create_egg(
+egg_t create_egg(
     int id,
-    int player_id,
+    int laid_time,
     char *team_name,
     position_t pos);

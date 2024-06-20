@@ -10,11 +10,13 @@
 #include <stdbool.h>
 
 #include "Server/Game/resource.h"
+#include "Server/Game/egg.h"
+#include "Server/Game/position.h"
 
 typedef struct tile_s {
-    int pos_x;
-    int pos_y;
+    position_t pos;
     resource_t resources[COUNT];
+    egg_t egg;
 } tile_t;
 
 typedef struct map_s {
