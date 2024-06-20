@@ -112,6 +112,10 @@ void gui::SFML::init(const std::string &name, std::pair<const unsigned int,const
         throw std::runtime_error("Failed to load texture");
     }
     addTexture(texture, "thystame");
+    if (!texture.loadFromFile("assets/textures/idle.png")) {
+        throw std::runtime_error("Failed to load texture");
+    }
+    addTexture(texture, "death");
     sf::Sprite sprite;
     sprite.setTexture(getTextures().at(0).first);
     addSprite(sprite, "forest");
@@ -153,6 +157,8 @@ void gui::SFML::init(const std::string &name, std::pair<const unsigned int,const
     addSprite(sprite, "thystame");
     sprite.setTexture(getTextures().at(19).first);
     addSprite(sprite, "egg");
+    sprite.setTexture(getTextures().at(20).first);
+    addSprite(sprite, "death");
 }
 
 bool gui::SFML::checkConnection(sf::Clock clock)
@@ -208,14 +214,19 @@ void gui::SFML::render(Map &map, std::vector<Egg> &egg, std::vector<Player> &pla
             for (auto &player : player) {
                 if (player.getAction() == Player::Action::NONE) {
                     getSprites().at(9).first.setPosition(
-                        static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width,
-                        static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height);
+                        static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height,
+                        static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width);
                     m_window.draw(getSprites().at(9).first);
                 } else if (player.getAction() == Player::Action::TAKE) {
                     getSprites().at(10).first.setPosition(
-                        static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width,
-                        static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height);
+                        static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height,
+                        static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width);
                     m_window.draw(getSprites().at(10).first);
+                } else if (player.getAction() == Player::Action::DEATH) {
+                    getSprites().at(21).first.setPosition(
+                        static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height,
+                        static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width);
+                    m_window.draw(getSprites().at(20).first);
                 }
             }
 
@@ -258,6 +269,28 @@ void gui::SFML::render(Map &map, std::vector<Egg> &egg, std::vector<Player> &pla
             }
         }
     }
+    //draw border
+    m_window.draw(getSprites().at(11).first);
+
+    for (auto& player : player) {
+        if (playerClock.getElapsedTime().asSeconds() > 0.1) {
+            if (player.getAction() != player.getLastAction() && player.getAction() != Player::Action::NONE) {
+                player.player_frame = 1;
+                std::cout << "proc" << std::endl;
+                player.setLastAction(player.getAction());
+            } 
+            player.player_frame++;
+            if (player.player_frame > 4) {
+                player.player_frame = 0;
+                player.setAction(Player::Action::NONE);
+            }
+            playerClock.restart();
+        }
+        sf::IntRect playerRect(player.player_frame * 32, 0, 32, 32);
+        getSprites().at(9).first.setTextureRect(playerRect);
+        getSprites().at(10).first.setTextureRect(playerRect);
+        getSprites().at(20).first.setTextureRect(playerRect);
+    }
 
     if (!mouseOnTile) {
         float titlePosX = static_cast<float>(map.getWidth() * getSprites().at(0).first.getGlobalBounds().width) + 130.0f;
@@ -275,7 +308,6 @@ void gui::SFML::render(Map &map, std::vector<Egg> &egg, std::vector<Player> &pla
         m_window.draw(titleText);
     }
 
-    m_window.draw(getSprites().at(11).first);
 
     m_window.display();
 }

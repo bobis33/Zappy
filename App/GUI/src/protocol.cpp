@@ -113,12 +113,21 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
             auto player = std::find_if(gui.getPlayers().begin(), gui.getPlayers().end(),
                 [playerId](const Player &p) { return p.getId() == playerId; });
             if (player != gui.getPlayers().end()) {
+                player->setLastAction(player->getAction());
                 player->setAction(Player::Action::TAKE);
             }
         }},
         {"pdi", [](Gui &gui, const std::string &cmd) {
             std::vector<std::string> data = Protocol::parseCommand(cmd);
-            gui.removePlayer(static_cast<unsigned int>(std::stoi(data[0].substr(1, data[0].size()))));
+            int playerId = std::stoi(data[0]);
+            auto player = std::find_if(gui.getPlayers().begin(), gui.getPlayers().end(),
+                [playerId](const Player &p) { return p.getId() == playerId; });
+            if (player != gui.getPlayers().end()) {
+                player->setLastAction(player->getAction());
+                player->setAction(Player::Action::DEATH);
+            }
+            gui.removePlayer(static_cast<unsigned int>(std::stoi(data[0])));
+            // player death
         }},
         {"enw", [](Gui &gui, const std::string &cmd) {
             std::vector<std::string> data = Protocol::parseCommand(cmd);

@@ -21,6 +21,7 @@ namespace gui {
                 FEED,
                 ELEVATE,
                 TAKE,
+                DEATH,
                 NONE
             };
 
@@ -35,6 +36,7 @@ namespace gui {
             ~Player() = default;
 
             [[nodiscard]] Action getAction() const { return m_action; };
+            [[nodiscard]] Action getLastAction() const { return m_lastAction; };
             [[nodiscard]] Orientation getOrientation() const { return m_orientation; };
             [[nodiscard]] Inventory& getInventory() { return m_inventory; };
             [[nodiscard]] Position& getPosition() { return m_position; };
@@ -43,6 +45,7 @@ namespace gui {
             [[nodiscard]] std::string getTeamName() const { return m_teamName; };
 
             void setAction(const Action action) { m_action = action; };
+            void setLastAction(const Action lastAction) { m_lastAction = lastAction; };
             void setOrientation(const Orientation orientation) { m_orientation = orientation; };
             void setId(const unsigned int id) { m_id = id; };
             void setTeamName(const std::string &teamName) { m_teamName = teamName; };
@@ -50,9 +53,12 @@ namespace gui {
 
             void levelUp() { m_level++; };
 
+            int player_frame = 0;
+
         private:
 
             Action m_action{Action::NONE};
+            Action m_lastAction{Action::NONE};
             Inventory m_inventory;
             Position m_position;
             Orientation m_orientation{Orientation::NORTH};
