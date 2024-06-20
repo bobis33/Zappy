@@ -17,11 +17,16 @@ std::string gui::SFMLClient::getResponse()
     std::size_t received = 0;
     std::vector<std::array<char, MAX_OCTETS_READ>> responseList;
 
+    if (m_socket.isBlocking()) {
+        m_socket.setBlocking(false);
+    }
     while (isInIt || (received == MAX_OCTETS_READ - 1 || received == MAX_OCTETS_READ)) {
         response.fill(0);
         if (m_socket.receive(&response, MAX_OCTETS_READ, received) == sf::Socket::Done) {
             responseList.push_back(response);
             isInIt = false;
+        } else {
+            break;
         }
     }
 
