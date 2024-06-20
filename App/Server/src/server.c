@@ -13,6 +13,7 @@
 
 #include "Server/server.h"
 #include "Server/tools.h"
+#include "Server/Game/update.h"
 
 static bool open_server(server_t *server)
 {
@@ -122,13 +123,13 @@ static server_status_t loop_fds(client_t *client, server_t *server)
 
 static bool main_loop(server_t *server)
 {
-    struct timeval timeout = {1, 0};
     client_t *client = init_client_data(server->fd);
 
     while (!*stop_signal_catched()) {
+        update_game(server->game, client);
         client->read_fds = client->master_fds;
         if (select(client->max_fd + 1,
-            &client->read_fds, NULL, NULL, &timeout) < 0) {
+            &client->read_fds, NULL, NULL, &(struct timeval){1, 0}) < 0) {
             free(client);
             return true;
         }

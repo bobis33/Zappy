@@ -11,7 +11,11 @@
 #include "Server/Game/player.h"
 #include "Server/Game/clock.h"
 
-player_t *create_player(char *team_name, int id, int pos_x, int pos_y)
+player_t *create_player(
+    char *team_name,
+    int id,
+    position_t position,
+    server_clock_t *clock)
 {
     player_t *new_player = malloc(sizeof(player_t));
 
@@ -21,13 +25,13 @@ player_t *create_player(char *team_name, int id, int pos_x, int pos_y)
     new_player->id = id;
     new_player->level = 1;
     new_player->team_name = team_name;
-    new_player->position.x = pos_x;
-    new_player->position.y = pos_y;
+    new_player->position = position;
     new_player->direction = NORTH;
     for (int i = 0; i < COUNT; i++) {
         new_player->resources[i].quantity = 0;
     }
     new_player->resources[FOOD].quantity = 10;
+    new_player->clock = clock;
     new_player->action_queue = NULL;
     new_player->action_queue_tail = NULL;
     return new_player;

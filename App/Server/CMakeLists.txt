@@ -32,6 +32,7 @@ set (SOURCES_GAME
         ${SRC_DIR}/game/resource.c
         ${SRC_DIR}/game/player.c
         ${SRC_DIR}/game/egg.c
+        ${SRC_DIR}/game/update.c
 )
 
 set(SOURCES_CMD_AI
