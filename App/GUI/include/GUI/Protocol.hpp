@@ -24,13 +24,15 @@ namespace gui {
                 std::vector<std::string> dataVector;
                 std::string tmp;
                 for (const auto &c : data) {
-                    if (c == '\n' || c == ' ') {
+                    if (c == '\n' || c == ' ' || c == '\0') {
                         dataVector.push_back(tmp);
                         tmp.clear();
                     } else {
                         tmp += c;
                     }
                 }
+                if (!tmp.empty())
+                    dataVector.push_back(tmp);
                 return dataVector;
             };
 

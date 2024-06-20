@@ -11,11 +11,11 @@
 
 std::string gui::SFMLClient::getResponse()
 {
-    bool isInIt = true;
-    std::string string;
+    std::vector<std::array<char, MAX_OCTETS_READ>> responseList{};
     std::array<char, MAX_OCTETS_READ> response{};
+    std::string string = "";
     std::size_t received = 0;
-    std::vector<std::array<char, MAX_OCTETS_READ>> responseList;
+    bool isInIt = true;
 
     if (m_socket.isBlocking()) {
         m_socket.setBlocking(false);
