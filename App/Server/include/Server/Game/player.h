@@ -25,6 +25,8 @@ typedef struct player_s {
     int id;
     int fd_client;
     char *team_name;
+    __time_t food_time;
+    server_clock_t *clock;
     position_t position;
     orientation_t direction;
     resource_t resources[COUNT];
@@ -32,7 +34,11 @@ typedef struct player_s {
     action_t *action_queue_tail;
 } player_t;
 
-player_t *create_player(char *team_name, int id, int pos_x, int pos_y);
+player_t *create_player(
+    char *team_name,
+    int id,
+    position_t position,
+    server_clock_t *clock);
 action_t *create_action(action_type_t type, int duration);
 void add_action_to_player(player_t *player, action_type_t type, int duration);
 void execute_player_action(player_t *player);

@@ -50,6 +50,7 @@ static void fill_game(game_t *game, arguments_t *args)
     game->clock = malloc(sizeof(server_clock_t));
     game->clock->freq = args->freq;
     clock_gettime(CLOCK_MONOTONIC, &game->clock->value);
+    game->map_resources_clock = game->clock;
     game->max_clients = args->clients_nb;
     game->nb_teams = args->nb_teams;
     game->team_names = args->team_names;
