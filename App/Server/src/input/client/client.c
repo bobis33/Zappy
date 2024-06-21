@@ -42,7 +42,7 @@ static bool identify_client(
         tmp_team_name = strcat(tmp_team_name, "\n");
         if (strcmp(cmd, tmp_team_name) == 0) {
             client_data->identity = AI;
-            add_player(create_player(game, game->team_names[i], fd), game);
+            add_player(create_player(game->team_names[i], game, (position_t){0, 0}, fd), game); // egg position
             free(tmp_team_name);
             return false;
         }

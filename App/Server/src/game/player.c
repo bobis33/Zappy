@@ -14,9 +14,9 @@
 
 player_t *create_player(
     char *team_name,
-    int id,
+    game_t *game,
     position_t position,
-    server_clock_t *clock)
+    int fd)
 {
     player_t *new_player = malloc(sizeof(player_t));
 
@@ -33,7 +33,7 @@ player_t *create_player(
         new_player->resources[i].quantity = 0;
     }
     new_player->resources[FOOD].quantity = 10;
-    new_player->clock = clock;
+    new_player->clock = game->clock;
     new_player->action_queue = NULL;
     new_player->action_queue_tail = NULL;
     return new_player;
