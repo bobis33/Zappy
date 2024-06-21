@@ -52,7 +52,7 @@ static void fill_tiles(game_t *game)
 {
     for (int i = 0; i < game->map->width; i++) {
         for (int j = 0; j < game->map->height; j++) {
-            game->map->tiles[i][j].egg = (egg_t){-1, -1, -1, NULL, (server_clock_t){-1, -1}};
+            game->map->tiles[i][j].egg = (egg_t){-1, -1, NULL, NULL};
             game->map->tiles[i][j].pos = (position_t){i, j};
             game->map->tiles[i][j].resources[FOOD].quantity = 0;
             game->map->tiles[i][j].resources[FOOD].density = 0.5;

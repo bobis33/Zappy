@@ -9,11 +9,11 @@
 
 egg_t create_egg(
     int id,
+    server_clock_t *laid_time,
     char *team_name,
-    server_clock_t laid_time,
     position_t pos)
 {
-    egg_t egg = {id, -1, laid_time, team_name, pos};
+    egg_t egg = {id, -1, team_name, laid_time, {pos.x, pos.y}};
 
     return egg;
 }

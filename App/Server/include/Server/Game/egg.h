@@ -20,11 +20,11 @@ typedef struct egg_s {
     int player_id;
     char *team_name;
     position_t pos;
-    server_clock_t laid_time;
+    server_clock_t *laid_time;
 } egg_t;
 
 egg_t create_egg(
     int id,
-    server_clock_t laid_time,
+    server_clock_t *laid_time,
     char *team_name,
     position_t pos);
