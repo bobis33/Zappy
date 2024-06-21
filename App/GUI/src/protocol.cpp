@@ -61,7 +61,7 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
                 if (player.getId() != static_cast<unsigned int>(std::stoi(data[0]))) {
                     continue;
                 }
-                for (size_t i = 0; i < 6; i++) {
+                for (size_t i = 0; i < 7; i++) {
                     player.getInventory().setQuantity(static_cast<Resource::Type>(i), static_cast<unsigned int>(std::stoi(data[i + 3])));
                 }
             }

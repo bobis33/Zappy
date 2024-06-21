@@ -64,7 +64,7 @@ void gui::SFML::init(const std::string &name, std::pair<const unsigned int,const
         throw std::runtime_error("Failed to load texture");
     }
     addTexture(texture, "thystame");
-    if (!texture.loadFromFile("assets/textures/side_screen/egg.png")) {
+    if (!texture.loadFromFile("assets/textures/resources/egg.png")) {
         throw std::runtime_error("Failed to load texture");
     }
     addTexture(texture, "egg");
@@ -80,10 +80,6 @@ void gui::SFML::init(const std::string &name, std::pair<const unsigned int,const
         throw std::runtime_error("Failed to load texture");
     }
     addTexture(texture, "border");
-    if (!texture.loadFromFile("assets/textures/side_screen/egg.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "egg");
     if (!texture.loadFromFile("assets/textures/side_screen/food.png")) {
         throw std::runtime_error("Failed to load texture");
     }
@@ -112,6 +108,10 @@ void gui::SFML::init(const std::string &name, std::pair<const unsigned int,const
         throw std::runtime_error("Failed to load texture");
     }
     addTexture(texture, "thystame");
+    if (!texture.loadFromFile("assets/textures/side_screen/egg.png")) {
+        throw std::runtime_error("Failed to load texture");
+    }
+    addTexture(texture, "egg");
     if (!texture.loadFromFile("assets/textures/idle.png")) {
         throw std::runtime_error("Failed to load texture");
     }
@@ -175,7 +175,7 @@ bool gui::SFML::checkConnection(sf::Clock clock)
     return true;
 }
 
-void gui::SFML::render(Map &map, std::vector<Egg> &egg, std::vector<Player> &player)
+void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &players)
 {
     m_window.clear({0, 0, 0, 0});
     std::vector<float> spritesAspectRatio;
@@ -204,14 +204,16 @@ void gui::SFML::render(Map &map, std::vector<Egg> &egg, std::vector<Player> &pla
             float tilePosY = static_cast<float>(tile.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width;
             getSprites().at(0).first.setPosition(tilePosX, tilePosY);
             m_window.draw(getSprites().at(0).first);
-            for (auto &egg : egg) {
+
+            for (auto &egg : eggs) {
                 getSprites().at(8).first.setPosition(
                     static_cast<float>(egg.getY()) * getSprites().at(0).first.getGlobalBounds().height,
                     static_cast<float>(egg.getX()) * getSprites().at(0).first.getGlobalBounds().width);
                 if (!egg.isDead())
                     m_window.draw(getSprites().at(8).first);
             }
-            for (auto &player : player) {
+
+            for (auto &player : players) {
                 if (player.getAction() == Player::Action::NONE) {
                     getSprites().at(9).first.setPosition(
                         static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height,
@@ -237,8 +239,18 @@ void gui::SFML::render(Map &map, std::vector<Egg> &egg, std::vector<Player> &pla
 
                 getSprites().at(11).first.setPosition(tilePosX, tilePosY);
                 const auto& resources = tile.getInventory().resources;
-                float resourcePosX = static_cast<float>(map.getWidth() * getSprites().at(0).first.getGlobalBounds().width) + 20.0f;
-                float resourcePosY = static_cast<float>(map.getHeight() * getSprites().at(0).first.getGlobalBounds().height) / 2.0f - 200.0f;
+                float resourcePosX = static_cast<float>(map.getWidth() * getSprites().at(0).first.getGlobalBounds().width);
+                float resourcePosY = static_cast<float>(map.getHeight() / getSprites().at(0).first.getGlobalBounds().height) + 60.0f;
+
+                sf::Text resourceTitle;
+                sf::Font someFont;
+                someFont.loadFromFile("assets/fonts/pixel.ttf");
+                resourceTitle.setFont(someFont);
+                resourceTitle.setString("Tile " + std::to_string(tile.getPosition().x) + " " + std::to_string(tile.getPosition().y));
+                resourceTitle.setCharacterSize(24);
+                resourceTitle.setFillColor(sf::Color::White);
+                resourceTitle.setPosition(resourcePosX + (10.0f * scaleFactor), resourcePosY - 15.0f * scaleFactor);
+                m_window.draw(resourceTitle);
 
                 for (size_t i = 0; i < resources.size(); i++) {
                     if (resources[i].quantity >= 0) {
@@ -247,24 +259,83 @@ void gui::SFML::render(Map &map, std::vector<Egg> &egg, std::vector<Player> &pla
                         someFont.loadFromFile("assets/fonts/pixel.ttf");
                         resourceText.setFont(someFont);
                         resourceText.setString(std::to_string(resources[i].quantity) + "x ");
-                        resourceText.setCharacterSize(24);
+                        resourceText.setCharacterSize(20);
                         resourceText.setFillColor(sf::Color::White);
-                        resourceText.setPosition(resourcePosX + 40.0f * scaleFactor, resourcePosY + 20.0f * scaleFactor);
-
+                        resourceText.setPosition(resourcePosX + 40.0f * scaleFactor, resourcePosY + (10.0f * scaleFactor));
                         m_window.draw(resourceText);
-                        getSprites().at(i + 13).first.setPosition(resourcePosX + 55.0f * scaleFactor, resourcePosY + 15.0f * scaleFactor);
-                        m_window.draw(getSprites().at(i + 13).first);
 
-                        resourcePosY += 20.0f * scaleFactor;
+                        resourceText.setString(getSprites().at(i + 12).second);
+                        resourceText.setPosition(resourcePosX + 80.0f * scaleFactor, resourcePosY + (10.0f * scaleFactor));
+                        m_window.draw(resourceText);
+
+                        getSprites().at(i + 12).first.setPosition(resourcePosX + 60.0f * scaleFactor, resourcePosY + 5.0f * scaleFactor);
+                        m_window.draw(getSprites().at(i + 12).first);
+
+                        resourcePosY += 15.0f * scaleFactor;
+                    }
+                }
+
+                for (auto &player : players) {
+                    if (mousePosition.x >= static_cast<int>(player.getPosition().y * getSprites().at(0).first.getGlobalBounds().height) &&
+                        mousePosition.x < static_cast<int>((player.getPosition().y + 1) * getSprites().at(0).first.getGlobalBounds().height) &&
+                        mousePosition.y >= static_cast<int>(player.getPosition().x * getSprites().at(0).first.getGlobalBounds().width) &&
+                        mousePosition.y < static_cast<int>((player.getPosition().x + 1) * getSprites().at(0).first.getGlobalBounds().width)) {
+
+                        sf::Text playerText;
+                        sf::Font someFont;
+                        someFont.loadFromFile("assets/fonts/pixel.ttf");
+                        playerText.setFont(someFont);
+                        playerText.setString("Player " + std::to_string(player.getId()) + " - Level " + std::to_string(player.getLevel()) + " - " + player.getTeamName());
+                        playerText.setCharacterSize(24);
+                        playerText.setFillColor(sf::Color::White);
+                        playerText.setPosition(resourcePosX + 10.0f * scaleFactor, resourcePosY + 20.0f * scaleFactor);
+                        m_window.draw(playerText);
+
+                        const auto& playerInventory = player.getInventory().resources;
+
+                        // std::cout << players.at(0).getInventory().resources.size() << std::endl;
+
+                        // float playerInventoryPosY = resourcePosY + 45.0f * scaleFactor;
+                        // for (size_t j = 0; j < playerInventory.size(); j++) {
+                        //     if (playerInventory[j].quantity >= 0) {
+                        //         sf::Text playerInventoryText;
+                        //         playerInventoryText.setFont(someFont);
+                        //         playerInventoryText.setString(std::to_string(playerInventory[j].quantity) + "x ");
+                        //         playerInventoryText.setCharacterSize(20);
+                        //         playerInventoryText.setFillColor(sf::Color::White);
+                        //         playerInventoryText.setPosition(resourcePosX + 40.0f * scaleFactor, playerInventoryPosY + (10.0f * scaleFactor));
+                        //         m_window.draw(playerInventoryText);
+
+                        //         playerInventoryText.setString(getSprites().at(j + 12).second);
+                        //         playerInventoryText.setPosition(resourcePosX + 80.0f * scaleFactor, playerInventoryPosY + (10.0f * scaleFactor));
+                        //         m_window.draw(playerInventoryText);
+
+                        //         getSprites().at(j + 12).first.setPosition(resourcePosX + 60.0f * scaleFactor, playerInventoryPosY + 5.0f * scaleFactor);
+                        //         m_window.draw(getSprites().at(j + 12).first);
+
+                        //         playerInventoryPosY += 15.0f * scaleFactor;
+                        //     }
+                        // }
+                    }
+                }
+
+                for (const auto &egg : eggs) {
+                    if (mousePosition.x >= static_cast<int>(egg.getY() * getSprites().at(0).first.getGlobalBounds().height) &&
+                        mousePosition.x < static_cast<int>((egg.getY() + 1) * getSprites().at(0).first.getGlobalBounds().height) &&
+                        mousePosition.y >= static_cast<int>(egg.getX() * getSprites().at(0).first.getGlobalBounds().width) &&
+                        mousePosition.y < static_cast<int>((egg.getX() + 1) * getSprites().at(0).first.getGlobalBounds().width)) {
+
+                        getSprites().at(19).first.setPosition(resourcePosX + 45.0f * scaleFactor, resourcePosY + 9.0f * scaleFactor);
+                        m_window.draw(getSprites().at(19).first);
                     }
                 }
             }
 
             const auto& resources = tile.getInventory().resources;
-            for (size_t i = 0; i < 7; i++) {
-                if (resources[i].quantity > 0) {
-                    getSprites().at(i + 1).first.setPosition(tilePosX, tilePosY);
-                    m_window.draw(getSprites().at(i + 1).first);
+            for (size_t inv = 0; inv < 7; inv++) {
+                if (resources[inv].quantity > 0) {
+                    getSprites().at(inv + 1).first.setPosition(tilePosX, tilePosY);
+                    m_window.draw(getSprites().at(inv + 1).first);
                 }
             }
         }
@@ -272,13 +343,13 @@ void gui::SFML::render(Map &map, std::vector<Egg> &egg, std::vector<Player> &pla
     //draw border
     m_window.draw(getSprites().at(11).first);
 
-    for (auto& player : player) {
+    for (auto& player : players) {
         if (playerClock.getElapsedTime().asSeconds() > 0.1) {
             if (player.getAction() != player.getLastAction() && player.getAction() != Player::Action::NONE) {
                 player.player_frame = 1;
                 std::cout << "proc" << std::endl;
                 player.setLastAction(player.getAction());
-            } 
+            }
             player.player_frame++;
             if (player.player_frame > 4) {
                 player.player_frame = 0;
@@ -293,8 +364,8 @@ void gui::SFML::render(Map &map, std::vector<Egg> &egg, std::vector<Player> &pla
     }
 
     if (!mouseOnTile) {
-        float titlePosX = static_cast<float>(map.getWidth() * getSprites().at(0).first.getGlobalBounds().width) + 130.0f;
-        float titlePosY = static_cast<float>(map.getHeight() * getSprites().at(0).first.getGlobalBounds().height) / 2.0f - 50.0f;
+        float titlePosX = static_cast<float>(static_cast<float>(map.getWidth()) * getSprites().at(0).first.getGlobalBounds().width) + 130.0f;
+        float titlePosY = static_cast<float>(static_cast<float>(map.getHeight()) * getSprites().at(0).first.getGlobalBounds().height) / 2.0f - 50.0f;
 
         sf::Text titleText;
         sf::Font titleFont;
@@ -307,7 +378,6 @@ void gui::SFML::render(Map &map, std::vector<Egg> &egg, std::vector<Player> &pla
 
         m_window.draw(titleText);
     }
-
 
     m_window.display();
 }
