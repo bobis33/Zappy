@@ -20,6 +20,12 @@ class Action(Enum):
     INCANTATION = "Incantation"
     NO_DETECTED_OBJECT = "No object"
 
+class Broadcast(Enum):
+    WANT_INCANTATION = "I'm ready to level up"
+    CONNECTED = "My authenticated connection is established"
+    DEAD = "I dead"
+    FOUND_FOOD = "I found a food "
+
 class ActionStatus(Enum):
     SUCCESS = "Success"
     FAILURE = "Failure"
@@ -34,7 +40,8 @@ class Bot:
 
     def __init__(self, command: list[Object] = 0):
         self.command = command
-        self.stones = Stones(0,0,0,0,0,0,1)
+        self.stones = None
+
 
     def make_action(self, action : Action, target: Optional[Union[str, Object]] = None) -> ActionStatus:
         if action == Action.FORWARD:
@@ -67,7 +74,8 @@ class Bot:
         except Exception as e:
             return "An error occurred"
 
-    def parse_command(self, command: str) -> Action:
+    def parse_command(self, command: str, current_level) -> Action:
+        self.stones = Stones(0, 0, 0, 0, 0, 0, current_level)
         words = command.split()
         if "Incantation" in self.read_incantation():
             self.delete_incantion()

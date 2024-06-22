@@ -9,7 +9,7 @@ from src.Players.Analysis import Analysis
 import os
 import time
 import csv
-import threading
+import select
 
 class REQUEST(Enum):
     TRUE = 1
@@ -31,26 +31,9 @@ class TCPClient:
         self.connect_nbr = -1
         self.analyse = Analysis()
         self.client =  {}
-        self.thread = []
-        self.broadcast_channel = []
-        self.client_num = None
-        self.lock = threading.Lock()
 
     def is_connected(self) -> bool:
         return self.sockfd is not None
-
-    def broadcast_message_to_all_clients(self, message: str, sender : int):
-        for client_num in self.client:
-            if client_num != sender:
-                self.handle_client(client_num, message)
-
-    def handle_client(self, client_num, message=None):
-        while True:
-            with self.lock:
-                if message or self.broadcast_channel:
-                    message = message or self.broadcast_channel.pop(0)
-                    print(f"Client : {client_num} received message: {message}")
-                    break
 
     def readCsv(self, filename):
         with open(filename, mode='r') as f:
@@ -62,9 +45,6 @@ class TCPClient:
                     'STATUS': row['STATUS'],
                     'SOCKET' : socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 }
-                t = threading.Thread(target=self.handle_client, args=(int(row['CLIENT-NUM']),))
-                t.start()
-                self.thread.append(t)
 
     def connect(self):
         self.name = self.name.replace('\n', '')
@@ -142,23 +122,11 @@ class TCPClient:
         response = self.receive()
         return response
 
-    def get_message_from_server(self) -> Optional[str]:
-        return self.message
-
-    def set_message_from_server(self, message) -> None:
-        self.message = message
-
     def getLevel(self) -> int:
         return self.level
 
-    def setLevel(self, level) -> None:
-        self.level = level
-
     def getTeams(self) -> str:
         return self.team
-
-    def setTeams(self, teams) -> None:
-        self.team = teams
 
     def write_file(self):
         with open('bot.txt', 'w') as file:
@@ -205,13 +173,9 @@ class TCPClient:
             lines = f.readlines()
         return len(lines) - 1
 
-    def broadcast(self, text):
-        for client in self.thread:
-            client.send(text)
-
-    def running_bot(self, debug : bool) -> None:
+    def running_bot(self, debug: bool) -> None:
         counter = 0
-        command = None
+        command = ""
 
         def command_callback(cmd):
             nonlocal command
@@ -224,38 +188,75 @@ class TCPClient:
                         time.sleep(10)
                         line = "Look\n"
                         self.delete_file('bot.txt')
-                        counter = counter + 1
                     else:
                         line = "Look\n"
                 else:
-                    line = command + "\n"
+                    cmd = command
+                    line = cmd + "\n"
+
+                selector = [self.sockfd]
+                readable, _, exceptional = select.select(selector, [], selector, 1)
+
+                for s in readable:
+                    if s is self.sockfd:
+                        recv_line = s.recv(1024).decode()
+                        if not recv_line:
+                            print("Server closed connection")
+                            self.request = 0
+                            break
+                        parser = recv_line.split(",")
+                        if len(parser) > 1:
+                            print(f"Client {self.get_current_client_id()} has received from server the message {parser[1]}")
+
                 if not self.handle_request(line):
                     break
+
                 if self.command is not None:
-                    result_dict = self.command.createList(debug)
-                    self.analyse.analyse_cases(result_dict,debug, command_callback)
+                    result_dict, command = self.command.createList(debug, self.getLevel())
+                    self.analyse.analyse_cases(result_dict, debug, command_callback, self.getLevel())
+                counter += 1
+
             except EOFError:
                 self.request = 0
-            counter += 1
-
+            except Exception as e:
+                print(f"An error occurred: {e}")
+                self.request = 0
     def get_clientConnected(self):
         return self.connect_nbr
     
     def get_current_client_id(self) -> str:
         return self.client_num
 
-    def running_debug(self, debug : bool) -> None:
+    def running_debug(self, debug: bool) -> None:
+        selector = [self.sockfd, sys.stdin]
+
         while self.request == 1:
             try:
-                line = input("Enter command : ") + "\n"
-                if not self.handle_request(line):
-                    break
-                if "Broadcast" in line:
-                    cast = line.split()
-                    self.broadcast_message_to_all_clients(cast[1], sender=int(self.get_current_client_id()))
+                readable, _, exceptional = select.select(selector, [], [])
+                for s in readable:
+                    if s is self.sockfd:
+                        line = s.recv(1024).decode()
+                        if not line:
+                            print("Server closed connection")
+                            self.request = 0
+                            break
+                        parser = line.split(",")
+                        if len(parser) > 1:
+                            print(
+                                f"Client {self.get_current_client_id()} received message from server: {parser[1]}"
+                            )
+                    elif s is sys.stdin:
+                        line = sys.stdin.readline().strip() + "\n"
+                        if not self.handle_request(line):
+                            self.request = 0
+                            break
+
                 if self.command is not None:
-                    result_dict = self.command.createList(debug)
+                    result_dict = self.command.createList(debug, self.getLevel())
             except EOFError:
+                self.request = 0
+            except Exception as e:
+                print(f"An error occurred: {e}")
                 self.request = 0
 
     def run(self, debug: bool) -> None:

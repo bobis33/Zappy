@@ -4,6 +4,8 @@ from src.Players.Inventory import InventoryIteam
 from src.Players.Level import LevelRequirements
 from src.Bot.Bot import Bot, Action, ActionStatus
 import logging
+import math
+import random
 
 class Analysis:
 
@@ -16,16 +18,7 @@ class Analysis:
         self.bot = Bot()
 
     def calculate_distance(self, nb_case):
-        case_to_distance = {
-            0: 0,
-            2: 1,
-            1: 2, 3: 2, 6: 2,
-            5: 3, 12: 3, 7: 3,
-            4: 4, 8: 4, 13: 4, 11: 4,
-            10: 5, 14: 5,
-            9: 6, 15: 6
-        }
-        return case_to_distance.get(nb_case, -1)
+        return math.floor(math.sqrt(nb_case))
 
     def calculate_importance(self, dist_case, item_count, multiplier):
         return (dist_case + 1) * 5 + ((item_count + 1) / 2) * multiplier
@@ -50,24 +43,18 @@ class Analysis:
 
         if importance < self.mostImportItem[1]:
             self.mostImportItem = (item, importance, nb_case)
-
-
-        if importance < self.mostImportItem[1]:
-            self.mostImportItem = (item, nb_case)
-
     def choose_direction(self, item):
         if item[2] == 1 or item[2] == 4 or item[2] == 9:
             return "Left"
         elif item[2] == 3 or item[2] == 8 or item[2] == 15:
             return "Right"
         else:
-            return "error"
+            return "Forward"
 
     def choose_action(self, item, last_item):
         result = []
         if self.mostImportItem[1] > self.lastMoreimportItem[1]:
             result.append(str(self.choose_direction(self.lastMoreimportItem)))
-            self.lastMoreimportItem = ("no item", 1000, 0)
         else:
             if self.mostImportItem[2] == 0:
                 result.append("Take " + str(self.mostImportItem[0]))
@@ -82,7 +69,7 @@ class Analysis:
         else:
             self.lastMoreimportItem = ("no item", 1000, 0)
 
-    def analyse_cases(self, dictal, debug, callback):
+    def analyse_cases(self, dictal, debug, callback, current_level : int):
         self.lastMoreimportItem = self.mostImportItem
         self.upgrade_last_more_important_item()
         self.mostImportItem = ("no item", 1000, 0)
@@ -93,11 +80,11 @@ class Analysis:
         action = self.choose_action(self.mostImportItem, self.lastMoreimportItem)
         command = action[0]
 
-        command = self.bot.parse_command(command)
+        command = self.bot.parse_command(command, current_level)
         if command == "Take no":
-            print(command)
-            command = "Forward"
+            command = random.choice(["Left", "Right"])
         print("--------- COMMAND ---------")
         print(command.center(28))
         print("---------------------------")
         callback(command)
+        return command
