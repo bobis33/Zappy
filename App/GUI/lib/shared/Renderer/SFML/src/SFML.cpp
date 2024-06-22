@@ -257,17 +257,17 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
                         resourceText.setString(std::to_string(resources[i].quantity) + "x ");
                         resourceText.setCharacterSize(20);
                         resourceText.setFillColor(sf::Color::White);
-                        resourceText.setPosition(resourcePosX + 40.0f * scaleFactor, resourcePosY + (10.0f * scaleFactor));
+                        resourceText.setPosition(resourcePosX + 50.0f, resourcePosY + 35.0f);
                         m_window.draw(resourceText);
 
                         resourceText.setString(getSprites().at(i + 12).second);
-                        resourceText.setPosition(resourcePosX + 80.0f * scaleFactor, resourcePosY + (10.0f * scaleFactor));
+                        resourceText.setPosition(resourcePosX + 150.0f, resourcePosY + 35.0f);
                         m_window.draw(resourceText);
 
-                        getSprites().at(i + 12).first.setPosition(resourcePosX + 60.0f * scaleFactor, resourcePosY + 5.0f * scaleFactor);
+                        getSprites().at(i + 12).first.setPosition(resourcePosX + 100.0f, resourcePosY + 15.0f);
                         m_window.draw(getSprites().at(i + 12).first);
 
-                        resourcePosY += 15.0f * scaleFactor;
+                        resourcePosY += 35.0f;
                     }
                 }
 
@@ -284,6 +284,39 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
                         playerText.setFillColor(sf::Color::White);
                         playerText.setPosition(resourcePosX + 10.0f * scaleFactor, resourcePosY + 20.0f * scaleFactor);
                         m_window.draw(playerText);
+                        if (player.getAction() == Player::Action::NONE) {
+                            getSprites().at(9).first.setPosition(resourcePosX + 150.0f * scaleFactor, resourcePosY + 30.0f * scaleFactor);
+                            m_window.draw(getSprites().at(9).first);
+                        } else if (player.getAction() == Player::Action::TAKE) {
+                            getSprites().at(10).first.setPosition(resourcePosX + 150.0f * scaleFactor, resourcePosY + 30.0f * scaleFactor);
+                            m_window.draw(getSprites().at(10).first);
+                        } else if (player.getAction() == Player::Action::DEATH) {
+                            getSprites().at(21).first.setPosition(resourcePosX + 150.0f * scaleFactor, resourcePosY + 30.0f * scaleFactor);
+                            m_window.draw(getSprites().at(20).first);
+                        } else if (player.getAction() == Player::Action::MOVE) {
+                            getSprites().at(21).first.setPosition(resourcePosX + 150.0f * scaleFactor, resourcePosY + 30.0f * scaleFactor);
+                            m_window.draw(getSprites().at(21).first);
+                        }
+
+                        const auto& playerInventory = player.getInventory().resources;
+
+                        float playerInventoryPosY = resourcePosY + 45.0f * scaleFactor;
+                        for (size_t j = 0; j < playerInventory.size(); j++) {
+                            if (playerInventory[j].quantity >= 0) {
+                                sf::Text playerInventoryText;
+                                playerInventoryText.setFont(someFont);
+                                playerInventoryText.setString(std::to_string(playerInventory[j].quantity) + "x ");
+                                playerInventoryText.setCharacterSize(20);
+                                playerInventoryText.setFillColor(sf::Color::White);
+                                playerInventoryText.setPosition(resourcePosX + 40.0f * scaleFactor, playerInventoryPosY + (10.0f * scaleFactor));
+                                m_window.draw(playerInventoryText);
+
+                                getSprites().at(j + 12).first.setPosition(resourcePosX + 60.0f * scaleFactor, playerInventoryPosY + 5.0f * scaleFactor);
+                                m_window.draw(getSprites().at(j + 12).first);
+
+                                playerInventoryPosY += 15.0f * scaleFactor;
+                            }
+                        }
                     }
                 }
 
@@ -342,7 +375,7 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
         titleFont.loadFromFile("assets/fonts/pixel.ttf");
         noMouseOnTile.setFont(titleFont);
         noMouseOnTile.setString("Zappy");
-        noMouseOnTile.setCharacterSize(static_cast<unsigned int>(30 * scaleFactor));
+        noMouseOnTile.setCharacterSize(100);
         noMouseOnTile.setFillColor(sf::Color::White);
         noMouseOnTile.setPosition(titlePosX, titlePosY);
         m_window.draw(noMouseOnTile);
