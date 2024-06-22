@@ -14,8 +14,8 @@
 #include "Server/Game/position.h"
 
 typedef struct tile_s {
-    position_t pos;
-    resource_t resources[COUNT];
+    position_t *pos;
+    resource_t *resources[COUNT];
     egg_t egg;
 } tile_t;
 

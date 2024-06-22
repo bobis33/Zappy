@@ -18,6 +18,7 @@ typedef enum action_type_s {
 typedef struct action_s {
     action_type_t type;
     int duration;
+    char *msg;
     server_clock_t *clock;
 
     struct action_s *next;

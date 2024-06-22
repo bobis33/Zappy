@@ -129,7 +129,7 @@ static bool main_loop(server_t *server)
         update_game(server->game, client);
         client->read_fds = client->master_fds;
         if (select(client->max_fd + 1,
-            &client->read_fds, NULL, NULL, &(struct timeval){1, 0}) < 0) {
+            &client->read_fds, NULL, NULL, &(struct timeval){0, 0}) < 0) {
             free(client);
             return true;
         }

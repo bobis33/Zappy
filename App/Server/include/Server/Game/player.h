@@ -34,8 +34,12 @@ typedef struct player_s {
     action_t *action_queue_tail;
 } player_t;
 
-action_t *create_action(action_type_t type, int duration);
-void add_action_to_player(player_t *player, action_type_t type, int duration);
+action_t *create_action(action_type_t type, int duration, char *msg, int freq);
+void add_action_to_player(
+    player_t *player,
+    action_type_t type,
+    char *msg,
+    int duration);
 void execute_player_action(player_t *player);
 bool is_current_action_done(player_t *player);
 

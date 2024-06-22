@@ -33,7 +33,7 @@ void add_resource(map_t *map, resource_t resource);
 void distribute_resources(game_t *game);
 void add_player(player_t *player, game_t *game);
 player_t *create_player(
-        char *team_name,
-        game_t *game,
-        position_t position,
-        int fd);
+    char *team_name,
+    game_t *game,
+    position_t position,
+    int fd);

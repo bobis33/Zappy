@@ -58,9 +58,11 @@ static bool init_player(game_t *game)
 static void fill_game(game_t *game, arguments_t *args)
 {
     game->clock = malloc(sizeof(server_clock_t));
+    game->map_resources_clock = malloc(sizeof(server_clock_t));
     game->clock->freq = args->freq;
+    game->map_resources_clock->freq = args->freq;
     clock_gettime(CLOCK_MONOTONIC, &game->clock->value);
-    game->map_resources_clock = game->clock;
+    clock_gettime(CLOCK_MONOTONIC, &game->map_resources_clock->value);
     game->max_clients = args->clients_nb;
     game->nb_teams = args->nb_teams;
     game->team_names = args->team_names;

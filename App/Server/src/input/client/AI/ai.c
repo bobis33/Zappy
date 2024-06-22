@@ -10,7 +10,7 @@
 #include "Server/cmd_ai_client.h"
 
 static const cmd_ai_client_t cmd_ai[] = {
-    {"Forward\r\n", cmd_forward},
+    {"Forward\n", cmd_forward},
     {"Right\n", cmd_right},
     {"Left\n", cmd_left},
     {"Look\n", cmd_look},

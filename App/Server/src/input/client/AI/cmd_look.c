@@ -5,28 +5,11 @@
 ** cmd_look
 */
 
-#include "Server/cmd_ai_client.h"
 #include <string.h>
 
-static void look_west(player_t *player, game_t *game)
-{
-    (void)game;
-    print_msg(player->fd_client, "ok\n");
-}
+#include "Server/cmd_ai_client.h"
 
-static void look_east(player_t *player, game_t *game)
-{
-    (void)game;
-    print_msg(player->fd_client, "ok\n");
-}
-
-static void look_south(player_t *player, game_t *game)
-{
-    (void)game;
-    print_msg(player->fd_client, "ok\n");
-}
-
-const char *resource_type_to_string(resource_type_t type)
+static const char *resource_type_to_string(resource_type_t type)
 {
     switch (type) {
         case FOOD:
@@ -48,57 +31,115 @@ const char *resource_type_to_string(resource_type_t type)
     }
 }
 
-static void look_north(player_t *player, game_t *game)
+static void get_tile_resources(char *msg, tile_t *tile)
 {
-    print_msg(player->fd_client, "[");
-    int first_tile = 1;
-    for (int i = 0; i <= player->level; ++i) {
-        for (int j = -i; j <= i; ++j) {
-            int tile_y = (player->position.y - i + game->map->height) % game->map->height;
-            int tile_x = (player->position.x + j + game->map->width) % game->map->width;
-            tile_t *tile = &game->map->tiles[tile_y][tile_x];
-            if (!first_tile) {
-                print_msg(player->fd_client, ", ");
-            }
-            int first_resource = 1;
-            char tile_contents[1024] = {0};
-            printf("tile is (%d, %d)\n", tile_x, tile_y);
-            for (int k = 0; k < COUNT; ++k) {
-                if (tile->resources[k].quantity > 0) {
-                    if (!first_resource) {
-                        strcat(tile_contents, " ");
-                    }
-                    strcat(tile_contents, resource_type_to_string(tile->resources[k].type));
-                    first_resource = 0;
-                }
-            }
-            if (strlen(tile_contents) == 0) {
-                strcat(tile_contents, "");
-            }
-            print_msg(player->fd_client, tile_contents);
-            first_tile = 0;
+    for (int i = 0; i < 7; i++) {
+        if (tile->resources[i]->quantity < 0) {
+            continue;
+        }
+        for (int j = 0; j < tile->resources[i]->quantity; j++) {
+            strcat(msg, " ");
+            strcat(msg, resource_type_to_string(tile->resources[i]->type));
         }
     }
-    print_msg(player->fd_client, "]\n");
+}
+
+static void get_adjacent_tile_resources(char *msg, game_t *game, int x, int y)
+{
+    if (x < 0) {
+        x += game->map->width;
+    } else if (x >= game->map->width) {
+        x -= game->map->width;
+    }
+    if (y < 0) {
+        y += game->map->height;
+    } else if (y >= game->map->height) {
+        y -= game->map->height;
+    }
+    strcat(msg, ",");
+    for (int i = 0; i < game->map->height * game->map->width; i++) {
+        if (game->map->tiles[i]->pos->x == x &&
+            game->map->tiles[i]->pos->y == y) {
+            get_tile_resources(msg, game->map->tiles[i]);
+            break;
+        }
+    }
+}
+
+static void look_direction(
+    player_t *player,
+    game_t *game,
+    int dx[3],
+    int dy[3])
+{
+    char msg[10240];
+    int x = player->position.x;
+    int y = player->position.y;
+
+    msg[0] = '\0';
+    strcat(msg, "[player");
+    for (int i = 0; i < game->map->height * game->map->width; i++) {
+        if (game->map->tiles[i]->pos->x == x &&
+            game->map->tiles[i]->pos->y == y) {
+            get_tile_resources(msg, game->map->tiles[i]);
+            break;
+        }
+    }
+    for (int i = 0; i < 3; i++) {
+        get_adjacent_tile_resources(msg, game, x + dx[i], y + dy[i]);
+    }
+    strcat(msg, "]\n");
+    add_action_to_player(player, ACTION, msg, 7);
+}
+
+static void look_north(player_t *player, game_t *game)
+{
+    int dx[3] = {-1, 0, 1};
+    int dy[3] = {-1, -1, -1};
+
+    look_direction(player, game, dx, dy);
+}
+
+static void look_south(player_t *player, game_t *game)
+{
+    int dx[3] = {-1, 0, 1};
+    int dy[3] = {1, 1, 1};
+
+    look_direction(player, game, dx, dy);
+}
+
+static void look_east(player_t *player, game_t *game)
+{
+    int dx[3] = {1, 1, 1};
+    int dy[3] = {-1, 0, 1};
+
+    look_direction(player, game, dx, dy);
+}
+
+static void look_west(player_t *player, game_t *game)
+{
+    int dx[3] = {-1, -1, -1};
+    int dy[3] = {-1, 0, 1};
+
+    look_direction(player, game, dx, dy);
 }
 
 void cmd_look(player_t *player, game_t *game)
 {
-    switch (player->direction) {
-        case NORTH:
-            look_north(player, game);
+    static struct {
+        orientation_t direction;
+        void (*look_func)(player_t *player, game_t *game);
+    } look_functions[] = {
+            {NORTH, look_north},
+            {EAST, look_east},
+            {SOUTH, look_south},
+            {WEST, look_west},
+    };
+
+    for (int i = 0; i < 4; i++) {
+        if (look_functions[i].direction == player->direction) {
+            look_functions[i].look_func(player, game);
             break;
-        case SOUTH:
-            look_south(player, game);
-            break;
-        case EAST:
-            look_east(player, game);
-            break;
-        case WEST:
-            look_west(player, game);
-            break;
-        default:
-            print_msg(player->fd_client, "ko\n");
-            break;
+        }
     }
 }

@@ -47,7 +47,7 @@ int main(const int argc, char *const argv[])
     arguments_t *args = NULL;
     struct sigaction sigIntHandler = {0};
 
-    srand(time(NULL));
+    srand(rand());
     sigIntHandler.sa_handler = my_handler;
     sigemptyset(&sigIntHandler.sa_mask);
     sigaction(SIGINT, &sigIntHandler, NULL);

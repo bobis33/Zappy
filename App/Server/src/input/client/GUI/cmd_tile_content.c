@@ -22,7 +22,7 @@ void cmd_tile_content(const int fd, char **cmd, game_t *game)
     print_msg(fd, "bct ");
     for (int i = 0; i < COUNT; i++) {
         sprintf(content, "%d",
-            game->map->tiles[height][width].resources[i].quantity);
+            game->map->tiles[height][width].resources[i]->quantity);
         print_msg(fd, content);
         if (i < COUNT - 1)
             print_msg(fd, " ");

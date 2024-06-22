@@ -14,7 +14,7 @@ static void display_tile_content(int fd, game_t *game, int width, int height)
 
     for (int i = 0; i < COUNT; i++) {
         sprintf(content, "%d",
-            game->map->tiles[height][width].resources[i].quantity);
+            game->map->tiles[height][width].resources[i]->quantity);
         print_msg(fd, content);
         if (i < COUNT - 1)
             print_msg(fd, " ");

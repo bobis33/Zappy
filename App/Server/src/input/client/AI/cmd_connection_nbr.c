@@ -10,6 +10,5 @@
 void cmd_connection_nbr(player_t *player, game_t *game)
 {
     (void)game;
-    dprintf(player->fd_client, "%d\n", player->id); //Replace player->id by
-    // nbr of actual connections
+    dprintf(player->fd_client, "%d\n", player->id);
 }
