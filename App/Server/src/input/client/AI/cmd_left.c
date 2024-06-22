@@ -24,7 +24,7 @@ void cmd_left(player_t *player, game_t *game)
             rotate_south(player);
             break;
         default:
-            print_msg(player->fd_client, "ko\n");
+            add_action_to_player(player, ACTION, "ko\n", 7);
             return;
     }
 }

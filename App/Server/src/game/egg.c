@@ -13,7 +13,7 @@ egg_t create_egg(
     char *team_name,
     position_t pos)
 {
-    egg_t egg = {id, -1, team_name, laid_time, {pos.x, pos.y}};
+    egg_t egg = {id, -1, team_name, {pos.x, pos.y}, laid_time};
 
     return egg;
 }

@@ -11,44 +11,44 @@ static void move_upper(game_t *game, player_t *player)
 {
     if (player->position.y == 0) {
         player->position.y = game->map->height - 1;
-        print_msg(player->fd_client, "ok\n");
+        add_action_to_player(player, ACTION, "ok\n", 7);
         return;
     }
     player->position.y--;
-    print_msg(player->fd_client, "ok\n");
+    add_action_to_player(player, ACTION, "ok\n", 7);
 }
 
 static void move_lower(game_t *game, player_t *player)
 {
     if (player->position.y == game->map->height - 1) {
         player->position.y = 0;
-        print_msg(player->fd_client, "ok\n");
+        add_action_to_player(player, ACTION, "ok\n", 7);
         return;
     }
     player->position.y++;
-    print_msg(player->fd_client, "ok\n");
+    add_action_to_player(player, ACTION, "ok\n", 7);
 }
 
 static void move_right(game_t *game, player_t *player)
 {
     if (player->position.x == game->map->width - 1){
         player->position.x = 0;
-        print_msg(player->fd_client, "ok\n");
+        add_action_to_player(player, ACTION, "ok\n", 7);
         return;
     }
     player->position.x++;
-    print_msg(player->fd_client, "ok\n");
+    add_action_to_player(player, ACTION, "ok\n", 7);
 }
 
 static void move_left(game_t *game, player_t *player)
 {
     if (player->position.x == 0) {
         player->position.x = game->map->width - 1;
-        print_msg(player->fd_client, "ok\n");
+        add_action_to_player(player, ACTION, "ok\n", 7);
         return;
     }
     player->position.x--;
-    print_msg(player->fd_client, "ok\n");
+    add_action_to_player(player, ACTION, "ok\n", 7);
 }
 
 void cmd_forward(player_t *player, game_t *game)
@@ -67,7 +67,7 @@ void cmd_forward(player_t *player, game_t *game)
             move_left(game, player);
             break;
         default:
-            print_msg(player->fd_client, "ko\n");
+            add_action_to_player(player, ACTION, "ko\n", 7);
             return;
     }
 }

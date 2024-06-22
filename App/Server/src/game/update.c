@@ -44,8 +44,15 @@ static void update_player_food(game_t *game, client_t *clients, int index)
     for (int j = 0; j < MAX_CLIENTS; j++) {
         if (clients->clients[j].fd == ERROR)
             continue;
+        if (clients->clients[j].fd == game->players[index]->fd_client) {
+            dprintf(clients->clients[j].fd, "dead\n");
+            clients->clients[j].fd = -1;
+            game->players[index]->fd_client = -1;
+        } else {
+            dprintf(clients->clients[j].fd, "pdi %d\n",
+                game->players[index]->id);
+        }
         dprintf(clients->clients[j].fd, "pdi %d\n", game->players[index]->id);
-        clients->clients[j].fd = -1;
     }
 }
 

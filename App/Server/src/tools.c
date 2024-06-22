@@ -11,6 +11,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "Server/Game/map.h"
+
+tile_t *get_tile_by_pos(map_t *map, int x, int y)
+{
+    for (int i = 0; i < map->width * map->height; i++) {
+        if (map->tiles[i]->pos->x == x
+            && map->tiles[i]->pos->y == y) {
+            return map->tiles[i];
+        }
+    }
+    return NULL;
+}
+
 bool *stop_signal_catched(void)
 {
     static bool globalStop = false;

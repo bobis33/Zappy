@@ -10,23 +10,23 @@
 void rotate_west(player_t *player)
 {
     player->direction = WEST;
-    print_msg(player->fd_client, "ok\n");
+    add_action_to_player(player, ACTION, "ok\n", 7);
 }
 
 void rotate_east(player_t *player)
 {
     player->direction = EAST;
-    print_msg(player->fd_client, "ok\n");
+    add_action_to_player(player, ACTION, "ok\n", 7);
 }
 
 void rotate_north(player_t *player)
 {
     player->direction = NORTH;
-    print_msg(player->fd_client, "ok\n");
+    add_action_to_player(player, ACTION, "ok\n", 7);
 }
 
 void rotate_south(player_t *player)
 {
     player->direction = SOUTH;
-    print_msg(player->fd_client, "ok\n");
+    add_action_to_player(player, ACTION, "ok\n", 7);
 }

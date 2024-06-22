@@ -10,14 +10,16 @@
 
 static void display_tile_content(int fd, game_t *game, int width, int height)
 {
-    char *content = malloc(sizeof(char) * 21);
+    char *content = malloc(sizeof(char) * 1024);
+    tile_t *tile = get_tile_by_pos(game->map, width, height);
 
     for (int i = 0; i < COUNT; i++) {
         sprintf(content, "%d",
-            game->map->tiles[height][width].resources[i]->quantity);
-        print_msg(fd, content);
-        if (i < COUNT - 1)
+            tile->resources[i]->quantity);
+        if (i < COUNT - 1) {
             print_msg(fd, " ");
+        }
+        print_msg(fd, content);
     }
     free(content);
 }
