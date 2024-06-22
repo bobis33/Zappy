@@ -17,7 +17,17 @@ namespace gui {
 
         public:
 
-            Inventory() = default;
+            Inventory() {
+                resources = {
+                    {Resource::Type::FOOD, 0},
+                    {Resource::Type::LINEMATE, 0},
+                    {Resource::Type::DERAUMERE, 0},
+                    {Resource::Type::SIBUR, 0},
+                    {Resource::Type::MENDIANE, 0},
+                    {Resource::Type::PHIRAS, 0},
+                    {Resource::Type::THYSTAME, 0}
+                };
+            };
 
             Inventory(Resource food, Resource linemate, Resource deraumere, Resource sibur, Resource mendiane, Resource phiras, Resource thystame) :
                 resources({food, linemate, deraumere, sibur, mendiane, phiras, thystame}) {};

@@ -11,6 +11,8 @@
 #include "GUI/Abstraction/IClient.hpp"
 #include "GUI/KeyBoard.hpp"
 #include "GUI/Map/Map.hpp"
+#include "GUI/Egg.hpp"
+#include "GUI/Player.hpp"
 
 namespace gui {
 
@@ -24,7 +26,8 @@ namespace gui {
             [[nodiscard]] virtual bool isRunning() = 0;
 
             virtual void init(const std::string &name, std::pair<const unsigned int,const unsigned int> resolution, unsigned int bitsPerPixel) = 0;
-            virtual void render(Map &map) = 0;
+            virtual void render(Map &map, std::vector<Egg> &egg, std::vector<Player> &players, std::vector<std::string> &teamNames) = 0;
+
             virtual KeyBoard::Key getEvents() = 0;
             virtual void close() = 0;
 

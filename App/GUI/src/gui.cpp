@@ -31,7 +31,7 @@ gui::Gui::Gui(const gui::Argument &args)
         throw RunTimeException("Failed to connect to server");
     }
 
-    Parser::processData(getData(m_renderer->getClient().getResponse()), *this);
+    Parser::processData(Parser::getData(m_renderer->getClient().getResponse()), *this);
 }
 
 void gui::Gui::Run()
@@ -43,20 +43,9 @@ void gui::Gui::Run()
         if (event < KeyBoard::Key::COUNT && EVENT_ARRAY.at(event) != nullptr) {
             EVENT_ARRAY.at(event)(*this);
         }
-        m_renderer->render(m_map);
+        Parser::processData(Parser::getData(m_renderer->getClient().getResponse()), *this);
+        m_renderer->render(m_map, m_eggs, m_players, m_teamNames);
     }
-}
-
-std::vector<std::string> gui::Gui::getData(const std::string &data)
-{
-    std::vector<std::string> tmp;
-    std::string tmpData;
-    std::stringstream ss(data);
-
-    while (std::getline(ss, tmpData, '\n')) {
-        tmp.push_back(tmpData);
-    }
-    return tmp;
 }
 
 void gui::Gui::initMap(const std::pair<unsigned int, unsigned int> &size)
@@ -69,14 +58,6 @@ void gui::Gui::initMap(const std::pair<unsigned int, unsigned int> &size)
     m_map.setHeight(size.second);
 }
 
-void gui::Gui::initEgg(const unsigned int &eggId, const int &playerId, const std::pair<unsigned int, unsigned int> &pos)
-{
-    (void) eggId;
-    (void) playerId;
-    (void) pos;
-    // Tmp -> add egg to the map
-}
-
 void gui::Gui::matureEgg(const unsigned int &eggId)
 {
     (void) eggId;
@@ -85,6 +66,5 @@ void gui::Gui::matureEgg(const unsigned int &eggId)
 
 void gui::Gui::eggDeath(const unsigned int &eggId)
 {
-    (void) eggId;
-    // Tmp -> remove egg from the map
+    getEggs().at(eggId).setDeath();
 }

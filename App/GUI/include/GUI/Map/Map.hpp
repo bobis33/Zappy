@@ -30,18 +30,6 @@ namespace gui {
 
             [[nodiscard]] std::vector<std::vector<Tile>>& getTiles() { return m_tiles; };
 
-            // DEBUG - TO REMOVE
-            void countResources() {
-                for (auto &row : m_tiles) {
-                    for (auto &tile : row) {
-                        std::cout << "Tile: " << tile.getPosition().x << " " << tile.getPosition().y << '\n';
-                        for (auto &resource : tile.getInventory().resources) {
-                            std::cout << "Resource: " << resource.quantity << " " << resource.density << '\n';
-                        }
-                    }
-                }
-            };
-
         private:
 
             unsigned int m_width;

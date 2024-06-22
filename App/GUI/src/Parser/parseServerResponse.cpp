@@ -56,9 +56,21 @@ gui::Tile gui::Parser::parseTileContent(std::string &tileContent)
     };
 }
 
+gui::Egg gui::Parser::parseEggContent(const std::vector<std::string> &eggContent)
+{
+    if (eggContent.size() != 4) {
+        throw std::runtime_error("Invalid egg content");
+    }
+    return {
+        static_cast<unsigned int>(std::stoi(eggContent[0])),
+        std::stoi(eggContent[1]),
+        static_cast<unsigned int>(std::stoi(eggContent[2])),
+        static_cast<unsigned int>(std::stoi(eggContent[3]))
+    };
+}
+
 void gui::Parser::processData(const std::vector<std::string>& data, Gui &gui)
 {
-
     for (const std::string& line : data) {
         auto command_val = Protocol::ProtocolMap.find(line.substr(0, 3));
         if (command_val != Protocol::ProtocolMap.end()) {
@@ -68,4 +80,16 @@ void gui::Parser::processData(const std::vector<std::string>& data, Gui &gui)
             command_val->second(gui, line.substr(4, line.size()));
         }
     }
+}
+
+std::vector<std::string> gui::Parser::getData(const std::string &data)
+{
+    std::vector<std::string> tmp;
+    std::string tmpData;
+    std::stringstream ss(data);
+
+    while (std::getline(ss, tmpData, '\n')) {
+        tmp.push_back(tmpData);
+    }
+    return tmp;
 }
