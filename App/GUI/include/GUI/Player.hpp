@@ -29,7 +29,9 @@ namespace gui {
                 NORTH = 1,
                 EAST = 2,
                 SOUTH = 3,
-                WEST = 4
+                WEST = 4,
+                NONE = 0,
+                OUI = 5
             };
 
             Player() = default;
@@ -40,9 +42,11 @@ namespace gui {
             [[nodiscard]] Orientation getOrientation() const { return m_orientation; };
             [[nodiscard]] Inventory& getInventory() { return m_inventory; };
             [[nodiscard]] Position& getPosition() { return m_position; };
+            [[nodiscard]] Position& getLastPosition() { return m_lastPosition; };
             [[nodiscard]] unsigned int getLevel() const { return m_level; };
             [[nodiscard]] unsigned int getId() const { return m_id; };
             [[nodiscard]] std::string getTeamName() const { return m_teamName; };
+            [[nodiscard]] Orientation getMoving() const { return m_moving; };
 
             void setAction(const Action action) { m_action = action; };
             void setLastAction(const Action lastAction) { m_lastAction = lastAction; };
@@ -50,10 +54,13 @@ namespace gui {
             void setId(const unsigned int id) { m_id = id; };
             void setTeamName(const std::string &teamName) { m_teamName = teamName; };
             void setLevel(const unsigned int level) { m_level = level; };
+            void setLastPosition(const Position &lastPosition) { m_lastPosition = lastPosition; };
+            void setMoving(const Orientation moving) { m_moving = moving; };
 
             void levelUp() { m_level++; };
 
             int player_frame = 0;
+            int index_moving = 0;
 
         private:
 
@@ -61,11 +68,13 @@ namespace gui {
             Action m_lastAction{Action::NONE};
             Inventory m_inventory;
             Position m_position;
+            Position m_lastPosition;
             Orientation m_orientation{Orientation::NORTH};
             std::string m_teamName{""};
             unsigned int m_id{0};
             unsigned int m_level{1};
             bool isAlive{true};
+            Orientation m_moving;
 
     }; // class Player
 

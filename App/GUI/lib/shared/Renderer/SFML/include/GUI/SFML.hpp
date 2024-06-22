@@ -46,6 +46,8 @@ class SFML : public IRenderer {
 
             sf::Clock playerClock;
             int playerframe = 0;
+            sf::Clock movingClock;
+            int movingFrame = 0;
 
         private:
 

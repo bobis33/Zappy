@@ -116,6 +116,10 @@ void gui::SFML::init(const std::string &name, std::pair<const unsigned int,const
         throw std::runtime_error("Failed to load texture");
     }
     addTexture(texture, "death");
+    if (!texture.loadFromFile("assets/textures/move.png")) {
+        throw std::runtime_error("Failed to load texture");
+    }
+    addTexture(texture, "move");
     sf::Sprite sprite;
     sprite.setTexture(getTextures().at(0).first);
     addSprite(sprite, "forest");
@@ -159,6 +163,8 @@ void gui::SFML::init(const std::string &name, std::pair<const unsigned int,const
     addSprite(sprite, "egg");
     sprite.setTexture(getTextures().at(20).first);
     addSprite(sprite, "death");
+    sprite.setTexture(getTextures().at(21).first);
+    addSprite(sprite, "move");
 }
 
 bool gui::SFML::checkConnection(sf::Clock clock)
@@ -212,23 +218,104 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
                 if (!egg.isDead())
                     m_window.draw(getSprites().at(8).first);
             }
-
             for (auto &player : players) {
-                if (player.getAction() == Player::Action::NONE) {
-                    getSprites().at(9).first.setPosition(
-                        static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height,
-                        static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width);
-                    m_window.draw(getSprites().at(9).first);
-                } else if (player.getAction() == Player::Action::TAKE) {
-                    getSprites().at(10).first.setPosition(
-                        static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height,
-                        static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width);
-                    m_window.draw(getSprites().at(10).first);
-                } else if (player.getAction() == Player::Action::DEATH) {
-                    getSprites().at(21).first.setPosition(
-                        static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height,
-                        static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width);
-                    m_window.draw(getSprites().at(20).first);
+                if (player.getPosition().x != player.getLastPosition().x || player.getPosition().y != player.getLastPosition().y) {
+                    if (player.getPosition().x > player.getLastPosition().x) {
+                        player.setMoving(Player::Orientation::SOUTH);
+                    } else if (player.getPosition().x < player.getLastPosition().x) {
+                        player.setMoving(Player::Orientation::NORTH);
+                        playerframe = 0;
+                    } else if (player.getPosition().y > player.getLastPosition().y) {
+                        player.setMoving(Player::Orientation::EAST);
+                    } else if (player.getPosition().y < player.getLastPosition().y) {
+                        player.setMoving(Player::Orientation::WEST);
+                    }
+                    player.setLastPosition(player.getPosition());
+                }
+
+                if (player.getMoving() == Player::Orientation::OUI) {
+                    if (movingClock.getElapsedTime().asMilliseconds() > 10) {
+                        if (player.getMoving() == Player::Orientation::NORTH) {
+                            float playerPosX = static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height;
+                            float playerPosY = static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width;
+                            float playerPosXLast = static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height;
+                            float playerPosYLast = static_cast<float>(player.getPosition().x + 1) * getSprites().at(0).first.getGlobalBounds().width;
+                            float playerDrawPosX = playerPosXLast;
+                            float playerDrawPosY = playerPosYLast - player.index_moving;
+                            if (playerDrawPosY > playerPosY) {
+                                player.index_moving = player.index_moving + 1;
+                                getSprites().at(21).first.setPosition(playerDrawPosX, playerDrawPosY);
+                            } else {
+                                player.index_moving = 0;
+                                player.setMoving(Player::Orientation::NONE);
+                                playerframe = 0;
+                            }
+                        } else if (player.getMoving() == Player::Orientation::SOUTH) {
+                            float playerPosX = static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height;
+                            float playerPosY = static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width;
+                            float playerPosXLast = static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height;
+                            float playerPosYLast = static_cast<float>(player.getPosition().x - 1) * getSprites().at(0).first.getGlobalBounds().width;
+                            float playerDrawPosX = playerPosXLast;
+                            float playerDrawPosY = playerPosYLast + player.index_moving;
+                            if (playerDrawPosY < playerPosY) {
+                                player.index_moving = player.index_moving + 1;
+                                getSprites().at(21).first.setPosition(playerDrawPosX, playerDrawPosY);
+                            } else {
+                                player.index_moving = 0;
+                                player.setMoving(Player::Orientation::NONE);
+                                playerframe = 0;
+                            }
+                        } else if (player.getMoving() == Player::Orientation::EAST) {
+                            float playerPosX = static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height;
+                            float playerPosY = static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width;
+                            float playerPosXLast = static_cast<float>(player.getPosition().y - 1) * getSprites().at(0).first.getGlobalBounds().height;
+                            float playerPosYLast = static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width;
+                            float playerDrawPosX = playerPosXLast + player.index_moving;
+                            float playerDrawPosY = playerPosYLast;
+                            if (playerDrawPosX < playerPosX) {
+                                player.index_moving = player.index_moving + 1;
+                                getSprites().at(21).first.setPosition(playerDrawPosX, playerDrawPosY);
+                            } else {
+                                player.index_moving = 0;
+                                player.setMoving(Player::Orientation::NONE);
+                                playerframe = 0;
+                            }
+                        } else if (player.getMoving() == Player::Orientation::WEST) {
+                            float playerPosX = static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height;
+                            float playerPosY = static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width;
+                            float playerPosXLast = static_cast<float>(player.getPosition().y + 1) * getSprites().at(0).first.getGlobalBounds().height;
+                            float playerPosYLast = static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width;
+                            float playerDrawPosX = playerPosXLast - player.index_moving;
+                            float playerDrawPosY = playerPosYLast;
+                            if (playerDrawPosX > playerPosX) {
+                                player.index_moving = player.index_moving + 1;
+                                getSprites().at(21).first.setPosition(playerDrawPosX, playerDrawPosY);
+                            } else {
+                                player.index_moving = 0;
+                                player.setMoving(Player::Orientation::NONE);
+                                playerframe = 0;
+                            }
+                        }
+                        movingClock.restart();
+                    }
+                    m_window.draw(getSprites().at(21).first);
+                } else {                
+                    if (player.getAction() == Player::Action::NONE) {
+                        getSprites().at(9).first.setPosition(
+                            static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height,
+                            static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width);
+                        m_window.draw(getSprites().at(9).first);
+                    } else if (player.getAction() == Player::Action::TAKE) {
+                        getSprites().at(10).first.setPosition(
+                            static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height,
+                            static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width);
+                        m_window.draw(getSprites().at(10).first);
+                    } else if (player.getAction() == Player::Action::DEATH) {
+                        getSprites().at(21).first.setPosition(
+                            static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height,
+                            static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width);
+                        m_window.draw(getSprites().at(20).first);
+                    }
                 }
             }
 
@@ -341,13 +428,14 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
         }
     }
     //draw border
-    m_window.draw(getSprites().at(11).first);
+    if (mouseOnTile) {
+        m_window.draw(getSprites().at(11).first);
+    }
 
     for (auto& player : players) {
-        if (playerClock.getElapsedTime().asSeconds() > 0.1) {
+        if (playerClock.getElapsedTime().asSeconds() > 0.08) {
             if (player.getAction() != player.getLastAction() && player.getAction() != Player::Action::NONE) {
                 player.player_frame = 1;
-                std::cout << "proc" << std::endl;
                 player.setLastAction(player.getAction());
             }
             player.player_frame++;
@@ -361,6 +449,7 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
         getSprites().at(9).first.setTextureRect(playerRect);
         getSprites().at(10).first.setTextureRect(playerRect);
         getSprites().at(20).first.setTextureRect(playerRect);
+        getSprites().at(21).first.setTextureRect(playerRect);
     }
 
     if (!mouseOnTile) {
