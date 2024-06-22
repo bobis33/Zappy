@@ -33,7 +33,7 @@ class SFML : public IRenderer {
 
             void init(const std::string &name, std::pair<const unsigned int,const unsigned int> resolution, unsigned int bitsPerPixel) override;
             void close() override { m_window.close(); getClient().disconnect(); };
-            void render(Map &map, std::vector<Egg> &egg, std::vector<Player> &players) override;
+            void render(Map &map, std::vector<Egg> &egg, std::vector<Player> &players, std::vector<std::string> &teamNames) override;
 
             [[nodiscard]] static KeyBoard::Key getKeyboardEvent(const sf::Event &event);
             [[nodiscard]] bool checkConnection(sf::Clock clock);

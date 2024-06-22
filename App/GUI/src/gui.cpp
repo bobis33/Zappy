@@ -44,7 +44,7 @@ void gui::Gui::Run()
             EVENT_ARRAY.at(event)(*this);
         }
         Parser::processData(Parser::getData(m_renderer->getClient().getResponse()), *this);
-        m_renderer->render(m_map, m_eggs, m_players);
+        m_renderer->render(m_map, m_eggs, m_players, m_teamNames);
     }
 }
 

@@ -30,8 +30,7 @@ namespace gui {
                 EAST = 2,
                 SOUTH = 3,
                 WEST = 4,
-                NONE = 0,
-                OUI = 5
+                NONE = 0
             };
 
             Player() = default;

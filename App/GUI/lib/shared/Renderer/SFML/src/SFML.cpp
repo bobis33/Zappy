@@ -31,140 +31,48 @@ void gui::SFML::init(const std::string &name, std::pair<const unsigned int,const
     m_window.create(sf::VideoMode(resolution.first, resolution.second, bitsPerPixel), name, sf::Style::Resize | sf::Style::Close);
     m_timeoutClock.restart();
 
+    std::vector<std::pair<std::string, std::string>> texturePaths = {
+        {"forest", "assets/textures/Tile2.png"},
+        {"food", "assets/textures/resources/wine.png"},
+        {"linemate", "assets/textures/resources/stone_1.png"},
+        {"deraumere", "assets/textures/resources/stone_2.png"},
+        {"sibur", "assets/textures/resources/stone_3.png"},
+        {"mendiane", "assets/textures/resources/stone_4.png"},
+        {"phiras", "assets/textures/resources/stone_5.png"},
+        {"thystame", "assets/textures/resources/stone_6.png"},
+        {"egg", "assets/textures/resources/egg.png"},
+        {"idle", "assets/textures/idle.png"},
+        {"take", "assets/textures/take.png"},
+        {"border", "assets/textures/Border1.png"},
+        {"food", "assets/textures/side_screen/food.png"},
+        {"linemate", "assets/textures/side_screen/stone1.png"},
+        {"deraumere", "assets/textures/side_screen/stone2.png"},
+        {"sibur", "assets/textures/side_screen/stone3.png"},
+        {"mendiane", "assets/textures/side_screen/stone4.png"},
+        {"phiras", "assets/textures/side_screen/stone5.png"},
+        {"thystame", "assets/textures/side_screen/stone6.png"},
+        {"egg", "assets/textures/side_screen/egg.png"},
+        {"death", "assets/textures/idle.png"},
+        {"move", "assets/textures/move.png"}
+    };
+
     sf::Texture texture;
-    if (!texture.loadFromFile("assets/textures/Tile2.png")) {
-        throw std::runtime_error("Failed to load texture");
+    for (const auto& texturePath : texturePaths) {
+        if (!texture.loadFromFile(texturePath.second)) {
+            throw std::runtime_error("Failed to load texture");
+        }
+        addTexture(texture, texturePath.first);
     }
-    addTexture(texture, "forest");
-    if (!texture.loadFromFile("assets/textures/resources/wine.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "food");
-    if (!texture.loadFromFile("assets/textures/resources/stone_1.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "linemate");
-    if (!texture.loadFromFile("assets/textures/resources/stone_2.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "deraumere");
-    if (!texture.loadFromFile("assets/textures/resources/stone_3.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "sibur");
-    if (!texture.loadFromFile("assets/textures/resources/stone_4.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "mendiane");
-    if (!texture.loadFromFile("assets/textures/resources/stone_5.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "phiras");
-    if (!texture.loadFromFile("assets/textures/resources/stone_6.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "thystame");
-    if (!texture.loadFromFile("assets/textures/resources/egg.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "egg");
-    if (!texture.loadFromFile("assets/textures/idle.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "idle");
-    if (!texture.loadFromFile("assets/textures/take.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "take");
-    if (!texture.loadFromFile("assets/textures/Border1.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "border");
-    if (!texture.loadFromFile("assets/textures/side_screen/food.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "food");
-    if (!texture.loadFromFile("assets/textures/side_screen/stone1.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "linemate");
-    if (!texture.loadFromFile("assets/textures/side_screen/stone2.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "deraumere");
-    if (!texture.loadFromFile("assets/textures/side_screen/stone3.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "sibur");
-    if (!texture.loadFromFile("assets/textures/side_screen/stone4.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "mendiane");
-    if (!texture.loadFromFile("assets/textures/side_screen/stone5.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "phiras");
-    if (!texture.loadFromFile("assets/textures/side_screen/stone6.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "thystame");
-    if (!texture.loadFromFile("assets/textures/side_screen/egg.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "egg");
-    if (!texture.loadFromFile("assets/textures/idle.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "death");
-    if (!texture.loadFromFile("assets/textures/move.png")) {
-        throw std::runtime_error("Failed to load texture");
-    }
-    addTexture(texture, "move");
+    std::vector<std::string> spritesNames = {
+        "forest", "food", "linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame", "egg", "idle",
+        "take", "border", "food", "linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame", "egg", "death", "move"
+    };
+
     sf::Sprite sprite;
-    sprite.setTexture(getTextures().at(0).first);
-    addSprite(sprite, "forest");
-    sprite.setTexture(getTextures().at(1).first);
-    addSprite(sprite, "food");
-    sprite.setTexture(getTextures().at(2).first);
-    addSprite(sprite, "linemate");
-    sprite.setTexture(getTextures().at(3).first);
-    addSprite(sprite, "deraumere");
-    sprite.setTexture(getTextures().at(4).first);
-    addSprite(sprite, "sibur");
-    sprite.setTexture(getTextures().at(5).first);
-    addSprite(sprite, "mendiane");
-    sprite.setTexture(getTextures().at(6).first);
-    addSprite(sprite, "phiras");
-    sprite.setTexture(getTextures().at(7).first);
-    addSprite(sprite, "thystame");
-    sprite.setTexture(getTextures().at(8).first);
-    addSprite(sprite, "egg");
-    sprite.setTexture(getTextures().at(9).first);
-    addSprite(sprite, "idle");
-    sprite.setTexture(getTextures().at(10).first);
-    addSprite(sprite, "take");
-    sprite.setTexture(getTextures().at(11).first);
-    addSprite(sprite, "border");
-    sprite.setTexture(getTextures().at(12).first);
-    addSprite(sprite, "food");
-    sprite.setTexture(getTextures().at(13).first);
-    addSprite(sprite, "linemate");
-    sprite.setTexture(getTextures().at(14).first);
-    addSprite(sprite, "deraumere");
-    sprite.setTexture(getTextures().at(15).first);
-    addSprite(sprite, "sibur");
-    sprite.setTexture(getTextures().at(16).first);
-    addSprite(sprite, "mendiane");
-    sprite.setTexture(getTextures().at(17).first);
-    addSprite(sprite, "phiras");
-    sprite.setTexture(getTextures().at(18).first);
-    addSprite(sprite, "thystame");
-    sprite.setTexture(getTextures().at(19).first);
-    addSprite(sprite, "egg");
-    sprite.setTexture(getTextures().at(20).first);
-    addSprite(sprite, "death");
-    sprite.setTexture(getTextures().at(21).first);
-    addSprite(sprite, "move");
+    for (size_t i = 0; i < spritesNames.size(); ++i) {
+        sprite.setTexture(getTextures().at(i).first);
+        addSprite(sprite, spritesNames[i]);
+    }
 }
 
 bool gui::SFML::checkConnection(sf::Clock clock)
@@ -181,10 +89,11 @@ bool gui::SFML::checkConnection(sf::Clock clock)
     return true;
 }
 
-void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &players)
+void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &players, std::vector<std::string> &teams)
 {
     m_window.clear({0, 0, 0, 0});
     std::vector<float> spritesAspectRatio;
+    const sf::Vector2u minSize = {1280, 720};
     sf::Vector2u windowSize = m_window.getSize();
     sf::Vector2i mousePosition = sf::Mouse::getPosition(m_window);
     float windowAspectRatio = static_cast<float>(windowSize.x) / static_cast<float>(windowSize.y);
@@ -233,7 +142,7 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
                     player.setLastPosition(player.getPosition());
                 }
 
-                if (player.getMoving() == Player::Orientation::OUI) {
+                if (player.getMoving() != Player::Orientation::NONE) {
                     if (movingClock.getElapsedTime().asMilliseconds() > 10) {
                         if (player.getMoving() == Player::Orientation::NORTH) {
                             float playerPosX = static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height;
@@ -369,40 +278,12 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
                         mousePosition.y < static_cast<int>((player.getPosition().x + 1) * getSprites().at(0).first.getGlobalBounds().width)) {
 
                         sf::Text playerText;
-                        sf::Font someFont;
-                        someFont.loadFromFile("assets/fonts/pixel.ttf");
                         playerText.setFont(someFont);
                         playerText.setString("Player " + std::to_string(player.getId()) + " - Level " + std::to_string(player.getLevel()) + " - " + player.getTeamName());
                         playerText.setCharacterSize(24);
                         playerText.setFillColor(sf::Color::White);
                         playerText.setPosition(resourcePosX + 10.0f * scaleFactor, resourcePosY + 20.0f * scaleFactor);
                         m_window.draw(playerText);
-
-                        const auto& playerInventory = player.getInventory().resources;
-
-                        // std::cout << players.at(0).getInventory().resources.size() << std::endl;
-
-                        // float playerInventoryPosY = resourcePosY + 45.0f * scaleFactor;
-                        // for (size_t j = 0; j < playerInventory.size(); j++) {
-                        //     if (playerInventory[j].quantity >= 0) {
-                        //         sf::Text playerInventoryText;
-                        //         playerInventoryText.setFont(someFont);
-                        //         playerInventoryText.setString(std::to_string(playerInventory[j].quantity) + "x ");
-                        //         playerInventoryText.setCharacterSize(20);
-                        //         playerInventoryText.setFillColor(sf::Color::White);
-                        //         playerInventoryText.setPosition(resourcePosX + 40.0f * scaleFactor, playerInventoryPosY + (10.0f * scaleFactor));
-                        //         m_window.draw(playerInventoryText);
-
-                        //         playerInventoryText.setString(getSprites().at(j + 12).second);
-                        //         playerInventoryText.setPosition(resourcePosX + 80.0f * scaleFactor, playerInventoryPosY + (10.0f * scaleFactor));
-                        //         m_window.draw(playerInventoryText);
-
-                        //         getSprites().at(j + 12).first.setPosition(resourcePosX + 60.0f * scaleFactor, playerInventoryPosY + 5.0f * scaleFactor);
-                        //         m_window.draw(getSprites().at(j + 12).first);
-
-                        //         playerInventoryPosY += 15.0f * scaleFactor;
-                        //     }
-                        // }
                     }
                 }
 
@@ -412,7 +293,7 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
                         mousePosition.y >= static_cast<int>(egg.getX() * getSprites().at(0).first.getGlobalBounds().width) &&
                         mousePosition.y < static_cast<int>((egg.getX() + 1) * getSprites().at(0).first.getGlobalBounds().width)) {
 
-                        getSprites().at(19).first.setPosition(resourcePosX + 45.0f * scaleFactor, resourcePosY + 9.0f * scaleFactor);
+                        getSprites().at(19).first.setPosition(resourcePosX + 150.0f * scaleFactor, resourcePosY - 10.0f * scaleFactor);
                         m_window.draw(getSprites().at(19).first);
                     }
                 }
@@ -453,19 +334,51 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
     }
 
     if (!mouseOnTile) {
-        float titlePosX = static_cast<float>(static_cast<float>(map.getWidth()) * getSprites().at(0).first.getGlobalBounds().width) + 130.0f;
-        float titlePosY = static_cast<float>(static_cast<float>(map.getHeight()) * getSprites().at(0).first.getGlobalBounds().height) / 2.0f - 50.0f;
+        float titlePosX = static_cast<float>(static_cast<float>(map.getWidth()) * getSprites().at(0).first.getGlobalBounds().width) + 160.0f;
+        float titlePosY = static_cast<float>(static_cast<float>(map.getHeight()) * getSprites().at(0).first.getGlobalBounds().height) - 1000.0f;
 
-        sf::Text titleText;
+        sf::Text noMouseOnTile;
         sf::Font titleFont;
         titleFont.loadFromFile("assets/fonts/pixel.ttf");
-        titleText.setFont(titleFont);
-        titleText.setString("Zappy");
-        titleText.setCharacterSize(static_cast<unsigned int>(30 * scaleFactor));
-        titleText.setFillColor(sf::Color::White);
-        titleText.setPosition(titlePosX, titlePosY);
+        noMouseOnTile.setFont(titleFont);
+        noMouseOnTile.setString("Zappy");
+        noMouseOnTile.setCharacterSize(static_cast<unsigned int>(30 * scaleFactor));
+        noMouseOnTile.setFillColor(sf::Color::White);
+        noMouseOnTile.setPosition(titlePosX, titlePosY);
+        m_window.draw(noMouseOnTile);
 
-        m_window.draw(titleText);
+        noMouseOnTile.setString("TeamNames");
+        noMouseOnTile.setCharacterSize(24);
+        noMouseOnTile.setPosition(titlePosX - 100.0f, titlePosY + 150.0f);
+        m_window.draw(noMouseOnTile);
+
+        float teamPosY = static_cast<float>(static_cast<float>(map.getHeight()) * getSprites().at(0).first.getGlobalBounds().height) / 4.0f;
+
+        titlePosY = teamPosY;
+        for (const auto &team : teams) {
+            noMouseOnTile.setString(team + " :");
+            noMouseOnTile.setCharacterSize(20);
+            noMouseOnTile.setPosition(titlePosX - 90.0f, titlePosY);
+            m_window.draw(noMouseOnTile);
+            titlePosY += 30.0f;
+
+            std::string playersText;
+            for (const auto &player : players) {
+                if (player.getTeamName() == team)
+                    playersText += std::to_string(player.getId()) + ", ";
+            }
+
+            if (!playersText.empty()) {
+                playersText.pop_back();
+                playersText.pop_back();
+
+                noMouseOnTile.setString("Players " + playersText);
+                noMouseOnTile.setCharacterSize(20);
+                noMouseOnTile.setPosition(titlePosX, titlePosY);
+                m_window.draw(noMouseOnTile);
+                titlePosY += 50.0f;
+            }
+        }
     }
 
     m_window.display();
