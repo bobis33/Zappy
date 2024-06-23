@@ -161,10 +161,10 @@ class TCPClient:
 
     def handle_request(self, request: str):
         if request == "exit\n":
-            return False
+            return False, None
         if request == "help\n":
             print("\n".join(commands.keys()))
-            return True
+            return True, None
         reply = self.send_and_receive(request)
         reply = reply.lstrip()
         if reply[0] == "[":
@@ -178,7 +178,7 @@ class TCPClient:
             self.write_file()
         print(f"---> {reply}", end='')
         self.readCsv('client_num.csv')
-        return True
+        return True, reply
 
     def client_connect(self, filename):
         with open(filename, 'r') as f:
@@ -226,8 +226,15 @@ class TCPClient:
                         if len(parser) > 1:
                             print(f"Client {self.get_current_client_id()} has received from server the message {parser[1]}")
 
-                if not self.handle_request(line):
+
+                result_request, reply = self.handle_request(line)
+                if not result_request:
+                    self.request = 0
                     break
+                if reply is not None and reply.find("client") != -1:
+                    parser = reply.split(",")
+                    if len(parser) > 1:
+                        print(f"Client {self.get_current_client_id()} has received from server the message {parser[1]}")
 
                 if self.command is not None:
                     result_dict = self.command.createList(debug, self.getLevel(), self.get_current_client_id())
@@ -264,9 +271,12 @@ class TCPClient:
                             )
                     elif s is sys.stdin:
                         line = sys.stdin.readline().strip() + "\n"
-                        if not self.handle_request(line):
+                        result_request, reply = self.handle_request(line)
+                        if not result_request:
                             self.request = 0
                             break
+                        if reply is not None:
+                            print(f"The reply is {reply}")
 
                 if self.command is not None:
                     result_dict = self.command.createList(debug, self.getLevel(), self.get_current_client_id())
