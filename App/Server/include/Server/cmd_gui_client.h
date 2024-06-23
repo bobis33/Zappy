@@ -25,3 +25,5 @@ void cmd_player_lvl(int fd, char **cmd, game_t *game);
 void cmd_player_inventory(int fd, char **cmd, game_t *game);
 void cmd_frequency(int fd, char **cmd, game_t *game);
 void cmd_frequency_update(int fd, char **cmd, game_t *game);
+
+void connect_gui(game_t *game, data_t *client, int fd);

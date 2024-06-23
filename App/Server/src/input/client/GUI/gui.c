@@ -39,7 +39,7 @@ static char **parse_command(char *cmd, char **cmd_array)
 
 void cmd_gui_client(game_t *game, char *cmd, const int fd)
 {
-    char **cmd_array = malloc(sizeof(char *) + 1);
+    char **cmd_array = malloc(sizeof(char *) * 1024);
 
     cmd_array = parse_command(cmd, cmd_array);
     for (int i = 0; cmd_builtin[i].command; i++) {

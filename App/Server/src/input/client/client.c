@@ -33,7 +33,7 @@ static bool identify_client(
     char *tmp_team_name = NULL;
 
     if (strcmp(cmd, "GRAPHIC\n") == 0) {
-        client_data->identity = GRAPHIC;
+        connect_gui(game, client_data, fd);
         return false;
     }
     for (int i = 0; i < game->nb_teams; i++) {
@@ -41,9 +41,7 @@ static bool identify_client(
         tmp_team_name = strcpy(tmp_team_name, game->team_names[i]);
         tmp_team_name = strcat(tmp_team_name, "\n");
         if (strcmp(cmd, tmp_team_name) == 0) {
-            client_data->identity = AI;
-            add_player(create_player(game->team_names[i], game,
-                (position_t){0, 0}, fd), game);
+            connect_ai(game, client_data, fd, game->team_names[i]);
             free(tmp_team_name);
             return false;
         }

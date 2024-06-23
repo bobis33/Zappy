@@ -35,3 +35,9 @@ void cmd_take(player_t *player, game_t *game);
 void cmd_set(player_t *player, game_t *game);
 void cmd_incantation(player_t *player, game_t *game);
 void cmd_dead(player_t *player, game_t *game);
+
+void connect_ai(
+    game_t *game,
+    data_t *client,
+    int fd,
+    char *team_name);
