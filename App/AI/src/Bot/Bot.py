@@ -5,6 +5,7 @@ from typing import Union, Optional, List
 from src.Players.Level import Stones
 import os
 
+import random
 
 class Action(Enum):
     FORWARD = "Forward"
@@ -92,31 +93,48 @@ class Bot:
                             return lst
         return []
 
-    def parse_command(self, command: str, current_level, client_nb, team) -> Action:
+    def need_incantation(self, reply, level):
+        clean = reply.replace("[", "")
+        lst = clean.split(",")
+        tab = lst[0].strip()
+        tab_parser = tab.split(" ")
+        if level == 1:
+            for i in range(len(tab_parser)):
+                if tab_parser[i] == "linemate":
+                    return True
+        elif level == 2:
+            for i in range(len(tab_parser)):
+                if tab_parser[i] == "linemate" or tab_parser[i] == "deraumere" or tab_parser[i] == "sibur":
+                    return True
+        return False
+    def parse_command(self, command: str, current_level, client_nb, team, reply) -> Action:
         self.stones = Stones(0, 0, 0, 0, 0, 0, current_level)
         words = command.split()
         lst = self.read_file()
         if len(lst) > 0:
             return Action.BROADCAST_TEXT.value + '"' + lst[0].strip() + '"'
-        if "Incantation" in self.read_incantation(client_nb):
+        if "Incantation" in self.read_incantation(client_nb) and self.need_incantation(reply, current_level):
             path = os.path.join(os.getcwd() + "/" + team.strip(), "client-" + client_nb.strip() + ".txt")
             with open(path, "w") as f:
-                if current_level == 2:
-                    f.write("client " + client_nb.strip() + ": I've just been promoted to level 2")
-                else:
-                    f.write("client " + client_nb.strip() + ": I'm ready to move up to the " + str((current_level + 1)).strip() + " level")
+                    if current_level == 1:
+                        current_level = 2
+                        f.write("client " + client_nb.strip() + ": I was passed level 2")
+                    elif current_level == 2:
+                        f.write("client " + client_nb.strip() + ": I'm ready to move up to the " + str((current_level + 1)).strip() + " level")
             self.delete_incantion(client_nb)
             return Action.INCANTATION.value
         elif "Forward" in words:
-            return Action.FORWARD.value
+            return random.choice(["Forward", "Inventory", "Forward", "Left", "Right"])
         elif "Right" in words:
             return Action.RIGHT.value
         elif "Left" in words:
             return Action.LEFT.value
         elif "Take no" in words:
-            return Action.FORWARD.value
+            return Action.INVENTORY.value
         elif "Take" in words:
             stones_name = words[1]
             if self.stones.take_stone(stones_name) == True:
                 self.write_incantation(client_nb)
             return Action.TAKE_OBJECT.value + words[1]
+        else:
+            return Action.INVENTORY.value

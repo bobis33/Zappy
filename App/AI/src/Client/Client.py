@@ -15,7 +15,6 @@ def create_file(name, content=None):
         with open(name, 'w') as f:
             if content:
                 f.write(content)
-        print(f"The file {name} has been created!")
     except Exception as e:
         print(f"The file {name} could not be created!")
 
@@ -82,7 +81,6 @@ class TCPClient:
         print("-----------------------------\n")
         client = [ [client_num, self.name.strip(), 'Connected'] ]
         path = os.path.join(self.customer, "client-" + str(client_num) + ".txt")
-        print(f"The path is {path}")
         content = "I'm glad I logged on I'm the client " + str(client_num) + "\n"
         create_file(path, content)
         with open('client_num.csv', 'a', newline='') as file:
@@ -209,7 +207,7 @@ class TCPClient:
                             if id_client[0] == str(self.get_current_client_id().strip()):
                                 line = cmd + "\n"
                             else:
-                                line = "Forward" + "\n"
+                                line = "Inventory" + "\n"
                         else:
                             line = cmd + "\n"
 
@@ -238,7 +236,7 @@ class TCPClient:
                         print(f"Client {self.get_current_client_id()} has received from server the message {parser[1]}")
 
                 if self.command is not None:
-                    result_dict = self.command.createList(debug, self.getLevel(), self.get_current_client_id())
+                    result_dict = self.command.createList(debug, self.level, self.get_current_client_id(),reply)
                 counter += 1
 
             except EOFError:
@@ -278,7 +276,7 @@ class TCPClient:
                             break
 
                 if self.command is not None:
-                    result_dict = self.command.createList(debug, self.getLevel(), self.get_current_client_id())
+                    result_dict = self.command.createList(debug, self.getLevel(), self.get_current_client_id(), reply)
             except EOFError:
                 self.request = 0
             except KeyboardInterrupt:
