@@ -70,7 +70,7 @@ class Analysis:
         else:
             self.lastMoreimportItem = ("no item", 1000, 0)
 
-    def analyse_cases(self, dictal, debug, callback, current_level : int, client_nb : str):
+    def analyse_cases(self, dictal, debug, callback, current_level : int, client_nb : str, team : str):
         self.lastMoreimportItem = self.mostImportItem
         self.upgrade_last_more_important_item()
         self.mostImportItem = ("no item", 1000, 0)
@@ -80,7 +80,7 @@ class Analysis:
                     self.analyse_item(i, item)
         action = self.choose_action(self.mostImportItem, self.lastMoreimportItem)
         command = action[0]
-        cmd = self.bot.parse_command(command, current_level, client_nb)
+        cmd = self.bot.parse_command(command, current_level, client_nb, team)
         with open('tmp-' + client_nb, 'w') as file:
             file.write(cmd)
         if cmd == "Take no":

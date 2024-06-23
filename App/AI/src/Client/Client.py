@@ -82,6 +82,7 @@ class TCPClient:
         print("-----------------------------\n")
         client = [ [client_num, self.name.strip(), 'Connected'] ]
         path = os.path.join(self.customer, "client-" + str(client_num) + ".txt")
+        print(f"The path is {path}")
         content = "I'm glad I logged on I'm the client " + str(client_num) + "\n"
         create_file(path, content)
         with open('client_num.csv', 'a', newline='') as file:
@@ -275,8 +276,6 @@ class TCPClient:
                         if not result_request:
                             self.request = 0
                             break
-                        if reply is not None:
-                            print(f"The reply is {reply}")
 
                 if self.command is not None:
                     result_dict = self.command.createList(debug, self.getLevel(), self.get_current_client_id())

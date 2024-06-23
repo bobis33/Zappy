@@ -73,7 +73,7 @@ class Command:
                 result_dict[i] = lst[i]
             else:
                 result_dict[i] = []
-        self.analysis.analyse_cases(result_dict, debug, lambda x:None, self.getLevel(), client_nb)
+        self.analysis.analyse_cases(result_dict, debug, lambda x:None, self.getLevel(), client_nb, self.getTeam())
         return result_dict
 
     def __repr__(self) -> str:

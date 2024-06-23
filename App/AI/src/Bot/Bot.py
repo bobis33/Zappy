@@ -92,13 +92,19 @@ class Bot:
                             return lst
         return []
 
-    def parse_command(self, command: str, current_level, client_nb) -> Action:
+    def parse_command(self, command: str, current_level, client_nb, team) -> Action:
         self.stones = Stones(0, 0, 0, 0, 0, 0, current_level)
         words = command.split()
         lst = self.read_file()
         if len(lst) > 0:
             return Action.BROADCAST_TEXT.value + '"' + lst[0].strip() + '"'
         if "Incantation" in self.read_incantation(client_nb):
+            path = os.path.join(os.getcwd() + "/" + team.strip(), "client-" + client_nb.strip() + ".txt")
+            with open(path, "w") as f:
+                if current_level == 2:
+                    f.write("client " + client_nb.strip() + ": I've just been promoted to level 2")
+                else:
+                    f.write("client " + client_nb.strip() + ": I'm ready to move up to the " + str((current_level + 1)).strip() + " level")
             self.delete_incantion(client_nb)
             return Action.INCANTATION.value
         elif "Forward" in words:
