@@ -9,7 +9,7 @@
 
 #include "GUI/Inventory/Inventory.hpp"
 #include "GUI/Position.hpp"
-#include "Mylib/Clock/Clock.hpp"
+#include "myLib/Clock/Clock.hpp"
 
 namespace gui {
 
@@ -47,6 +47,7 @@ namespace gui {
             [[nodiscard]] unsigned int getId() const { return m_id; };
             [[nodiscard]] std::string getTeamName() const { return m_teamName; };
             [[nodiscard]] Orientation getMoving() const { return m_moving; };
+            [[nodiscard]] std::string getBroadcast() const { return m_broadcast; };
 
             void setAction(const Action action) { m_action = action; };
             void setLastAction(const Action lastAction) { m_lastAction = lastAction; };
@@ -56,6 +57,7 @@ namespace gui {
             void setLevel(const unsigned int level) { m_level = level; };
             void setLastPosition(const Position &lastPosition) { m_lastPosition = lastPosition; };
             void setMoving(const Orientation moving) { m_moving = moving; };
+            void setBroadcast(const std::string &broadcast) { m_broadcast = broadcast; };
 
             void levelUp() { m_level++; };
 
@@ -73,6 +75,7 @@ namespace gui {
             Position m_lastPosition;
             Orientation m_orientation{Orientation::NORTH};
             std::string m_teamName{""};
+            std::string m_broadcast{""};
             unsigned int m_id{0};
             unsigned int m_level{1};
             bool isAlive{true};

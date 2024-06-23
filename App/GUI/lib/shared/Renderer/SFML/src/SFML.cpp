@@ -93,7 +93,6 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
 {
     m_window.clear({0, 0, 0, 0});
     std::vector<float> spritesAspectRatio;
-    const sf::Vector2u minSize = {1280, 720};
     sf::Vector2u windowSize = m_window.getSize();
     sf::Vector2i mousePosition = sf::Mouse::getPosition(m_window);
     float windowAspectRatio = static_cast<float>(windowSize.x) / static_cast<float>(windowSize.y);
@@ -202,7 +201,7 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
                         player.moving_clock.restart();
                     }
                     m_window.draw(getSprites().at(21).first);
-                } else { 
+                } else {
                     if (player.getAction() == Player::Action::NONE) {
                         getSprites().at(9).first.setPosition(
                             static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height,
@@ -242,34 +241,33 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
                 resourceTitle.setPosition(resourcePosX + (10.0f * scaleFactor), resourcePosY - 15.0f * scaleFactor);
                 m_window.draw(resourceTitle);
 
-                for (size_t i = 0; i < resources.size(); i++) {
-                    if (resources[i].quantity >= 0) {
+                for (size_t n = 0; n < resources.size(); n++) {
+                    if (resources[n].quantity >= 0) {
                         sf::Text resourceText;
-                        sf::Font someFont;
                         someFont.loadFromFile("assets/fonts/pixel.ttf");
                         resourceText.setFont(someFont);
-                        resourceText.setString(std::to_string(resources[i].quantity) + "x ");
+                        resourceText.setString(std::to_string(resources[n].quantity) + "x ");
                         resourceText.setCharacterSize(20);
                         resourceText.setFillColor(sf::Color::White);
                         resourceText.setPosition(resourcePosX + 50.0f, resourcePosY + 35.0f);
                         m_window.draw(resourceText);
 
-                        resourceText.setString(getSprites().at(i + 12).second);
+                        resourceText.setString(getSprites().at(n + 12).second);
                         resourceText.setPosition(resourcePosX + 150.0f, resourcePosY + 35.0f);
                         m_window.draw(resourceText);
 
-                        getSprites().at(i + 12).first.setPosition(resourcePosX + 100.0f, resourcePosY + 15.0f);
-                        m_window.draw(getSprites().at(i + 12).first);
+                        getSprites().at(n + 12).first.setPosition(resourcePosX + 100.0f, resourcePosY + 15.0f);
+                        m_window.draw(getSprites().at(n + 12).first);
 
                         resourcePosY += 35.0f;
                     }
                 }
 
                 for (auto &player : players) {
-                    if (mousePosition.x >= static_cast<int>(player.getPosition().y * getSprites().at(0).first.getGlobalBounds().height) &&
-                        mousePosition.x < static_cast<int>((player.getPosition().y + 1) * getSprites().at(0).first.getGlobalBounds().height) &&
-                        mousePosition.y >= static_cast<int>(player.getPosition().x * getSprites().at(0).first.getGlobalBounds().width) &&
-                        mousePosition.y < static_cast<int>((player.getPosition().x + 1) * getSprites().at(0).first.getGlobalBounds().width)) {
+                    if (mousePosition.x >= static_cast<int>(static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height) &&
+                        mousePosition.x < static_cast<int>(static_cast<float>(player.getPosition().y + 1) * getSprites().at(0).first.getGlobalBounds().height) &&
+                        mousePosition.y >= static_cast<int>(static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width) &&
+                        mousePosition.y < static_cast<int>(static_cast<float>(player.getPosition().x + 1) * getSprites().at(0).first.getGlobalBounds().width)) {
 
                         sf::Text playerText;
                         playerText.setFont(someFont);
@@ -315,10 +313,10 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
                 }
 
                 for (const auto &egg : eggs) {
-                    if (mousePosition.x >= static_cast<int>(egg.getY() * getSprites().at(0).first.getGlobalBounds().height) &&
-                        mousePosition.x < static_cast<int>((egg.getY() + 1) * getSprites().at(0).first.getGlobalBounds().height) &&
-                        mousePosition.y >= static_cast<int>(egg.getX() * getSprites().at(0).first.getGlobalBounds().width) &&
-                        mousePosition.y < static_cast<int>((egg.getX() + 1) * getSprites().at(0).first.getGlobalBounds().width)) {
+                    if (mousePosition.x >= static_cast<int>(static_cast<float>(egg.getY()) * getSprites().at(0).first.getGlobalBounds().height) &&
+                        mousePosition.x < static_cast<int>(static_cast<float>(egg.getY() + 1) * getSprites().at(0).first.getGlobalBounds().height) &&
+                        mousePosition.y >= static_cast<int>(static_cast<float>(egg.getX()) * getSprites().at(0).first.getGlobalBounds().width) &&
+                        mousePosition.y < static_cast<int>(static_cast<float>(egg.getX() + 1) * getSprites().at(0).first.getGlobalBounds().width)) {
 
                         getSprites().at(19).first.setPosition(resourcePosX + 150.0f * scaleFactor, resourcePosY - 10.0f * scaleFactor);
                         m_window.draw(getSprites().at(19).first);
@@ -431,6 +429,14 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
                 titlePosY += 50.0f;
             }
         }
+        for (const auto &playerBroadcast: players) {
+            if (playerBroadcast.getBroadcast() != "") {
+                noMouseOnTile.setString("Player " + std::to_string(playerBroadcast.getId()) + " : " + playerBroadcast.getBroadcast());
+                noMouseOnTile.setCharacterSize(15);
+                noMouseOnTile.setPosition(titlePosX - 90.0f, static_cast<float>(windowSize.y) - 100.0f);
+            }
+        }
+        m_window.draw(noMouseOnTile);
     }
 
     m_window.display();

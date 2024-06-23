@@ -74,9 +74,13 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
         }},
         {"pbc", [](Gui &gui, const std::string &cmd) {
             std::vector<std::string> data = Protocol::parseCommand(cmd);
-            int playerId = std::stoi(data[0]);
-            const std::string msg = data[1];
-            // broadcast message
+            for (auto &player : gui.getPlayers()) {
+                if (player.getId() != static_cast<unsigned int>(std::stoi(data[0]))) {
+                    continue;
+                }
+                std::string broadcastMsg = cmd.substr(cmd.find(' ') + 1, cmd.size());
+                player.setBroadcast(broadcastMsg);
+            }
         }},
         {"pic", [](Gui &gui, const std::string &cmd) {
             std::vector<std::string> data = Protocol::parseCommand(cmd);
