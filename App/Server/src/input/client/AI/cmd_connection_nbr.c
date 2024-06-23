@@ -5,9 +5,10 @@
 ** cmd_connection_nbr
 */
 
-#include "Server/tools.h"
+#include "Server/cmd_ai_client.h"
 
-void cmd_connection_nbr(const int fd)
+void cmd_connection_nbr(player_t *player, game_t *game)
 {
-    print_msg(fd, "number of connections\n");
+    (void)game;
+    dprintf(player->fd_client, "%d\n", player->id);
 }

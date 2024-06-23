@@ -14,6 +14,16 @@
 #include "Server/cmd_ai_client.h"
 #include "Server/cmd_gui_client.h"
 
+static void ai_loop(game_t *game, const int fd, char *cmd)
+{
+    for (int i = 0; game->players[i] != NULL; i++) {
+        if (game->players[i]->fd_client == fd) {
+            cmd_ai_client(game->players[i], game, cmd);
+            return;
+        }
+    }
+}
+
 static bool identify_client(
     game_t *game,
     data_t *client_data,
@@ -23,7 +33,7 @@ static bool identify_client(
     char *tmp_team_name = NULL;
 
     if (strcmp(cmd, "GRAPHIC\n") == 0) {
-        client_data->identity = GRAPHIC;
+        connect_gui(game, client_data, fd);
         return false;
     }
     for (int i = 0; i < game->nb_teams; i++) {
@@ -31,13 +41,12 @@ static bool identify_client(
         tmp_team_name = strcpy(tmp_team_name, game->team_names[i]);
         tmp_team_name = strcat(tmp_team_name, "\n");
         if (strcmp(cmd, tmp_team_name) == 0) {
-            client_data->identity = AI;
+            connect_ai(game, client_data, fd, game->team_names[i]);
             free(tmp_team_name);
             return false;
         }
         free(tmp_team_name);
     }
-    print_msg(fd, "You have to identify ur client: GRAPHIC or [team_name]\n");
     return true;
 }
 
@@ -56,10 +65,10 @@ static void cmd_builtin_client(
     }
     switch (client_data->identity) {
         case GRAPHIC:
-            cmd_gui_client(game, client, cmd, fd);
+            cmd_gui_client(game, cmd, fd);
             break;
         case AI:
-            cmd_ai_client(game, client, cmd, fd);
+            ai_loop(game, fd, cmd);
             break;
         default:
             break;

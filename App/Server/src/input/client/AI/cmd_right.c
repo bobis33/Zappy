@@ -5,9 +5,26 @@
 ** cmd_right
 */
 
-#include "Server/tools.h"
+#include "Server/cmd_ai_client.h"
 
-void cmd_right(const int fd)
+void cmd_right(player_t *player, game_t *game)
 {
-    print_msg(fd, "ok\n");
+    (void)game;
+    switch (player->direction) {
+        case NORTH:
+            rotate_east(player);
+            break;
+        case SOUTH:
+            rotate_west(player);
+            break;
+        case EAST:
+            rotate_south(player);
+            break;
+        case WEST:
+            rotate_north(player);
+            break;
+        default:
+            print_msg(player->fd_client, "ko\n");
+            return;
+    }
 }

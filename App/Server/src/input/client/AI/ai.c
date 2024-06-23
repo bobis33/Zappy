@@ -8,7 +8,6 @@
 #include <string.h>
 
 #include "Server/cmd_ai_client.h"
-#include "Server/tools.h"
 
 static const cmd_ai_client_t cmd_ai[] = {
     {"Forward\n", cmd_forward},
@@ -26,15 +25,13 @@ static const cmd_ai_client_t cmd_ai[] = {
     {NULL, NULL}
 };
 
-void cmd_ai_client(game_t *game, client_t *client, char *cmd, const int fd)
+void cmd_ai_client(player_t *player, game_t *game, char *cmd)
 {
-    (void)game;
-    (void)client;
     for (int i = 0; cmd_ai[i].command; i++) {
         if (strcmp(cmd, cmd_ai[i].command) == 0) {
-            cmd_ai[i].function(fd);
+            cmd_ai[i].function(player, game);
             return;
         }
     }
-    print_msg(fd, "ko\n");
+    print_msg(player->fd_client, "ko\n");
 }

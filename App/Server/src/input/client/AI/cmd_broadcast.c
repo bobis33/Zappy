@@ -5,9 +5,10 @@
 ** cmd_broadcast
 */
 
-#include "Server/tools.h"
+#include "Server/cmd_ai_client.h"
 
-void cmd_broadcast(const int fd)
+void cmd_broadcast(player_t *player, game_t *game)
 {
-    print_msg(fd, "ok\n");
+    (void)game;
+    print_msg(player->fd_client, "ok\n");
 }

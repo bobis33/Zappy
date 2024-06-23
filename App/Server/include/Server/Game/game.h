@@ -16,6 +16,7 @@
 #include "Server/Game/player.h"
 
 typedef struct game_s {
+    int index_client;
     int max_clients;
     int nb_teams;
     map_t *map;
@@ -30,3 +31,9 @@ bool init_map(game_t *game, const int width, const int height);
 void free_game_resources(game_t *game);
 void add_resource(map_t *map, resource_t resource);
 void distribute_resources(game_t *game);
+void add_player(player_t *player, game_t *game);
+player_t *create_player(
+    char *team_name,
+    game_t *game,
+    position_t position,
+    int fd);

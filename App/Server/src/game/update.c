@@ -6,18 +6,18 @@
 */
 
 #include <stdio.h>
+#include <unistd.h>
+#include <sys/select.h>
 
 #include "Server/Game/update.h"
 
 static void update_eggs(game_t *game)
 {
-    for (int i = 0; i < game->map->width; i++) {
-        for (int j = 0; j < game->map->height; j++) {
-            if (game->map->tiles[i][j].egg.id == -1)
-                continue;
-            if (get_ticks_elapsed(game->map->tiles[i][j].egg.laid_time) >= 600) {
-                game->map->tiles[i][j].egg.id = -1;
-            }
+    for (int i = 0; i < game->map->width * game->map->height; i++) {
+        if (game->map->tiles[i]->egg.id == -1)
+            continue;
+        if (get_ticks_elapsed(game->map->tiles[i]->egg.laid_time) >= 600) {
+            game->map->tiles[i]->egg.id = -1;
         }
     }
 }
@@ -28,8 +28,8 @@ static void update_map_resources(game_t *game)
 
     if (ticks_elapsed >= 20) {
         distribute_resources(game);
+        clock_gettime(CLOCK_MONOTONIC, &game->map_resources_clock->value);
     }
-    game->map_resources_clock = game->clock;
 }
 
 static void update_player_food(game_t *game, client_t *clients, int index)
@@ -44,13 +44,20 @@ static void update_player_food(game_t *game, client_t *clients, int index)
     for (int j = 0; j < MAX_CLIENTS; j++) {
         if (clients->clients[j].fd == ERROR)
             continue;
+        if (clients->clients[j].fd == game->players[index]->fd_client) {
+            dprintf(clients->clients[j].fd, "dead\n");
+            clients->clients[j].fd = -1;
+            game->players[index]->fd_client = -1;
+        } else {
+            dprintf(clients->clients[j].fd, "pdi %d\n",
+                game->players[index]->id);
+        }
         dprintf(clients->clients[j].fd, "pdi %d\n", game->players[index]->id);
     }
 }
 
 void update_game(game_t *game, client_t *clients)
 {
-    clock_gettime(CLOCK_MONOTONIC, &game->clock->value);
     for (int i = 0; game->players[i] != NULL; i++) {
         if (is_current_action_done(game->players[i])) {
             execute_player_action(game->players[i]);

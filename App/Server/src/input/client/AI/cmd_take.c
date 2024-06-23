@@ -5,9 +5,10 @@
 ** cmd_take
 */
 
-#include "Server/tools.h"
+#include "Server/cmd_ai_client.h"
 
-void cmd_take(const int fd)
+void cmd_take(player_t *player, game_t *game)
 {
-    print_msg(fd, "ok/ko\n");
+    (void)game;
+    print_msg(player->fd_client, "ok/ko\n");
 }

@@ -25,16 +25,6 @@ endif()
 # Main executable
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-set (SOURCES_GAME
-        ${SRC_DIR}/game/clock.c
-        ${SRC_DIR}/game/game.c
-        ${SRC_DIR}/game/map.c
-        ${SRC_DIR}/game/resource.c
-        ${SRC_DIR}/game/player.c
-        ${SRC_DIR}/game/egg.c
-        ${SRC_DIR}/game/update.c
-)
-
 set(SOURCES_CMD_AI
         ${SRC_CMD_DIR}/client/AI/ai.c
         ${SRC_CMD_DIR}/client/AI/cmd_broadcast.c
@@ -49,6 +39,7 @@ set(SOURCES_CMD_AI
         ${SRC_CMD_DIR}/client/AI/cmd_right.c
         ${SRC_CMD_DIR}/client/AI/cmd_set.c
         ${SRC_CMD_DIR}/client/AI/cmd_take.c
+        ${SRC_CMD_DIR}/client/AI/rotate_player.c
 )
 
 set(SOURCES_CMD_GUI
@@ -67,8 +58,19 @@ set(SOURCES_CMD_GUI
 set(SOURCES_INPUT
         ${SRC_DIR}/input/server.c
         ${SRC_DIR}/input/client/client.c
+        ${SRC_DIR}/input/client/connect.c
         ${SOURCES_CMD_AI}
         ${SOURCES_CMD_GUI}
+)
+
+set (SOURCES_GAME
+        ${SRC_DIR}/game/clock.c
+        ${SRC_DIR}/game/game.c
+        ${SRC_DIR}/game/map.c
+        ${SRC_DIR}/game/resource.c
+        ${SRC_DIR}/game/player.c
+        ${SRC_DIR}/game/egg.c
+        ${SRC_DIR}/game/update.c
 )
 
 target_sources(${PROJECT_NAME} PRIVATE

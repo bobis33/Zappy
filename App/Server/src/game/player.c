@@ -8,22 +8,25 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "Server/Game/game.h"
 #include "Server/Game/player.h"
 #include "Server/Game/clock.h"
+#include "Server/tools.h"
 
 player_t *create_player(
     char *team_name,
-    int id,
+    game_t *game,
     position_t position,
-    server_clock_t *clock)
+    int fd)
 {
     player_t *new_player = malloc(sizeof(player_t));
 
-    if (!new_player) {
+    if (!new_player)
         return NULL;
-    }
-    new_player->id = id;
+    game->index_client++;
+    new_player->id = game->index_client;
     new_player->level = 1;
+    new_player->fd_client = fd;
     new_player->team_name = team_name;
     new_player->position = position;
     new_player->direction = NORTH;
@@ -31,13 +34,13 @@ player_t *create_player(
         new_player->resources[i].quantity = 0;
     }
     new_player->resources[FOOD].quantity = 10;
-    new_player->clock = clock;
+    new_player->clock = game->clock;
     new_player->action_queue = NULL;
     new_player->action_queue_tail = NULL;
     return new_player;
 }
 
-action_t *create_action(action_type_t type, int duration)
+action_t *create_action(action_type_t type, int duration, char *msg, int freq)
 {
     action_t *new_action = malloc(sizeof(action_t));
     server_clock_t *clock = malloc(sizeof(server_clock_t));
@@ -48,17 +51,23 @@ action_t *create_action(action_type_t type, int duration)
     }
     clock_gettime(CLOCK_MONOTONIC, &start_time);
     new_action->clock = clock;
-    new_action->clock->freq = 1;
+    new_action->clock->freq = freq;
     new_action->clock->value = start_time;
     new_action->type = type;
     new_action->duration = duration;
+    new_action->msg = msg;
     new_action->next = NULL;
     return new_action;
 }
 
-void add_action_to_player(player_t *player, action_type_t type, int duration)
+void add_action_to_player(
+    player_t *player,
+    action_type_t type,
+    char *msg,
+    int duration)
 {
-    action_t *new_action = create_action(type, duration);
+    action_t *new_action =
+        create_action(type, duration, msg, player->clock->freq);
 
     if (!new_action) {
         return;
@@ -80,6 +89,7 @@ void execute_player_action(player_t *player)
         return;
     }
     current_action = player->action_queue;
+    print_msg(player->fd_client, current_action->msg);
     player->action_queue = current_action->next;
     if (!player->action_queue) {
         player->action_queue_tail = NULL;
@@ -89,16 +99,16 @@ void execute_player_action(player_t *player)
 
 bool is_current_action_done(player_t *player)
 {
-    int ticks_elapsed = get_ticks_elapsed(player->action_queue->clock);
+    int ticks_elapsed = 0;
 
     if (!player->action_queue) {
         return true;
     }
+    ticks_elapsed = get_ticks_elapsed(player->action_queue->clock);
     if (ticks_elapsed < 0) {
         return false;
     }
-    if (!player->action_queue ||
-        ticks_elapsed >= player->action_queue->duration) {
+    if (ticks_elapsed >= player->action_queue->duration) {
         return true;
     }
     return false;
