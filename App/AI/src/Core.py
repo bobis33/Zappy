@@ -2,8 +2,6 @@
 
 from src.Parser.Parsing import Parser
 from src.Client.Client import TCPClient
-from .file import create_folder, destroy_folder
-import os
 
 class Core:
     def __init__(self, ac, av):
@@ -35,9 +33,3 @@ class Core:
 
     def getCommand(self):
         return self.command
-
-    def dataTeams(self):
-        create_folder(self.parser.get_name())
-
-    def removeTeams(self):
-        destroy_folder(os.getcwd())

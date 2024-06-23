@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 import socket
 import sys
 from typing import Optional
@@ -9,15 +10,6 @@ import os
 import time
 import csv
 import select
-import re
-def create_file(name, content=None):
-    try:
-        with open(name, 'w') as f:
-            if content:
-                f.write(content)
-    except Exception as e:
-        print(f"The file {name} could not be created!")
-
 
 class REQUEST(Enum):
     TRUE = 1
@@ -39,7 +31,6 @@ class TCPClient:
         self.connect_nbr = -1
         self.analyse = Analysis()
         self.client =  {}
-        self.customer = name
 
     def is_connected(self) -> bool:
         return self.sockfd is not None
@@ -80,9 +71,7 @@ class TCPClient:
         print(f"<--- X Y {size}")
         print("-----------------------------\n")
         client = [ [client_num, self.name.strip(), 'Connected'] ]
-        path = os.path.join(self.customer, "client-" + str(client_num) + ".txt")
-        content = "I'm glad I logged on I'm the client " + str(client_num) + "\n"
-        create_file(path, content)
+
         with open('client_num.csv', 'a', newline='') as file:
             csv_writter = csv.writer(file)
             if not os.path.isfile('client_num.csv') or os.path.getsize('client_num.csv') == 0:
@@ -160,10 +149,10 @@ class TCPClient:
 
     def handle_request(self, request: str):
         if request == "exit\n":
-            return False, None
+            return False
         if request == "help\n":
             print("\n".join(commands.keys()))
-            return True, None
+            return True
         reply = self.send_and_receive(request)
         reply = reply.lstrip()
         if reply[0] == "[":
@@ -177,16 +166,20 @@ class TCPClient:
             self.write_file()
         print(f"---> {reply}", end='')
         self.readCsv('client_num.csv')
-        return True, reply
+        return True
 
     def client_connect(self, filename):
         with open(filename, 'r') as f:
             lines = f.readlines()
         return len(lines) - 1
 
-
     def running_bot(self, debug: bool) -> None:
         counter = 0
+        command = ""
+
+        def command_callback(cmd):
+            nonlocal command
+            command = cmd
 
         while self.request == 1:
             try:
@@ -198,21 +191,11 @@ class TCPClient:
                     else:
                         line = "Look\n"
                 else:
-                    file_path = os.path.join(os.getcwd(), 'tmp-' +  self.get_current_client_id())
-                    with open(file_path, 'r') as f:
-                        cmd = f.read()
-                        if "Broadcast" in cmd:
-                            id_client = re.findall(r'\d+', cmd)
-                            id_client[0] = id_client[0].strip()
-                            if id_client[0] == str(self.get_current_client_id().strip()):
-                                line = cmd + "\n"
-                            else:
-                                line = "Inventory" + "\n"
-                        else:
-                            line = cmd + "\n"
+                    cmd = command
+                    line = cmd + "\n"
 
                 selector = [self.sockfd]
-                readable, _, exceptional = select.select(selector, [], selector, 5)
+                readable, _, exceptional = select.select(selector, [], selector, 1)
 
                 for s in readable:
                     if s is self.sockfd:
@@ -225,18 +208,12 @@ class TCPClient:
                         if len(parser) > 1:
                             print(f"Client {self.get_current_client_id()} has received from server the message {parser[1]}")
 
-
-                result_request, reply = self.handle_request(line)
-                if not result_request:
-                    self.request = 0
+                if not self.handle_request(line):
                     break
-                if reply is not None and reply.find("client") != -1:
-                    parser = reply.split(",")
-                    if len(parser) > 1:
-                        print(f"Client {self.get_current_client_id()} has received from server the message {parser[1]}")
 
                 if self.command is not None:
-                    result_dict = self.command.createList(debug, self.level, self.get_current_client_id(),reply)
+                    result_dict, command = self.command.createList(debug, self.getLevel())
+                    self.analyse.analyse_cases(result_dict, debug, command_callback, self.getLevel())
                 counter += 1
 
             except EOFError:
@@ -270,16 +247,13 @@ class TCPClient:
                             )
                     elif s is sys.stdin:
                         line = sys.stdin.readline().strip() + "\n"
-                        result_request, reply = self.handle_request(line)
-                        if not result_request:
+                        if not self.handle_request(line):
                             self.request = 0
                             break
 
                 if self.command is not None:
-                    result_dict = self.command.createList(debug, self.getLevel(), self.get_current_client_id(), reply)
+                    result_dict = self.command.createList(debug, self.getLevel())
             except EOFError:
-                self.request = 0
-            except KeyboardInterrupt:
                 self.request = 0
             except Exception as e:
                 print(f"An error occurred: {e}")

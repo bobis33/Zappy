@@ -6,7 +6,6 @@ from src.Bot.Bot import Bot, Action, ActionStatus
 import logging
 import math
 import random
-import os
 
 class Analysis:
 
@@ -70,7 +69,7 @@ class Analysis:
         else:
             self.lastMoreimportItem = ("no item", 1000, 0)
 
-    def analyse_cases(self, dictal, debug, callback, current_level : int, client_nb : str, team : str, reply):
+    def analyse_cases(self, dictal, debug, callback, current_level : int):
         self.lastMoreimportItem = self.mostImportItem
         self.upgrade_last_more_important_item()
         self.mostImportItem = ("no item", 1000, 0)
@@ -80,11 +79,12 @@ class Analysis:
                     self.analyse_item(i, item)
         action = self.choose_action(self.mostImportItem, self.lastMoreimportItem)
         command = action[0]
-        cmd = self.bot.parse_command(command, current_level, client_nb, team, reply)
-        with open('tmp-' + client_nb, 'w') as file:
-            file.write(cmd)
-        if cmd == "Take no":
-            cmd = random.choice(["Left", "Right"])
+
+        command = self.bot.parse_command(command, current_level)
+        if command == "Take no":
+            command = random.choice(["Left", "Right"])
         print("--------- COMMAND ---------")
-        print(cmd.center(28))
+        print(command.center(28))
         print("---------------------------")
+        callback(command)
+        return command

@@ -5,15 +5,13 @@ from typing import Union, Optional, List
 from src.Players.Level import Stones
 import os
 
-import random
-
 class Action(Enum):
     FORWARD = "Forward"
     RIGHT = "Right"
     LEFT = "Left"
     LOOK = "Look"
     INVENTORY = "Inventory"
-    BROADCAST_TEXT = "Broadcast "
+    BROADCAST_TEXT = "Broadcast text"
     CONNECT_NBR = "Connect_nbr"
     FORK = "Fork"
     EJECT = "Eject"
@@ -55,86 +53,43 @@ class Bot:
         else:
             return ActionStatus.INVALID_ACTION.value
 
-    def write_incantation(self, client_nb):
-        with open('incantion-' + client_nb + ".txt", 'w') as file:
+    def write_incantation(self):
+        with open('incantion.txt', 'w') as file:
             file.write("Incantation")
 
-    def read_incantation(self, client_nb):
+    def read_incantation(self):
         try:
-            with open('incantion-' + client_nb + ".txt", 'r') as file:
+            with open('incantion.txt', 'r') as file:
                 content = file.read()
             return content
         except FileNotFoundError:
             return "The file 'incantation.txt' does not exist."
 
-    def delete_incantion(self, client_nb):
+    def delete_incantion(self):
         try:
-            os.remove('incantion-' + client_nb + ".txt")
+            os.remove('incantion.txt')
             return "The file has been deleted."
         except FileNotFoundError:
             return "The file 'incantation.txt' does not exist."
         except Exception as e:
             return "An error occurred"
 
-    def read_file(self):
-        exclude_folders = ["App", "src"]
-        lst = []
-        for root, dirs, files in os.walk('.'):
-            if not any(folder in root.split(os.path.sep) for folder in exclude_folders):
-                for file in files:
-                    if file.find("client") != -1 and file.find(".txt") != -1:
-                        file_path = os.path.join(root, file)
-                        with open(file_path, 'r') as f:
-                            content = f.read()
-                        if content.strip():
-                            lst.append(content)
-                            with open(file_path, "w") as file:
-                                file.write("")
-                            return lst
-        return []
-
-    def need_incantation(self, reply, level):
-        clean = reply.replace("[", "")
-        lst = clean.split(",")
-        tab = lst[0].strip()
-        tab_parser = tab.split(" ")
-        if level == 1:
-            for i in range(len(tab_parser)):
-                if tab_parser[i] == "linemate":
-                    return True
-        elif level == 2:
-            for i in range(len(tab_parser)):
-                if tab_parser[i] == "linemate" or tab_parser[i] == "deraumere" or tab_parser[i] == "sibur":
-                    return True
-        return False
-    def parse_command(self, command: str, current_level, client_nb, team, reply) -> Action:
+    def parse_command(self, command: str, current_level) -> Action:
         self.stones = Stones(0, 0, 0, 0, 0, 0, current_level)
         words = command.split()
-        lst = self.read_file()
-        if len(lst) > 0:
-            return Action.BROADCAST_TEXT.value + '"' + lst[0].strip() + '"'
-        if "Incantation" in self.read_incantation(client_nb) and self.need_incantation(reply, current_level):
-            path = os.path.join(os.getcwd() + "/" + team.strip(), "client-" + client_nb.strip() + ".txt")
-            with open(path, "w") as f:
-                    if current_level == 1:
-                        current_level = 2
-                        f.write("client " + client_nb.strip() + ": I was passed level 2")
-                    elif current_level == 2:
-                        f.write("client " + client_nb.strip() + ": I'm ready to move up to the " + str((current_level + 1)).strip() + " level")
-            self.delete_incantion(client_nb)
+        if "Incantation" in self.read_incantation():
+            self.delete_incantion()
             return Action.INCANTATION.value
         elif "Forward" in words:
-            return random.choice(["Forward", "Inventory", "Forward", "Left", "Right"])
+            return Action.FORWARD.value
         elif "Right" in words:
             return Action.RIGHT.value
         elif "Left" in words:
             return Action.LEFT.value
         elif "Take no" in words:
-            return Action.INVENTORY.value
+            return Action.FORWARD.value
         elif "Take" in words:
             stones_name = words[1]
             if self.stones.take_stone(stones_name) == True:
-                self.write_incantation(client_nb)
+                self.write_incantation()
             return Action.TAKE_OBJECT.value + words[1]
-        else:
-            return Action.INVENTORY.value
