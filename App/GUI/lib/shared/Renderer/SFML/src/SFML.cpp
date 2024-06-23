@@ -89,7 +89,7 @@ bool gui::SFML::checkConnection(sf::Clock clock)
     return true;
 }
 
-void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &players, std::vector<std::string> &teams)
+void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &players, std::vector<std::string> &teams, bool animations)
 {
     m_window.clear({0, 0, 0, 0});
     std::vector<float> spritesAspectRatio;
@@ -133,7 +133,6 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
                         player.setMoving(Player::Orientation::SOUTH);
                     } else if (player.getPosition().x < player.getLastPosition().x) {
                         player.setMoving(Player::Orientation::NORTH);
-                        playerframe = 0;
                     } else if (player.getPosition().y > player.getLastPosition().y) {
                         player.setMoving(Player::Orientation::EAST);
                     } else if (player.getPosition().y < player.getLastPosition().y) {
@@ -141,9 +140,8 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
                     }
                     player.setLastPosition(player.getPosition());
                 }
-
-                if (player.getMoving() != Player::Orientation::NONE) {
-                    if (movingClock.getElapsedTime().asMilliseconds() > 10) {
+                if (player.getMoving() != Player::Orientation::NONE && animations == true) {
+                    if (player.moving_clock.getElapsedTime().asMilliseconds() > 5) {
                         if (player.getMoving() == Player::Orientation::NORTH) {
                             float playerPosX = static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height;
                             float playerPosY = static_cast<float>(player.getPosition().x) * getSprites().at(0).first.getGlobalBounds().width;
@@ -157,7 +155,6 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
                             } else {
                                 player.index_moving = 0;
                                 player.setMoving(Player::Orientation::NONE);
-                                playerframe = 0;
                             }
                         } else if (player.getMoving() == Player::Orientation::SOUTH) {
                             float playerPosX = static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height;
@@ -172,7 +169,6 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
                             } else {
                                 player.index_moving = 0;
                                 player.setMoving(Player::Orientation::NONE);
-                                playerframe = 0;
                             }
                         } else if (player.getMoving() == Player::Orientation::EAST) {
                             float playerPosX = static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height;
@@ -187,7 +183,6 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
                             } else {
                                 player.index_moving = 0;
                                 player.setMoving(Player::Orientation::NONE);
-                                playerframe = 0;
                             }
                         } else if (player.getMoving() == Player::Orientation::WEST) {
                             float playerPosX = static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height;
@@ -202,13 +197,12 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
                             } else {
                                 player.index_moving = 0;
                                 player.setMoving(Player::Orientation::NONE);
-                                playerframe = 0;
                             }
                         }
-                        movingClock.restart();
+                        player.moving_clock.restart();
                     }
                     m_window.draw(getSprites().at(21).first);
-                } else {                
+                } else { 
                     if (player.getAction() == Player::Action::NONE) {
                         getSprites().at(9).first.setPosition(
                             static_cast<float>(player.getPosition().y) * getSprites().at(0).first.getGlobalBounds().height,
@@ -346,10 +340,32 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
         m_window.draw(getSprites().at(11).first);
     }
 
+    //for (auto& player : players) {
+    //    std::cout << "Player " << player.getId() << std::endl;
+    //    if (playerClock.getElapsedTime().asSeconds() > 0.08) {
+    //        //if (player.getAction() != player.getLastAction() && player.getAction() != Player::Action::NONE) {
+    //        //    player.player_frame = 1;
+    //        //    player.setLastAction(player.getAction());
+    //        //}
+    //        player.player_frame++;
+    //        std::cout << "Player frame " << player.player_frame << std::endl;
+    //        if (player.player_frame > 4) {
+    //            player.player_frame = 0;
+    //            player.setAction(Player::Action::NONE);
+    //        }
+    //        playerClock.restart();
+    //    }
+    //    sf::IntRect playerRect(player.player_frame * 32, 0, 32, 32);
+    //    getSprites().at(9).first.setTextureRect(playerRect);
+    //    getSprites().at(10).first.setTextureRect(playerRect);
+    //    getSprites().at(20).first.setTextureRect(playerRect);
+    //    getSprites().at(21).first.setTextureRect(playerRect);
+    //}
+
     for (auto& player : players) {
-        if (playerClock.getElapsedTime().asSeconds() > 0.08) {
+        if (player.player_clock.getElapsedTime().asMilliseconds() > 80) {
             if (player.getAction() != player.getLastAction() && player.getAction() != Player::Action::NONE) {
-                player.player_frame = 1;
+                player.player_frame = 0;
                 player.setLastAction(player.getAction());
             }
             player.player_frame++;
@@ -357,13 +373,16 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
                 player.player_frame = 0;
                 player.setAction(Player::Action::NONE);
             }
-            playerClock.restart();
+            player.player_clock.restart();
         }
+    }
+
+    for (auto& player : players) {
         sf::IntRect playerRect(player.player_frame * 32, 0, 32, 32);
         getSprites().at(9).first.setTextureRect(playerRect);
         getSprites().at(10).first.setTextureRect(playerRect);
         getSprites().at(20).first.setTextureRect(playerRect);
-        getSprites().at(21).first.setTextureRect(playerRect);
+        getSprites().at(21).first.setTextureRect(playerRect);        
     }
 
     if (!mouseOnTile) {
@@ -416,3 +435,4 @@ void gui::SFML::render(Map &map, std::vector<Egg> &eggs, std::vector<Player> &pl
 
     m_window.display();
 }
+

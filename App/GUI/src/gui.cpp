@@ -37,6 +37,18 @@ gui::Gui::Gui(const gui::Argument &args)
 void gui::Gui::Run()
 {
     unsigned long event = 0;
+    std::string input;
+    bool animations = false;
+    
+    std::cout << "Do you want to play with animations? (y/n)" << std::endl;
+    std::cin >> input;
+    if (input == "y") {
+        animations = true;
+    } else if (input == "n") {
+        animations = false;
+    } else {
+        throw RunTimeException("Invalid input");
+    }
 
     while (m_renderer->isRunning()) {
         event = static_cast<unsigned long>(m_renderer->getEvents());
@@ -44,7 +56,7 @@ void gui::Gui::Run()
             EVENT_ARRAY.at(event)(*this);
         }
         Parser::processData(Parser::getData(m_renderer->getClient().getResponse()), *this);
-        m_renderer->render(m_map, m_eggs, m_players, m_teamNames);
+        m_renderer->render(m_map, m_eggs, m_players, m_teamNames, animations);
     }
 }
 

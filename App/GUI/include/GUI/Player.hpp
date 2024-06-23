@@ -9,6 +9,7 @@
 
 #include "GUI/Inventory/Inventory.hpp"
 #include "GUI/Position.hpp"
+#include "Mylib/Clock/Clock.hpp"
 
 namespace gui {
 
@@ -60,6 +61,8 @@ namespace gui {
 
             int player_frame = 0;
             int index_moving = 0;
+            myLib::Clock player_clock;
+            myLib::Clock moving_clock;
 
         private:
 
@@ -74,6 +77,7 @@ namespace gui {
             unsigned int m_level{1};
             bool isAlive{true};
             Orientation m_moving;
+            
 
     }; // class Player
 
