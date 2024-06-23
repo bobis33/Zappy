@@ -4,7 +4,7 @@ class InventoryIteam:
 
     def __init__(self):
         self.items = {
-            "food": 9,
+            "food": 4,
             "linemate": 0,
             "deraumere": 0,
             "sibur": 0,

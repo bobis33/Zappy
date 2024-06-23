@@ -55,7 +55,7 @@ class Command:
         return result
 
 
-    def createList(self, debug, current_level):
+    def createList(self, debug, current_level, reply):
         print(f'LEVEL: {self.getLevel()}')
         count = self.countListRequired()
         info = str(self.infoServer)
@@ -73,7 +73,7 @@ class Command:
                 result_dict[i] = lst[i]
             else:
                 result_dict[i] = []
-        command = self.analysis.analyse_cases(result_dict, debug, lambda x:None, self.getLevel())
+        command = self.analysis.analyse_cases(result_dict, debug, lambda x:None, self.getLevel(), reply)
         return result_dict, command
 
     def __repr__(self) -> str:

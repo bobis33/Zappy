@@ -69,7 +69,7 @@ class Analysis:
         else:
             self.lastMoreimportItem = ("no item", 1000, 0)
 
-    def analyse_cases(self, dictal, debug, callback, current_level : int):
+    def analyse_cases(self, dictal, debug, callback, current_level : int, reply):
         self.lastMoreimportItem = self.mostImportItem
         self.upgrade_last_more_important_item()
         self.mostImportItem = ("no item", 1000, 0)
@@ -80,7 +80,7 @@ class Analysis:
         action = self.choose_action(self.mostImportItem, self.lastMoreimportItem)
         command = action[0]
 
-        command = self.bot.parse_command(command, current_level)
+        command = self.bot.parse_command(command, current_level, reply)
         if command == "Take no":
             command = random.choice(["Left", "Right"])
         print("--------- COMMAND ---------")

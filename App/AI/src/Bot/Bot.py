@@ -74,10 +74,24 @@ class Bot:
         except Exception as e:
             return "An error occurred"
 
-    def parse_command(self, command: str, current_level) -> Action:
+    def need_incantation(self, reply, level):
+            clean = reply.replace("[", "")
+            lst = clean.split(",")
+            tab = lst[0].strip()
+            tab_parser = tab.split(" ")
+            if level == 1:
+                for i in range(len(tab_parser)):
+                    if tab_parser[i] == "linemate":
+                        return True
+            elif level == 2:
+                for i in range(len(tab_parser)):
+                    if tab_parser[i] == "linemate" or tab_parser[i] == "deraumere" or tab_parser[i] == "sibur":
+                        return True
+
+    def parse_command(self, command: str, current_level, reply) -> Action:
         self.stones = Stones(0, 0, 0, 0, 0, 0, current_level)
         words = command.split()
-        if "Incantation" in self.read_incantation():
+        if "Incantation" in self.read_incantation() and self.need_incantation(reply, current_level):
             self.delete_incantion()
             return Action.INCANTATION.value
         elif "Forward" in words:
