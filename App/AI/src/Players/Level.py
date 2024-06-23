@@ -107,9 +107,9 @@ class Stones:
                 self._mendiane -= require["mendiane"]
                 self._phiras -= require["phiras"]
                 self._thystame -= require["thystame"]
-                print(f"Incantation successful! New level: {self._level}")
+                return True
         else:
-            print("Incantation failed.")
+            return False
 
     def take_stone(self, stone_name):
         if stone_name == 'linemate':
@@ -138,3 +138,8 @@ class Stones:
                 self._phiras = 1
         elif stone_name == 'thystame' and self._level == 7:
             self._thystame = 1
+
+        if self.incantation() == True:
+            return True
+        else:
+            return False
