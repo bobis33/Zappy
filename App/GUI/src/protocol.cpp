@@ -74,7 +74,7 @@ const std::unordered_map<std::string, std::function<void(gui::Gui&, std::string)
         }},
         {"pbc", [](Gui &gui, const std::string &cmd) {
             std::vector<std::string> data = Protocol::parseCommand(cmd);
-            int playerId = std::stoi(data[0].substr(1, data[0].size()));
+            int playerId = std::stoi(data[0]);
             const std::string msg = data[1];
             // broadcast message
         }},
