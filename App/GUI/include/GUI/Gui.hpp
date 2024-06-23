@@ -34,7 +34,7 @@ namespace gui {
 
             std::unique_ptr<IRenderer>& getRenderer() { return m_renderer; };
 
-            void Run();
+            void Run(bool animations);
 
             void initMap(const std::pair<unsigned, unsigned> &size);
             void matureEgg(const unsigned int &eggId);

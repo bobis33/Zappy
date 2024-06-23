@@ -34,21 +34,9 @@ gui::Gui::Gui(const gui::Argument &args)
     Parser::processData(Parser::getData(m_renderer->getClient().getResponse()), *this);
 }
 
-void gui::Gui::Run()
+void gui::Gui::Run(bool animations)
 {
     unsigned long event = 0;
-    std::string input;
-    bool animations = false;
-    
-    std::cout << "Do you want to play with animations? (y/n)" << std::endl;
-    std::cin >> input;
-    if (input == "y") {
-        animations = true;
-    } else if (input == "n") {
-        animations = false;
-    } else {
-        throw RunTimeException("Invalid input");
-    }
 
     while (m_renderer->isRunning()) {
         event = static_cast<unsigned long>(m_renderer->getEvents());
