@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 import socket
 import sys
 from typing import Optional
@@ -10,6 +9,16 @@ import os
 import time
 import csv
 import select
+import re
+def create_file(name, content=None):
+    try:
+        with open(name, 'w') as f:
+            if content:
+                f.write(content)
+        print(f"The file {name} has been created!")
+    except Exception as e:
+        print(f"The file {name} could not be created!")
+
 
 class REQUEST(Enum):
     TRUE = 1
@@ -31,6 +40,7 @@ class TCPClient:
         self.connect_nbr = -1
         self.analyse = Analysis()
         self.client =  {}
+        self.customer = name
 
     def is_connected(self) -> bool:
         return self.sockfd is not None
@@ -71,7 +81,9 @@ class TCPClient:
         print(f"<--- X Y {size}")
         print("-----------------------------\n")
         client = [ [client_num, self.name.strip(), 'Connected'] ]
-
+        path = os.path.join(self.customer, "client-" + str(client_num) + ".txt")
+        content = "I'm glad I logged on I'm the client " + str(client_num) + "\n"
+        create_file(path, content)
         with open('client_num.csv', 'a', newline='') as file:
             csv_writter = csv.writer(file)
             if not os.path.isfile('client_num.csv') or os.path.getsize('client_num.csv') == 0:
@@ -173,13 +185,9 @@ class TCPClient:
             lines = f.readlines()
         return len(lines) - 1
 
+
     def running_bot(self, debug: bool) -> None:
         counter = 0
-        command = ""
-
-        def command_callback(cmd):
-            nonlocal command
-            command = cmd
 
         while self.request == 1:
             try:
@@ -191,11 +199,21 @@ class TCPClient:
                     else:
                         line = "Look\n"
                 else:
-                    cmd = command
-                    line = cmd + "\n"
+                    file_path = os.path.join(os.getcwd(), 'tmp-' +  self.get_current_client_id())
+                    with open(file_path, 'r') as f:
+                        cmd = f.read()
+                        if "Broadcast" in cmd:
+                            id_client = re.findall(r'\d+', cmd)
+                            id_client[0] = id_client[0].strip()
+                            if id_client[0] == str(self.get_current_client_id().strip()):
+                                line = cmd + "\n"
+                            else:
+                                line = "Forward" + "\n"
+                        else:
+                            line = cmd + "\n"
 
                 selector = [self.sockfd]
-                readable, _, exceptional = select.select(selector, [], selector, 1)
+                readable, _, exceptional = select.select(selector, [], selector, 5)
 
                 for s in readable:
                     if s is self.sockfd:
@@ -212,8 +230,7 @@ class TCPClient:
                     break
 
                 if self.command is not None:
-                    result_dict, command = self.command.createList(debug, self.getLevel())
-                    self.analyse.analyse_cases(result_dict, debug, command_callback, self.getLevel())
+                    result_dict = self.command.createList(debug, self.getLevel(), self.get_current_client_id())
                 counter += 1
 
             except EOFError:
@@ -252,8 +269,10 @@ class TCPClient:
                             break
 
                 if self.command is not None:
-                    result_dict = self.command.createList(debug, self.getLevel())
+                    result_dict = self.command.createList(debug, self.getLevel(), self.get_current_client_id())
             except EOFError:
+                self.request = 0
+            except KeyboardInterrupt:
                 self.request = 0
             except Exception as e:
                 print(f"An error occurred: {e}")

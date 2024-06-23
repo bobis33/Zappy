@@ -5,13 +5,14 @@ from typing import Union, Optional, List
 from src.Players.Level import Stones
 import os
 
+
 class Action(Enum):
     FORWARD = "Forward"
     RIGHT = "Right"
     LEFT = "Left"
     LOOK = "Look"
     INVENTORY = "Inventory"
-    BROADCAST_TEXT = "Broadcast text"
+    BROADCAST_TEXT = "Broadcast "
     CONNECT_NBR = "Connect_nbr"
     FORK = "Fork"
     EJECT = "Eject"
@@ -53,32 +54,52 @@ class Bot:
         else:
             return ActionStatus.INVALID_ACTION.value
 
-    def write_incantation(self):
-        with open('incantion.txt', 'w') as file:
+    def write_incantation(self, client_nb):
+        with open('incantion-' + client_nb + ".txt", 'w') as file:
             file.write("Incantation")
 
-    def read_incantation(self):
+    def read_incantation(self, client_nb):
         try:
-            with open('incantion.txt', 'r') as file:
+            with open('incantion-' + client_nb + ".txt", 'r') as file:
                 content = file.read()
             return content
         except FileNotFoundError:
             return "The file 'incantation.txt' does not exist."
 
-    def delete_incantion(self):
+    def delete_incantion(self, client_nb):
         try:
-            os.remove('incantion.txt')
+            os.remove('incantion-' + client_nb + ".txt")
             return "The file has been deleted."
         except FileNotFoundError:
             return "The file 'incantation.txt' does not exist."
         except Exception as e:
             return "An error occurred"
 
-    def parse_command(self, command: str, current_level) -> Action:
+    def read_file(self):
+        exclude_folders = ["App", "src"]
+        lst = []
+        for root, dirs, files in os.walk('.'):
+            if not any(folder in root.split(os.path.sep) for folder in exclude_folders):
+                for file in files:
+                    if file.find("client") != -1 and file.find(".txt") != -1:
+                        file_path = os.path.join(root, file)
+                        with open(file_path, 'r') as f:
+                            content = f.read()
+                        if content.strip():
+                            lst.append(content)
+                            with open(file_path, "w") as file:
+                                file.write("")
+                            return lst
+        return []
+
+    def parse_command(self, command: str, current_level, client_nb) -> Action:
         self.stones = Stones(0, 0, 0, 0, 0, 0, current_level)
         words = command.split()
-        if "Incantation" in self.read_incantation():
-            self.delete_incantion()
+        lst = self.read_file()
+        if len(lst) > 0:
+            return Action.BROADCAST_TEXT.value + '"' + lst[0].strip() + '"'
+        if "Incantation" in self.read_incantation(client_nb):
+            self.delete_incantion(client_nb)
             return Action.INCANTATION.value
         elif "Forward" in words:
             return Action.FORWARD.value
@@ -91,5 +112,5 @@ class Bot:
         elif "Take" in words:
             stones_name = words[1]
             if self.stones.take_stone(stones_name) == True:
-                self.write_incantation()
+                self.write_incantation(client_nb)
             return Action.TAKE_OBJECT.value + words[1]
